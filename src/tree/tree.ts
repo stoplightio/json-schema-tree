@@ -1,0 +1,59 @@
+import { extractPointerFromRef, extractSourceFromRef, pointerToPath } from '@stoplight/json';
+
+import { ResolvingError } from '../errors';
+import { RootNode } from '../nodes/RootNode';
+import type { SchemaTreeRefDereferenceFn } from '../resolver/types';
+import type { SchemaFragment } from '../types';
+import { isObjectLiteral } from '../utils';
+import { get } from '../utils/get';
+import type { WalkerRefResolver } from '../walker/types';
+import { Walker } from '../walker/walk';
+
+export type SchemaTreeOptions = {
+  mergeAllOf: boolean;
+  refResolver: SchemaTreeRefDereferenceFn | null;
+};
+
+export class SchemaTree {
+  public walker: Walker;
+  public root: RootNode;
+
+  constructor(public schema: SchemaFragment, protected readonly opts?: Partial<SchemaTreeOptions>) {
+    this.root = new RootNode(schema);
+    this.walker = new Walker(this.root, {
+      mergeAllOf: this.opts?.mergeAllOf !== false,
+      resolveRef: opts?.refResolver === null ? null : this.resolveRef,
+    });
+  }
+
+  public populate() {
+    this.invokeWalker(this.walker);
+  }
+
+  public invokeWalker(walker: Walker) {
+    const walk = this.walker.walk();
+    while (!walk.next().done);
+  }
+
+  protected resolveRef: WalkerRefResolver = (path, $ref) => {
+    // todo: passe pointer and stuff
+    const source = extractSourceFromRef($ref);
+    const pointer = extractPointerFromRef($ref);
+    const { refResolver } = this.opts ?? {};
+
+    if (typeof refResolver === 'function') {
+      return refResolver({ source, pointer }, path, this.schema);
+    } else if (source !== null) {
+      throw new ResolvingError('Cannot dereference external references');
+    } else if (pointer === null) {
+      throw new ResolvingError('The pointer is empty');
+    } else {
+      const value = get(this.schema, pointerToPath(pointer));
+      if (!isObjectLiteral(value)) {
+        throw new ResolvingError('Invalid value');
+      }
+
+      return value;
+    }
+  };
+}

@@ -1,0 +1,11 @@
+{
+  "extends": "@stoplight/scripts/tsconfig.json",
+  // target all ts files
+  "include": ["."],
+  "exclude": ["**/__mocks__/**", "dist/"],
+  "compilerOptions": {
+    "lib": ["dom", "es2017"],
+    "target": "es2017",
+    "importsNotUsedAsValues": "error"
+  }
+}

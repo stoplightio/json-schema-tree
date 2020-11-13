@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "xml": {
+    "name": "Pet"
+  },
+  "properties": {
+    "propertyIsArrayOfObjects": {
+      "type": ["array"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "ArrayObjectProperty": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

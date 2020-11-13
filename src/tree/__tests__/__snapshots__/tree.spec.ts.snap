@@ -1,0 +1,411 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SchemaTree tree correctness given anyOf combiner placed next to allOf given allOf merging disabled, should still merge 1`] = `
+"├─ 0
+│  └─ #
+│     ├─ type: object
+│     ├─ combiner: anyOf
+│     └─ children
+│        ├─ 0
+│        │  └─ #/anyOf/0
+│        │     ├─ type: object
+│        │     ├─ combiner: allOf
+│        │     └─ children
+│        │        ├─ 0
+│        │        │  └─ #/anyOf/0/allOf/0
+│        │        │     ├─ type: object
+│        │        │     ├─ required
+│        │        │     │  └─ 0: type
+│        │        │     └─ children
+│        │        │        ├─ 0
+│        │        │        │  └─ #/anyOf/0/allOf/0/properties/type
+│        │        │        │     ├─ type: string
+│        │        │        │     └─ enum
+│        │        │        │        ├─ 0: admin
+│        │        │        │        └─ 1: editor
+│        │        │        └─ 1
+│        │        │           └─ #/anyOf/0/allOf/0/properties/enabled
+│        │        │              └─ type: boolean
+│        │        └─ 1
+│        │           └─ #/anyOf/0/allOf/1
+│        │              ├─ type: object
+│        │              └─ children
+│        │                 ├─ 0
+│        │                 │  └─ #/anyOf/0/allOf/1/properties/root
+│        │                 │     └─ type: boolean
+│        │                 ├─ 1
+│        │                 │  └─ #/anyOf/0/allOf/1/properties/group
+│        │                 │     └─ type: string
+│        │                 └─ 2
+│        │                    └─ #/anyOf/0/allOf/1/properties/expirationDate
+│        │                       └─ type: string
+│        └─ 1
+│           └─ #/anyOf/1
+│              ├─ type: object
+│              ├─ combiner: allOf
+│              └─ children
+│                 ├─ 0
+│                 │  └─ #/anyOf/1/allOf/0
+│                 │     ├─ type: object
+│                 │     ├─ required
+│                 │     │  └─ 0: type
+│                 │     └─ children
+│                 │        ├─ 0
+│                 │        │  └─ #/anyOf/1/allOf/0/properties/type
+│                 │        │     ├─ type: string
+│                 │        │     └─ enum
+│                 │        │        ├─ 0: admin
+│                 │        │        └─ 1: editor
+│                 │        └─ 1
+│                 │           └─ #/anyOf/1/allOf/0/properties/enabled
+│                 │              └─ type: boolean
+│                 └─ 1
+│                    └─ #/anyOf/1/allOf/1
+│                       ├─ type: object
+│                       └─ children
+│                          ├─ 0
+│                          │  └─ #/anyOf/1/allOf/1/properties/supervisor
+│                          │     └─ type: string
+│                          └─ 1
+│                             └─ #/anyOf/1/allOf/1/properties/key
+│                                └─ type: string
+└─ 1
+   └─ #
+      ├─ type: object
+      ├─ combiner: allOf
+      └─ children
+         └─ 0
+            └─ #/allOf/0
+               ├─ type: object
+               ├─ required
+               │  └─ 0: type
+               └─ children
+                  ├─ 0
+                  │  └─ #/allOf/0/properties/type
+                  │     ├─ type: string
+                  │     └─ enum
+                  │        ├─ 0: admin
+                  │        └─ 1: editor
+                  └─ 1
+                     └─ #/allOf/0/properties/enabled
+                        └─ type: boolean
+"
+`;
+
+exports[`SchemaTree tree correctness given anyOf combiner placed next to allOf given allOf merging enabled, should merge contents of allOf combiners 1`] = `
+"└─ #
+   ├─ type: object
+   ├─ combiner: anyOf
+   └─ children
+      ├─ 0
+      │  └─ #/anyOf/0
+      │     ├─ type: object
+      │     ├─ required
+      │     │  └─ 0: type
+      │     └─ children
+      │        ├─ 0
+      │        │  └─ #/anyOf/0/properties/type
+      │        │     ├─ type: string
+      │        │     └─ enum
+      │        │        ├─ 0: admin
+      │        │        └─ 1: editor
+      │        ├─ 1
+      │        │  └─ #/anyOf/0/properties/enabled
+      │        │     └─ type: boolean
+      │        ├─ 2
+      │        │  └─ #/anyOf/0/properties/root
+      │        │     └─ type: boolean
+      │        ├─ 3
+      │        │  └─ #/anyOf/0/properties/group
+      │        │     └─ type: string
+      │        └─ 4
+      │           └─ #/anyOf/0/properties/expirationDate
+      │              └─ type: string
+      └─ 1
+         └─ #/anyOf/1
+            ├─ type: object
+            ├─ required
+            │  └─ 0: type
+            └─ children
+               ├─ 0
+               │  └─ #/anyOf/1/properties/type
+               │     ├─ type: string
+               │     └─ enum
+               │        ├─ 0: admin
+               │        └─ 1: editor
+               ├─ 1
+               │  └─ #/anyOf/1/properties/enabled
+               │     └─ type: boolean
+               ├─ 2
+               │  └─ #/anyOf/1/properties/supervisor
+               │     └─ type: string
+               └─ 3
+                  └─ #/anyOf/1/properties/key
+                     └─ type: string
+"
+`;
+
+exports[`SchemaTree tree correctness given oneOf combiner placed next to allOf given allOf merging disabled, should still merge 1`] = `
+"├─ 0
+│  └─ #
+│     ├─ type: object
+│     ├─ combiner: oneOf
+│     └─ children
+│        ├─ 0
+│        │  └─ #/oneOf/0
+│        │     ├─ type: object
+│        │     ├─ combiner: allOf
+│        │     └─ children
+│        │        ├─ 0
+│        │        │  └─ #/oneOf/0/allOf/0
+│        │        │     ├─ type: object
+│        │        │     ├─ required
+│        │        │     │  └─ 0: type
+│        │        │     └─ children
+│        │        │        ├─ 0
+│        │        │        │  └─ #/oneOf/0/allOf/0/properties/type
+│        │        │        │     ├─ type: string
+│        │        │        │     └─ enum
+│        │        │        │        ├─ 0: admin
+│        │        │        │        └─ 1: editor
+│        │        │        └─ 1
+│        │        │           └─ #/oneOf/0/allOf/0/properties/enabled
+│        │        │              └─ type: boolean
+│        │        └─ 1
+│        │           └─ #/oneOf/0/allOf/1
+│        │              ├─ type: object
+│        │              └─ children
+│        │                 ├─ 0
+│        │                 │  └─ #/oneOf/0/allOf/1/properties/root
+│        │                 │     └─ type: boolean
+│        │                 ├─ 1
+│        │                 │  └─ #/oneOf/0/allOf/1/properties/group
+│        │                 │     └─ type: string
+│        │                 └─ 2
+│        │                    └─ #/oneOf/0/allOf/1/properties/expirationDate
+│        │                       └─ type: string
+│        └─ 1
+│           └─ #/oneOf/1
+│              ├─ type: object
+│              ├─ combiner: allOf
+│              └─ children
+│                 ├─ 0
+│                 │  └─ #/oneOf/1/allOf/0
+│                 │     ├─ type: object
+│                 │     ├─ required
+│                 │     │  └─ 0: type
+│                 │     └─ children
+│                 │        ├─ 0
+│                 │        │  └─ #/oneOf/1/allOf/0/properties/type
+│                 │        │     ├─ type: string
+│                 │        │     └─ enum
+│                 │        │        ├─ 0: admin
+│                 │        │        └─ 1: editor
+│                 │        └─ 1
+│                 │           └─ #/oneOf/1/allOf/0/properties/enabled
+│                 │              └─ type: boolean
+│                 └─ 1
+│                    └─ #/oneOf/1/allOf/1
+│                       ├─ type: object
+│                       └─ children
+│                          ├─ 0
+│                          │  └─ #/oneOf/1/allOf/1/properties/supervisor
+│                          │     └─ type: string
+│                          └─ 1
+│                             └─ #/oneOf/1/allOf/1/properties/key
+│                                └─ type: string
+└─ 1
+   └─ #
+      ├─ type: object
+      ├─ combiner: allOf
+      └─ children
+         └─ 0
+            └─ #/allOf/0
+               ├─ type: object
+               ├─ required
+               │  └─ 0: type
+               └─ children
+                  ├─ 0
+                  │  └─ #/allOf/0/properties/type
+                  │     ├─ type: string
+                  │     └─ enum
+                  │        ├─ 0: admin
+                  │        └─ 1: editor
+                  └─ 1
+                     └─ #/allOf/0/properties/enabled
+                        └─ type: boolean
+"
+`;
+
+exports[`SchemaTree tree correctness given oneOf combiner placed next to allOf given allOf merging enabled, should merge contents of allOf combiners 1`] = `
+"└─ #
+   ├─ type: object
+   ├─ combiner: oneOf
+   └─ children
+      ├─ 0
+      │  └─ #/oneOf/0
+      │     ├─ type: object
+      │     ├─ required
+      │     │  └─ 0: type
+      │     └─ children
+      │        ├─ 0
+      │        │  └─ #/oneOf/0/properties/type
+      │        │     ├─ type: string
+      │        │     └─ enum
+      │        │        ├─ 0: admin
+      │        │        └─ 1: editor
+      │        ├─ 1
+      │        │  └─ #/oneOf/0/properties/enabled
+      │        │     └─ type: boolean
+      │        ├─ 2
+      │        │  └─ #/oneOf/0/properties/root
+      │        │     └─ type: boolean
+      │        ├─ 3
+      │        │  └─ #/oneOf/0/properties/group
+      │        │     └─ type: string
+      │        └─ 4
+      │           └─ #/oneOf/0/properties/expirationDate
+      │              └─ type: string
+      └─ 1
+         └─ #/oneOf/1
+            ├─ type: object
+            ├─ required
+            │  └─ 0: type
+            └─ children
+               ├─ 0
+               │  └─ #/oneOf/1/properties/type
+               │     ├─ type: string
+               │     └─ enum
+               │        ├─ 0: admin
+               │        └─ 1: editor
+               ├─ 1
+               │  └─ #/oneOf/1/properties/enabled
+               │     └─ type: boolean
+               ├─ 2
+               │  └─ #/oneOf/1/properties/supervisor
+               │     └─ type: string
+               └─ 3
+                  └─ #/oneOf/1/properties/key
+                     └─ type: string
+"
+`;
+
+exports[`SchemaTree tree correctness should generate valid tree for allof-with-type.json 1`] = `
+"└─ #
+   ├─ type: object
+   ├─ combiner: oneOf
+   └─ children
+      ├─ 0
+      │  └─ #/oneOf/0
+      │     ├─ type: object
+      │     ├─ required
+      │     │  ├─ 0: actionType
+      │     │  ├─ 1: id
+      │     │  └─ 2: items
+      │     └─ children
+      │        ├─ 0
+      │        │  └─ #/oneOf/0/properties/actionType
+      │        │     ├─ type: string
+      │        │     └─ enum
+      │        │        ├─ 0: Cancel
+      │        │        ├─ 1: Confirm
+      │        │        └─ 2: Update
+      │        ├─ 1
+      │        │  └─ #/oneOf/0/properties/id
+      │        │     └─ type: string
+      │        ├─ 2
+      │        │  └─ #/oneOf/0/properties/externalId
+      │        │     └─ type: string
+      │        ├─ 3
+      │        │  └─ #/oneOf/0/properties/calculateCosts
+      │        │     └─ type: boolean
+      │        ├─ 4
+      │        │  └─ #/oneOf/0/properties/calculateDates
+      │        │     └─ type: boolean
+      │        └─ 5
+      │           └─ #/oneOf/0/properties/items
+      │              ├─ type: array
+      │              └─ subtype: string
+      └─ 1
+         └─ #/oneOf/1
+            ├─ type: object
+            ├─ required
+            │  ├─ 0: actionType
+            │  └─ 1: items
+            └─ children
+               ├─ 0
+               │  └─ #/oneOf/1/properties/actionType
+               │     ├─ type: string
+               │     └─ enum
+               │        └─ 0: Create
+               ├─ 1
+               │  └─ #/oneOf/1/properties/id
+               │     └─ type: string
+               ├─ 2
+               │  └─ #/oneOf/1/properties/externalId
+               │     └─ type: string
+               ├─ 3
+               │  └─ #/oneOf/1/properties/calculateCosts
+               │     └─ type: boolean
+               ├─ 4
+               │  └─ #/oneOf/1/properties/calculateDates
+               │     └─ type: boolean
+               └─ 5
+                  └─ #/oneOf/1/properties/items
+                     ├─ type: array
+                     └─ subtype: string
+"
+`;
+
+exports[`SchemaTree tree correctness should generate valid tree for array-of-allofs.json 1`] = `
+"└─ #
+   ├─ type: object
+   └─ children
+      └─ 0
+         └─ #/properties/array-all-objects
+            ├─ type: array
+            ├─ subtype: object
+            └─ children
+               ├─ 0
+               │  └─ #/properties/array-all-objects/items/properties/foo
+               │     └─ type: string
+               └─ 1
+                  └─ #/properties/array-all-objects/items/properties/bar
+                     └─ type: string
+"
+`;
+
+exports[`SchemaTree tree correctness should generate valid tree for oneof-with-array-type.json 1`] = `
+"└─ #
+   ├─ type: array
+   ├─ combiner: oneOf
+   └─ children
+      ├─ 0
+      │  └─ #/oneOf/0
+      │     ├─ type: array
+      │     ├─ subtype: object
+      │     └─ children
+      │        ├─ 0
+      │        │  └─ #/oneOf/0/items/properties/foo
+      │        │     ├─ type: string
+      │        │     └─ enum
+      │        │        └─ 0: test
+      │        └─ 1
+      │           └─ #/oneOf/0/items/properties/baz
+      │              └─ type: integer
+      └─ 1
+         └─ #/oneOf/1
+            ├─ type: array
+            ├─ subtype: object
+            └─ children
+               ├─ 0
+               │  └─ #/oneOf/1/items/properties/foo
+               │     └─ type: number
+               ├─ 1
+               │  └─ #/oneOf/1/items/properties/baz
+               │     └─ type: integer
+               └─ 2
+                  └─ #/oneOf/1/items/properties/bar
+                     └─ type: string
+"
+`;

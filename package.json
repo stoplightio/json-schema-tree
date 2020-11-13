@@ -1,0 +1,90 @@
+{
+  "name": "@stoplight/json-schema-tree",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "sideEffects": false,
+  "homepage": "https://github.com/stoplightio/json-schema-tree",
+  "bugs": "https://github.com/stoplightio/json-schema-tree/issues",
+  "author": "Stoplight <support@stoplight.io>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stoplightio/json-schema-tree"
+  },
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "files": [
+    "**/*"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "build": "sl-scripts bundle --sourcemap",
+    "commit": "git-cz",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint.fix": "yarn lint --fix",
+    "release": "sl-scripts release",
+    "release.dryRun": "sl-scripts release --dry-run --debug",
+    "test": "jest",
+    "test.prod": "yarn lint && yarn test --coverage --maxWorkers=2",
+    "test.update": "yarn test --updateSnapshot",
+    "test.watch": "yarn test --watch"
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "@stoplight/json": "^3.9.0",
+    "@stoplight/json-schema-merge-allof": "^0.7.2",
+    "@stoplight/lifecycle": "^2.3.2"
+  },
+  "devDependencies": {
+    "@stoplight/eslint-config": "^1.2.0",
+    "@stoplight/scripts": "^8.2.3",
+    "@stoplight/types": "^11.9.0",
+    "@types/jest": "^24.0.18",
+    "@types/json-schema": "^7.0.3",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^12.7.2",
+    "@types/treeify": "^1.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-simple-import-sort": "^5.0.2",
+    "jest": "^26.6.2",
+    "prettier": "^2.1.2",
+    "treeify": "^1.1.0",
+    "ts-jest": "^26.4.3",
+    "typescript": "^4.0.5"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}$": [
+      "yarn lint.fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "release": {
+    "extends": "@stoplight/scripts/release"
+  },
+  "typings": "src/index.d.ts"
+}

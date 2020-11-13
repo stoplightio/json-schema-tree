@@ -1,0 +1,58 @@
+import type { Dictionary } from '@stoplight/types';
+
+import { getAnnotations } from '../accessors/getAnnotations';
+import { getCombiners } from '../accessors/getCombiners';
+import { getMeta } from '../accessors/getMeta';
+import { getPrimaryType } from '../accessors/getPrimaryType';
+import { getRequired } from '../accessors/getRequired';
+import { getTypes } from '../accessors/getTypes';
+import { getValidations } from '../accessors/getValidations';
+import { isDeprecated } from '../accessors/isDeprecated';
+import { unwrapArrayOrNull, unwrapStringOrNull } from '../accessors/unwrap';
+import type { SchemaFragment } from '../types';
+import { BaseNode } from './BaseNode';
+import { SchemaAnnotations, SchemaCombinerName, SchemaMeta, SchemaNode, SchemaNodeKind } from './types';
+
+export class RegularNode extends BaseNode {
+  public readonly types: SchemaNodeKind[] | null;
+  public readonly primaryType: SchemaNodeKind | null; // object (first choice) or array (second option), primitive last
+  public readonly combiners: SchemaCombinerName[] | null;
+
+  public readonly required: string[] | null;
+  public readonly enum: unknown[] | null; // https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.5.1
+  public readonly format: string | null; // https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-7
+  public readonly title: string | null;
+  public readonly deprecated: boolean;
+
+  public children: SchemaNode[] | null;
+
+  public readonly meta: Readonly<Partial<Dictionary<unknown, SchemaMeta>>>;
+  public readonly annotations: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
+  public readonly validations: Readonly<Dictionary<unknown>>;
+
+  constructor(public readonly fragment: SchemaFragment) {
+    super(fragment);
+
+    this.types = getTypes(fragment);
+    this.primaryType = getPrimaryType(fragment, this.types);
+    this.combiners = getCombiners(fragment);
+
+    this.deprecated = isDeprecated(fragment);
+    this.enum = unwrapArrayOrNull(fragment.enum);
+    this.required = getRequired(fragment.required);
+    this.format = unwrapStringOrNull(fragment.format);
+    this.title = unwrapStringOrNull(fragment.title);
+
+    this.meta = getMeta(fragment);
+    this.annotations = getAnnotations(fragment);
+    this.validations = getValidations(fragment, this.types);
+
+    this.children = null;
+  }
+
+  public get simple() {
+    return (
+      this.primaryType !== SchemaNodeKind.Array && this.primaryType !== SchemaNodeKind.Object && this.combiners === null
+    );
+  }
+}
