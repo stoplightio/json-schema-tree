@@ -31,12 +31,29 @@ export class SchemaTree {
   }
 
   public invokeWalker(walker: Walker) {
-    const walk = this.walker.walk();
+    const walk = walker.walk();
     while (!walk.next().done);
   }
 
   protected resolveRef: WalkerRefResolver = (path, $ref) => {
-    // todo: passe pointer and stuff
+    const seenRefs: string[] = [];
+    let cur$ref: unknown = $ref;
+    let resolvedValue!: SchemaFragment;
+
+    while (typeof cur$ref === 'string') {
+      if (seenRefs.includes(cur$ref)) {
+        break;
+      }
+
+      seenRefs.push(cur$ref);
+      resolvedValue = this._resolveRef(path, cur$ref);
+      cur$ref = resolvedValue.$ref;
+    }
+
+    return resolvedValue;
+  };
+
+  private _resolveRef: WalkerRefResolver = (path, $ref) => {
     const source = extractSourceFromRef($ref);
     const pointer = extractPointerFromRef($ref);
     const { refResolver } = this.opts ?? {};
