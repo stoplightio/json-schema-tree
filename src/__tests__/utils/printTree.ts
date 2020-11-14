@@ -1,12 +1,10 @@
 import { pathToPointer } from '@stoplight/json';
 import * as treeify from 'treeify';
 
-import { ReferenceNode, RegularNode } from '../../../nodes';
-import { MirrorNode } from '../../../nodes/MirrorNode';
-import type { SchemaNode } from '../../../nodes/types';
-import type { SchemaFragment } from '../../../types';
+import { MirrorNode, ReferenceNode, RegularNode, SchemaNode } from '../../nodes';
 import type { SchemaTreeOptions } from '../../tree';
 import { SchemaTree } from '../../tree';
+import type { SchemaFragment } from '../../types';
 
 export function printTree(schema: SchemaFragment, opts?: Partial<SchemaTreeOptions>) {
   const tree = new SchemaTree(schema, opts);
@@ -38,14 +36,14 @@ function printReferenceNode(node: ReferenceNode) {
 }
 
 function printMirrorNode(this: WeakSet<SchemaNode>, node: MirrorNode): any {
-  if (this.has(node.references)) {
+  if (this.has(node.mirrors)) {
     return {
       mirrors: pathToPointer(node.path as string[]),
     };
   }
 
-  this.add(node.references);
-  return printNode.call(this, node.references);
+  this.add(node.mirrors);
+  return printNode.call(this, node.mirrors);
 }
 
 function printNode(this: WeakSet<SchemaNode>, node: SchemaNode) {

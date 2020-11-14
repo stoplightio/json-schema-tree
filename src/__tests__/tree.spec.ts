@@ -1,9 +1,8 @@
 import * as fs from 'fs';
+import type { JSONSchema4 } from 'json-schema';
 import * as path from 'path';
 
 import { printTree } from './utils/printTree';
-
-type JSONSchema4 = any;
 
 describe('SchemaTree', () => {
   describe('allOf failures', () => {
@@ -202,30 +201,61 @@ describe('SchemaTree', () => {
 
       expect(printTree(schema)).toMatchInlineSnapshot(`
         "└─ #
-           ├─ type: object
+           ├─ types
+           │  └─ 0: object
+           ├─ primaryType: object
            └─ children
               ├─ 0
               │  └─ #/properties/foo
-              │     ├─ type: array
-              │     ├─ subtype: object
+              │     ├─ types
+              │     │  └─ 0: array
+              │     ├─ primaryType: array
               │     └─ children
               │        └─ 0
-              │           └─ #/properties/foo/items/properties/user
-              │              ├─ $ref: #/properties/baz
+              │           └─ #/properties/foo/items
+              │              ├─ types
+              │              │  └─ 0: object
+              │              ├─ primaryType: object
               │              └─ children
+              │                 └─ 0
+              │                    └─ #/properties/foo/items/properties/user
+              │                       ├─ types
+              │                       │  └─ 0: array
+              │                       ├─ primaryType: array
+              │                       └─ children
+              │                          └─ 0
+              │                             └─ #/properties/foo/items/properties/user/items
+              │                                ├─ types
+              │                                │  └─ 0: object
+              │                                ├─ primaryType: object
+              │                                └─ children
+              │                                   └─ 0
+              │                                      └─ #/properties/foo/items/properties/user/properties/user
+              │                                         ├─ types
+              │                                         │  └─ 0: array
+              │                                         ├─ primaryType: array
+              │                                         └─ children
+              │                                            └─ 0
+              │                                               └─ #/properties/foo/items/properties/user/items/user/items
+              │                                                  └─ mirrors: #/properties/foo/items/properties/user/items
               ├─ 1
               │  └─ #/properties/bar
-              │     ├─ $ref: #/properties/foo
+              │     ├─ types
+              │     │  └─ 0: array
+              │     ├─ primaryType: array
               │     └─ children
+              │        └─ 0
+              │           └─ #/properties/bar/items
+              │              └─ mirrors: #/properties/foo/items/properties/user/items
               └─ 2
                  └─ #/properties/baz
-                    ├─ type: array
-                    ├─ subtype: object
+                    ├─ types
+                    │  └─ 0: array
+                    ├─ primaryType: array
                     └─ children
                        └─ 0
-                          └─ #/properties/baz/items/properties/user
-                             ├─ $ref: #/properties/baz
-                             └─ children
+                          └─ #/properties/baz/items
+                             └─ mirrors: #/properties/bar/items
         "
       `);
     });
@@ -261,7 +291,6 @@ describe('SchemaTree', () => {
   });
 
   describe('tree correctness', () => {
-    // you can put tests verifying whether we generate expected tree
     it('given multiple object and string type, should process properties', () => {
       const schema: JSONSchema4 = {
         type: ['string', 'object'],

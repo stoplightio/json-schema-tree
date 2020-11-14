@@ -15,6 +15,10 @@ export abstract class BaseNode {
     return this.parent === null ? this.subpath : [...this.parent.path, ...this.subpath];
   }
 
+  public get depth(): number {
+    return this.parent === null ? 0 : this.parent.depth + 1;
+  }
+
   protected constructor(public readonly fragment: SchemaFragment) {
     this.id = String(SEED++);
     this.subpath = [];

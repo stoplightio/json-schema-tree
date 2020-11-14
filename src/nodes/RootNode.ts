@@ -1,4 +1,4 @@
-import type { SchemaFragment } from '../walker/types';
+import type { SchemaFragment } from '../types';
 import { BaseNode } from './BaseNode';
 import type { SchemaNode } from './types';
 
@@ -7,7 +7,7 @@ export class RootNode extends BaseNode {
   public readonly children: SchemaNode[];
 
   constructor(public readonly fragment: SchemaFragment) {
-    super(fragment, []);
+    super(fragment);
     this.children = [];
   }
 }
