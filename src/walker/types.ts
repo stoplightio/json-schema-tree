@@ -1,4 +1,5 @@
-import type { SchemaNode } from '../nodes';
+import type { RegularNode, SchemaNode } from '../nodes';
+import type { RootNode } from '../nodes/RootNode';
 import type { SchemaFragment } from '../types';
 
 export type WalkerRefResolver = (path: string[] | null, $ref: string) => SchemaFragment;
@@ -16,11 +17,12 @@ export type WalkerItem = {
 export type WalkerSnapshot = {
   readonly fragment: SchemaFragment;
   readonly depth: number;
+  readonly schemaNode: RegularNode | RootNode;
   readonly path: string[];
 };
 
 export type WalkerHookAction = 'filter' | 'stepIn';
 export type WalkerHookHandler = (node: SchemaNode) => boolean;
 
-export type WalkerEvent = 'newNode' | 'enterNode' | 'exitNode';
+export type WalkerEvent = 'newNode' | 'acceptNode' | 'enterNode' | 'exitNode';
 export type WalkerEventHandler = (node: SchemaNode) => void;

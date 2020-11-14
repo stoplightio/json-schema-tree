@@ -45,6 +45,7 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
     this.path.splice(0, this.path.length, ...snapshot.path);
     this.depth = snapshot.depth;
     this.fragment = snapshot.fragment;
+    this.schemaNode = snapshot.schemaNode;
 
     yield* this.walk();
   }
@@ -53,12 +54,20 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
     return {
       depth: this.depth,
       fragment: this.fragment,
+      schemaNode: this.schemaNode,
       path: this.path.slice(),
     };
   }
 
   public hookInto(action: WalkerHookAction, handler: WalkerHookHandler) {
     this.hooks[action] = handler;
+  }
+
+  public restoreWalkerAtNode(node: RegularNode) {
+    this.path.splice(0, this.path.length, ...node.path);
+    this.depth = node.depth;
+    this.fragment = node.fragment;
+    this.schemaNode = node;
   }
 
   public *walk(): IterableIterator<WalkerItem> {
@@ -93,13 +102,15 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
         }
       }
 
-      if (!(schemaNode instanceof RegularNode)) continue;
+      super.emit('acceptNode', schemaNode);
 
-      this.schemaNode = schemaNode;
+      if (schemaNode instanceof RegularNode) {
+        this.schemaNode = schemaNode;
 
-      if (this.hooks.stepIn?.(schemaNode) === false) {
-        super.emit('enterNode', schemaNode);
-        yield* this.walkNodeChildren();
+        if (this.hooks.stepIn?.(schemaNode) !== false) {
+          super.emit('enterNode', schemaNode);
+          yield* this.walkNodeChildren();
+        }
       }
 
       super.emit('exitNode', schemaNode);
