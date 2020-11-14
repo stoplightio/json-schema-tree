@@ -26,11 +26,24 @@ const tree = new SchemaTree(mySchema);
 const snapshots = [];
 let allowedDepth = 4;
 
-tree.walker.on('enter', node => {
-  if (tree.walker.depth >= allowedDepth) {
-    tree.walker.stepIn = false;
-    snapshots.push(tree.walker.pause());  
-  }
+tree.walker.hookInto('stepIn', node => {
+  return tree.walker.depth >= allowedDepth;
+});
+
+tree.walker.hookInto('filter', node => {
+  return !!node.type?.includes('integeer'); // sorry, we don't care about integers
+});
+
+tree.walker.on('newNode', node => {
+  // new node in fragment is about to be processed
+});
+
+tree.walker.on('enterNode', node => {
+  // node has some children we'll process
+});
+
+tree.walker('exitNode', node => {
+  // node processed
 });
 
 tree.populate();

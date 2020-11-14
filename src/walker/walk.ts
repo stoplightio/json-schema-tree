@@ -1,4 +1,5 @@
 import { EventEmitter } from '@stoplight/lifecycle';
+import type { Dictionary } from '@stoplight/types';
 
 import { mergeAllOf } from '../mergers/mergeAllOf';
 import { mergeOneOrAnyOf } from '../mergers/mergeOneOrAnyOf';
@@ -8,74 +9,17 @@ import type { RootNode } from '../nodes/RootNode';
 import { SchemaCombinerName, SchemaNode, SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
 import { isObjectLiteral } from '../utils/guards';
-import type { WalkingOptions } from './types';
+import type {
+  WalkerEvent,
+  WalkerEventHandler,
+  WalkerHookAction,
+  WalkerHookHandler,
+  WalkerItem,
+  WalkerSnapshot,
+  WalkingOptions,
+} from './types';
 
-function* processFragment(
-  fragment: SchemaFragment,
-  path: string[],
-  walkingOptions: WalkingOptions,
-  processedFragments: WeakMap<SchemaFragment, SchemaNode>,
-): IterableIterator<SchemaNode> {
-  const processedFragment = processedFragments.get(fragment);
-  if (processedFragment !== void 0) {
-    return yield new MirrorNode(processedFragment);
-  }
-
-  if ('$ref' in fragment) {
-    if (walkingOptions.resolveRef !== null && typeof fragment.$ref === 'string') {
-      try {
-        const seenRefs: string[] = [];
-        while (typeof fragment.$ref === 'string') {
-          if (seenRefs.includes(fragment.$ref)) {
-            return yield new ReferenceNode(fragment, null);
-          }
-
-          seenRefs.push(fragment.$ref);
-          fragment = walkingOptions.resolveRef(path, fragment.$ref);
-        }
-      } catch (ex) {
-        return yield new ReferenceNode(fragment, ex.message);
-      }
-    } else {
-      return yield new ReferenceNode(fragment, null);
-    }
-  }
-
-  if (walkingOptions.mergeAllOf && SchemaCombinerName.AllOf in fragment) {
-    try {
-      fragment = mergeAllOf(fragment, path, walkingOptions);
-    } catch {
-      //
-    }
-  }
-
-  if (SchemaCombinerName.OneOf in fragment || SchemaCombinerName.AnyOf in fragment) {
-    try {
-      for (const item of mergeOneOrAnyOf(fragment, path, walkingOptions)) {
-        yield new RegularNode(item);
-      }
-
-      return;
-    } catch {
-      //
-    }
-  }
-
-  yield new RegularNode(fragment);
-}
-
-type WalkerItem = {
-  node: SchemaNode;
-  parentNode: SchemaNode | null;
-};
-
-type WalkerSnapshot = {
-  readonly fragment: SchemaFragment;
-  readonly depth: number;
-  readonly path: string[];
-};
-
-export class Walker extends EventEmitter<any> {
+export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEvent>> {
   public readonly path: string[];
   public depth: number;
 
@@ -83,6 +27,7 @@ export class Walker extends EventEmitter<any> {
   protected schemaNode: RegularNode | RootNode;
 
   private readonly processedFragments: WeakMap<SchemaFragment, SchemaNode>;
+  private readonly hooks: Partial<Dictionary<WalkerHookHandler, WalkerHookAction>>;
 
   constructor(protected readonly root: RootNode, protected readonly walkingOptions: WalkingOptions) {
     super();
@@ -92,9 +37,9 @@ export class Walker extends EventEmitter<any> {
     this.fragment = root.fragment;
     this.schemaNode = root;
     this.processedFragments = new WeakMap<SchemaFragment, SchemaNode>();
-  }
 
-  public stepIn: boolean = true;
+    this.hooks = {};
+  }
 
   public *resume(snapshot: WalkerSnapshot) {
     this.path.splice(0, this.path.length, ...snapshot.path);
@@ -112,6 +57,10 @@ export class Walker extends EventEmitter<any> {
     };
   }
 
+  public hookInto(action: WalkerHookAction, handler: WalkerHookHandler) {
+    this.hooks[action] = handler;
+  }
+
   public *walk(): IterableIterator<WalkerItem> {
     const {
       depth: initialDepth,
@@ -119,16 +68,21 @@ export class Walker extends EventEmitter<any> {
       path: { length },
     } = this;
 
-    for (const schemaNode of processFragment(this.fragment, this.path, this.walkingOptions, this.processedFragments)) {
+    for (const schemaNode of this.processFragment()) {
+      super.emit('newNode', schemaNode);
+
       this.processedFragments.set(schemaNode.fragment, schemaNode);
 
       this.fragment = schemaNode.fragment;
       this.depth = initialDepth + 1;
 
-      super.emit('enter', schemaNode);
+      const shouldSkipNode = this.hooks.filter?.(schemaNode);
+
+      if (shouldSkipNode === true) {
+        continue;
+      }
 
       schemaNode.parent = initialSchemaNode;
-      // @ts-ignore
       schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
 
       if ('children' in initialSchemaNode) {
@@ -143,11 +97,12 @@ export class Walker extends EventEmitter<any> {
 
       this.schemaNode = schemaNode;
 
-      if (this.stepIn) {
+      if (this.hooks.stepIn?.(schemaNode) === false) {
+        super.emit('enterNode', schemaNode);
         yield* this.walkNodeChildren();
       }
 
-      super.emit('exit');
+      super.emit('exitNode', schemaNode);
     }
 
     this.path.length = length;
@@ -166,7 +121,6 @@ export class Walker extends EventEmitter<any> {
       path: { length },
     } = this;
 
-    // todo: combiner
     if (schemaNode.combiners !== null) {
       for (const combiner of schemaNode.combiners) {
         const items = fragment[combiner];
@@ -177,6 +131,7 @@ export class Walker extends EventEmitter<any> {
           i++;
           if (!isObjectLiteral(item)) continue;
           this.fragment = item;
+          // todo: spaghetti
           this.schemaNode = initialSchemaNode;
           this.depth = initialDepth;
           this.path.length = length;
@@ -241,5 +196,49 @@ export class Walker extends EventEmitter<any> {
     }
 
     this.schemaNode = schemaNode;
+  }
+
+  protected *processFragment(): IterableIterator<SchemaNode> {
+    const { walkingOptions, path, processedFragments } = this;
+    let { fragment } = this;
+
+    const processedFragment = processedFragments.get(fragment);
+    if (processedFragment !== void 0) {
+      return yield new MirrorNode(processedFragment);
+    }
+
+    if ('$ref' in fragment) {
+      if (walkingOptions.resolveRef !== null && typeof fragment.$ref === 'string') {
+        try {
+          fragment = walkingOptions.resolveRef(path, fragment.$ref);
+        } catch (ex) {
+          return yield new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error');
+        }
+      } else {
+        return yield new ReferenceNode(fragment, null);
+      }
+    }
+
+    if (walkingOptions.mergeAllOf && SchemaCombinerName.AllOf in fragment) {
+      try {
+        fragment = mergeAllOf(fragment, path, walkingOptions);
+      } catch {
+        // no the end of the world - we will render raw unprocessed fragment
+      }
+    }
+
+    if (SchemaCombinerName.OneOf in fragment || SchemaCombinerName.AnyOf in fragment) {
+      try {
+        for (const item of mergeOneOrAnyOf(fragment, path, walkingOptions)) {
+          yield new RegularNode(item);
+        }
+
+        return;
+      } catch {
+        // no the end of the world - we will render raw unprocessed fragment
+      }
+    }
+
+    yield new RegularNode(fragment);
   }
 }
