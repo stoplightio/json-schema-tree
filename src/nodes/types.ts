@@ -1,8 +1,9 @@
 import type { MirrorNode } from './MirrorNode';
 import type { ReferenceNode } from './ReferenceNode';
 import type { RegularNode } from './RegularNode';
+import type { RootNode } from './RootNode';
 
-export type SchemaNode = RegularNode | ReferenceNode | MirrorNode;
+export type SchemaNode = RootNode | RegularNode | ReferenceNode | MirrorNode;
 
 export enum SchemaNodeKind {
   Any = 'any',

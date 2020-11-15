@@ -1,4 +1,5 @@
 import { pathToPointer } from '@stoplight/json';
+import type { Dictionary } from '@stoplight/types';
 import * as treeify from 'treeify';
 
 import { MirrorNode, ReferenceNode, RegularNode, SchemaNode } from '../../nodes';
@@ -12,13 +13,13 @@ export function printTree(schema: SchemaFragment, opts?: Partial<SchemaTreeOptio
 
   const root: unknown =
     tree.root.children.length > 1
-      ? tree.root.children.map(prepareTree, new WeakSet())
+      ? tree.root.children.map(child => prepareTree.call(new WeakSet(), child))
       : prepareTree.call(new WeakSet(), tree.root.children[0]);
 
   return treeify.asTree(root as treeify.TreeObject, true, true);
 }
 
-function printRegularNode(this: WeakSet<SchemaNode>, node: RegularNode): any {
+function printRegularNode(this: WeakSet<SchemaFragment>, node: RegularNode): Dictionary<unknown> {
   return {
     ...(node.types !== null ? { types: node.types } : null),
     ...(node.primaryType !== null ? { primaryType: node.primaryType } : null),
@@ -36,30 +37,30 @@ function printReferenceNode(node: ReferenceNode) {
   };
 }
 
-function printMirrorNode(this: WeakSet<SchemaNode>, node: MirrorNode): any {
-  if (this.has(node.mirrors)) {
+function printMirrorNode(this: WeakSet<SchemaFragment>, node: MirrorNode): any {
+  if (this.has(node.fragment)) {
     return {
-      mirrors: pathToPointer(node.path as string[]),
+      mirrors: pathToPointer(node.mirroredNode.path as string[]),
     };
   }
 
-  this.add(node.mirrors);
-  return printNode.call(this, node.mirrors);
+  this.add(node.fragment);
+  return printRegularNode.call(this, node as RegularNode);
 }
 
-function printNode(this: WeakSet<SchemaNode>, node: SchemaNode) {
-  return node instanceof RegularNode
+function printNode(this: WeakSet<SchemaFragment>, node: SchemaNode) {
+  return node instanceof MirrorNode
+    ? printMirrorNode.call(this, node)
+    : node instanceof RegularNode
     ? printRegularNode.call(this, node)
     : node instanceof ReferenceNode
     ? printReferenceNode.call(this, node)
-    : node instanceof MirrorNode
-    ? printMirrorNode.call(this, node)
     : {
         kind: 'unknown node',
       };
 }
 
-function prepareTree(this: WeakSet<SchemaNode>, node: SchemaNode) {
+function prepareTree(this: WeakSet<SchemaFragment>, node: SchemaNode) {
   return {
     [pathToPointer(node.path as string[])]: printNode.call(this, node),
   };
