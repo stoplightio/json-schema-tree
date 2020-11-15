@@ -54,6 +54,61 @@ allowedDepth++;
 tree.invokeWalker(tree.walker.resume(snapshots[0])); // resumes, useful for jsv (expand)
 ```
 
+#### General tree structure
+
+The tree self expands if a schema we build tree for has circular $refs.
+
+Example
+
+```ts
+const schema: JSONSchema4 = {
+  type: 'object',
+  properties: {
+    foo: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          user: {
+            $ref: '#/properties/bar',
+          },
+        },
+      },
+    },
+    bar: {
+      $ref: '#/properties/baz',
+    },
+    baz: {
+      $ref: '#/properties/foo',
+    },
+  },
+};
+
+const tree = new SchemaTree(schema);
+tree.populate();
+
+expect(tree.root.children[0].children[0].children[0].children[0].children[0].children[0].path).toEqual([
+  'properties',
+  'foo',
+  'items',
+  'properties',
+  'user',
+  'items',
+  'properties',
+  'user',
+]);
+expect(tree.root.children[0].children[2].children[0].children[0].children[0].children[0].path).toEqual([
+  'properties',
+  'baz',
+  'items',
+  'properties',
+  'user',
+  'items',
+  'properties',
+  'user',
+]);
+```
+
 ### Contributing
 
 1. Clone repo.
