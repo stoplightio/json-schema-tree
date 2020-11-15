@@ -23,6 +23,7 @@ function printRegularNode(this: WeakSet<SchemaNode>, node: RegularNode): any {
     ...(node.types !== null ? { types: node.types } : null),
     ...(node.primaryType !== null ? { primaryType: node.primaryType } : null),
     ...(node.combiners !== null ? { combiners: node.combiners } : null),
+    ...(node.enum !== null ? { enum: node.enum } : null),
     ...(node.children !== null ? { children: node.children.map(prepareTree, this) } : null),
   };
 }

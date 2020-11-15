@@ -290,21 +290,20 @@ describe('SchemaTree', () => {
     // });
   });
 
-  describe('tree correctness', () => {
-    it('given multiple object and string type, should process properties', () => {
-      const schema: JSONSchema4 = {
-        type: ['string', 'object'],
-        properties: {
-          ids: {
-            type: 'array',
-            items: {
-              type: 'integer',
-            },
+  it('given multiple object and string type, should process properties', () => {
+    const schema: JSONSchema4 = {
+      type: ['string', 'object'],
+      properties: {
+        ids: {
+          type: 'array',
+          items: {
+            type: 'integer',
           },
         },
-      };
+      },
+    };
 
-      expect(printTree(schema)).toMatchInlineSnapshot(`
+    expect(printTree(schema)).toMatchInlineSnapshot(`
         "└─ #
            ├─ types
            │  ├─ 0: string
@@ -324,90 +323,90 @@ describe('SchemaTree', () => {
                              └─ primaryType: integer
         "
       `);
-    });
+  });
 
-    describe.each(['anyOf', 'oneOf'])('given %s combiner placed next to allOf', combiner => {
-      let schema: JSONSchema4;
+  describe.each(['anyOf', 'oneOf'])('given %s combiner placed next to allOf', combiner => {
+    let schema: JSONSchema4;
 
-      beforeEach(() => {
-        schema = {
-          type: 'object',
-          title: 'Account',
-          allOf: [
-            {
-              type: 'object',
-              properties: {
-                type: {
-                  type: 'string',
-                  enum: ['admin', 'editor'],
-                },
-                enabled: {
-                  type: 'boolean',
-                  description: 'Is this account enabled',
-                },
-              },
-              required: ['type'],
-            },
-          ],
-          [combiner]: [
-            {
-              type: 'object',
-              title: 'Admin',
-              properties: {
-                root: {
-                  type: 'boolean',
-                },
-                group: {
-                  type: 'string',
-                },
-                expirationDate: {
-                  type: 'string',
-                },
-              },
-            },
-            {
-              type: 'object',
-              title: 'Editor',
-              properties: {
-                supervisor: {
-                  type: 'string',
-                },
-                key: {
-                  type: 'string',
-                },
-              },
-            },
-          ],
-        };
-      });
-
-      it('given allOf merging disabled, should still merge', () => {
-        expect(printTree(schema, { mergeAllOf: false })).toMatchSnapshot();
-      });
-
-      it('given allOf merging enabled, should merge contents of allOf combiners', () => {
-        expect(printTree(schema)).toMatchSnapshot();
-      });
-    });
-
-    it('given array with oneOf containing items, should merge it correctly', () => {
-      const schema: JSONSchema4 = {
-        oneOf: [
+    beforeEach(() => {
+      schema = {
+        type: 'object',
+        title: 'Account',
+        allOf: [
           {
-            items: {
-              type: 'string',
+            type: 'object',
+            properties: {
+              type: {
+                type: 'string',
+                enum: ['admin', 'editor'],
+              },
+              enabled: {
+                type: 'boolean',
+                description: 'Is this account enabled',
+              },
+            },
+            required: ['type'],
+          },
+        ],
+        [combiner]: [
+          {
+            type: 'object',
+            title: 'Admin',
+            properties: {
+              root: {
+                type: 'boolean',
+              },
+              group: {
+                type: 'string',
+              },
+              expirationDate: {
+                type: 'string',
+              },
             },
           },
           {
-            items: {
-              type: 'number',
+            type: 'object',
+            title: 'Editor',
+            properties: {
+              supervisor: {
+                type: 'string',
+              },
+              key: {
+                type: 'string',
+              },
             },
           },
         ],
-        type: 'array',
       };
+    });
 
-      expect(printTree(schema)).toMatchInlineSnapshot(`
+    it('given allOf merging disabled, should still merge', () => {
+      expect(printTree(schema, { mergeAllOf: false })).toMatchSnapshot();
+    });
+
+    it('given allOf merging enabled, should merge contents of allOf combiners', () => {
+      expect(printTree(schema)).toMatchSnapshot();
+    });
+  });
+
+  it('given array with oneOf containing items, should merge it correctly', () => {
+    const schema: JSONSchema4 = {
+      oneOf: [
+        {
+          items: {
+            type: 'string',
+          },
+        },
+        {
+          items: {
+            type: 'number',
+          },
+        },
+      ],
+      type: 'array',
+    };
+
+    expect(printTree(schema)).toMatchInlineSnapshot(`
         "└─ #
            ├─ type: array
            ├─ combiner: oneOf
@@ -422,14 +421,13 @@ describe('SchemaTree', () => {
                     └─ subtype: number
         "
       `);
-    });
-
-    it.each(['array-of-allofs.json', 'allof-with-type.json', 'oneof-with-array-type.json'])(
-      'should generate valid tree for %s',
-      filename => {
-        const schema = JSON.parse(fs.readFileSync(path.resolve(__dirname, '__fixtures__', filename), 'utf8'));
-        expect(printTree(schema)).toMatchSnapshot();
-      },
-    );
   });
+
+  it.each(['array-of-allofs.json', 'allof-with-type.json', 'oneof-with-array-type.json'])(
+    'should generate valid tree for %s',
+    filename => {
+      const schema = JSON.parse(fs.readFileSync(path.resolve(__dirname, '__fixtures__', filename), 'utf8'));
+      expect(printTree(schema)).toMatchSnapshot();
+    },
+  );
 });
