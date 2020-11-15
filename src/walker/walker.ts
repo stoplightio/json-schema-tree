@@ -240,8 +240,14 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
 
     if (SchemaCombinerName.OneOf in fragment || SchemaCombinerName.AnyOf in fragment) {
       try {
-        for (const item of mergeOneOrAnyOf(fragment, path, walkingOptions)) {
-          yield new RegularNode(item);
+        const merged = mergeOneOrAnyOf(fragment, path, walkingOptions);
+        if (merged.length === 1) {
+          yield new RegularNode(merged[0]);
+        } else {
+          const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
+          yield new RegularNode({
+            [combiner]: merged,
+          });
         }
 
         return;

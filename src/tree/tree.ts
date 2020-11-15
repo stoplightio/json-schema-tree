@@ -6,8 +6,8 @@ import type { SchemaTreeRefDereferenceFn } from '../resolver/types';
 import type { SchemaFragment } from '../types';
 import { isObjectLiteral } from '../utils';
 import { get } from '../utils/get';
+import { Walker } from '../walker';
 import type { WalkerRefResolver } from '../walker/types';
-import { Walker } from '../walker/walk';
 
 export type SchemaTreeOptions = {
   mergeAllOf: boolean;
@@ -24,6 +24,10 @@ export class SchemaTree {
       mergeAllOf: this.opts?.mergeAllOf !== false,
       resolveRef: opts?.refResolver === null ? null : this.resolveRef,
     });
+  }
+
+  public clear() {
+    this.root.children.length = 0;
   }
 
   public populate() {
