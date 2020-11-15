@@ -42,16 +42,14 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
     this.hooks = {};
   }
 
-  public *resume(snapshot: WalkerSnapshot) {
+  public loadState(snapshot: WalkerSnapshot) {
     this.path.splice(0, this.path.length, ...snapshot.path);
     this.depth = snapshot.depth;
     this.fragment = snapshot.fragment;
     this.schemaNode = snapshot.schemaNode;
-
-    yield* this.walk();
   }
 
-  public pause(): WalkerSnapshot {
+  public saveState(): WalkerSnapshot {
     return {
       depth: this.depth,
       fragment: this.fragment,
