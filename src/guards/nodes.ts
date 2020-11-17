@@ -1,10 +1,10 @@
-import type { MirrorNode, ReferenceNode, RegularNode, SchemaNode } from '../nodes';
+import type { MirroredSchemaNode, ReferenceNode, RegularNode, SchemaNode } from '../nodes';
 
 export function isRegularNode(node: SchemaNode): node is RegularNode {
   return 'types' in node && 'primaryType' in node && 'combiners' in node;
 }
 
-export function isMirrorNode(node: SchemaNode): node is MirrorNode {
+export function isMirroredNode(node: SchemaNode): node is MirroredSchemaNode {
   return 'mirroredNode' in node;
 }
 

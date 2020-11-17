@@ -6,7 +6,6 @@ import { BaseNode } from './BaseNode';
 
 export class ReferenceNode extends BaseNode {
   public readonly value: string | null;
-  // public readonly circular: boolean | null; // null = no info
 
   constructor(fragment: SchemaFragment, public readonly error: string | null) {
     super(fragment);

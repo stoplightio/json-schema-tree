@@ -2,7 +2,8 @@ import { pathToPointer } from '@stoplight/json';
 import type { Dictionary } from '@stoplight/types';
 import * as treeify from 'treeify';
 
-import { MirrorNode, ReferenceNode, RegularNode, SchemaNode } from '../../nodes';
+import { isMirroredNode, isRegularNode } from '../../guards';
+import { MirroredSchemaNode, ReferenceNode, RegularNode, SchemaNode } from '../../nodes';
 import type { SchemaTreeOptions } from '../../tree';
 import { SchemaTree } from '../../tree';
 import type { SchemaFragment } from '../../types';
@@ -37,7 +38,7 @@ function printReferenceNode(node: ReferenceNode) {
   };
 }
 
-function printMirrorNode(this: WeakSet<SchemaFragment>, node: MirrorNode): any {
+function printMirrorNode(this: WeakSet<SchemaFragment>, node: MirroredSchemaNode): any {
   if (this.has(node.fragment)) {
     return {
       mirrors: pathToPointer(node.mirroredNode.path as string[]),
@@ -45,11 +46,11 @@ function printMirrorNode(this: WeakSet<SchemaFragment>, node: MirrorNode): any {
   }
 
   this.add(node.fragment);
-  return printRegularNode.call(this, node as RegularNode);
+  return isRegularNode(node) ? printRegularNode.call(this, node) : printReferenceNode.call(this, node);
 }
 
 function printNode(this: WeakSet<SchemaFragment>, node: SchemaNode) {
-  return node instanceof MirrorNode
+  return isMirroredNode(node)
     ? printMirrorNode.call(this, node)
     : node instanceof RegularNode
     ? printRegularNode.call(this, node)

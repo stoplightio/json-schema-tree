@@ -11,7 +11,8 @@ import { isDeprecated } from '../accessors/isDeprecated';
 import { unwrapArrayOrNull, unwrapStringOrNull } from '../accessors/unwrap';
 import type { SchemaFragment } from '../types';
 import { BaseNode } from './BaseNode';
-import { SchemaAnnotations, SchemaCombinerName, SchemaMeta, SchemaNode, SchemaNodeKind } from './types';
+import type { ReferenceNode } from './ReferenceNode';
+import { MirroredSchemaNode, SchemaAnnotations, SchemaCombinerName, SchemaMeta, SchemaNodeKind } from './types';
 
 export class RegularNode extends BaseNode {
   public readonly types: SchemaNodeKind[] | null;
@@ -24,7 +25,7 @@ export class RegularNode extends BaseNode {
   public readonly title: string | null;
   public readonly deprecated: boolean;
 
-  public children: SchemaNode[] | null;
+  public children: (RegularNode | ReferenceNode | MirroredSchemaNode)[] | null;
 
   public readonly meta: Readonly<Partial<Dictionary<unknown, SchemaMeta>>>;
   public readonly annotations: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;

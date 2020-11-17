@@ -1,9 +1,12 @@
-import type { MirrorNode } from './MirrorNode';
+import type { MirroredReferenceNode } from './mirrored/MirroredReferenceNode';
+import type { MirroredRegularNode } from './mirrored/MirroredRegularNode';
 import type { ReferenceNode } from './ReferenceNode';
 import type { RegularNode } from './RegularNode';
 import type { RootNode } from './RootNode';
 
-export type SchemaNode = RootNode | RegularNode | ReferenceNode | MirrorNode;
+export type MirroredSchemaNode = MirroredRegularNode | MirroredReferenceNode;
+
+export type SchemaNode = RootNode | RegularNode | ReferenceNode | MirroredSchemaNode;
 
 export enum SchemaNodeKind {
   Any = 'any',

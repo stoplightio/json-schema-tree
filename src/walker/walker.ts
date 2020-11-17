@@ -1,11 +1,10 @@
 import { EventEmitter } from '@stoplight/lifecycle';
 import type { Dictionary } from '@stoplight/types';
 
-import { isRegularNode } from '../guards';
+import { isReferenceNode, isRegularNode } from '../guards';
 import { mergeAllOf } from '../mergers/mergeAllOf';
 import { mergeOneOrAnyOf } from '../mergers/mergeOneOrAnyOf';
-import { ReferenceNode, RegularNode } from '../nodes';
-import { MirrorNode } from '../nodes/MirrorNode';
+import { MirroredReferenceNode, MirroredRegularNode, ReferenceNode, RegularNode } from '../nodes';
 import { RootNode } from '../nodes/RootNode';
 import { SchemaCombinerName, SchemaNode, SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
@@ -95,7 +94,7 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
         schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
       }
 
-      if ('children' in initialSchemaNode) {
+      if ('children' in initialSchemaNode && !(schemaNode instanceof RootNode)) {
         if (initialSchemaNode.children === null) {
           (initialSchemaNode as RegularNode).children = [schemaNode];
         } else {
@@ -214,9 +213,18 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
     const { walkingOptions, path, processedFragments } = this;
     let { fragment } = this;
 
-    const processedFragment = processedFragments.get(fragment);
-    if (processedFragment !== void 0) {
-      return yield new MirrorNode(processedFragment);
+    const processedSchemaNode = processedFragments.get(fragment);
+    if (processedSchemaNode !== void 0) {
+      if (isRegularNode(processedSchemaNode)) {
+        return yield new MirroredRegularNode(processedSchemaNode);
+      }
+
+      if (isReferenceNode(processedSchemaNode)) {
+        return yield new MirroredReferenceNode(processedSchemaNode);
+      }
+
+      // whoops, we don't know what to do with it
+      throw new TypeError('Cannot mirror the node');
     }
 
     if ('$ref' in fragment) {

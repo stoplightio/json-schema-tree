@@ -1,10 +1,12 @@
 import type { Dictionary } from '@stoplight/types';
 
-import { BaseNode } from './BaseNode';
-import type { RegularNode } from './RegularNode';
-import type { SchemaAnnotations, SchemaCombinerName, SchemaMeta, SchemaNode, SchemaNodeKind } from './types';
+import { isRegularNode } from '../../guards';
+import { BaseNode } from '../BaseNode';
+import type { RegularNode } from '../RegularNode';
+import type { SchemaAnnotations, SchemaCombinerName, SchemaMeta, SchemaNodeKind } from '../types';
+import { MirroredReferenceNode } from './MirroredReferenceNode';
 
-export class MirrorNode extends BaseNode implements RegularNode {
+export class MirroredRegularNode extends BaseNode implements RegularNode {
   public readonly types!: SchemaNodeKind[] | null;
   public readonly primaryType!: SchemaNodeKind | null;
   public readonly combiners!: SchemaCombinerName[] | null;
@@ -21,7 +23,7 @@ export class MirrorNode extends BaseNode implements RegularNode {
 
   public readonly simple!: boolean;
 
-  constructor(public readonly mirroredNode: SchemaNode) {
+  constructor(public readonly mirroredNode: RegularNode) {
     super(mirroredNode.fragment);
 
     return new Proxy(this, {
@@ -43,15 +45,15 @@ export class MirrorNode extends BaseNode implements RegularNode {
     });
   }
 
-  public get children(): MirrorNode[] | null {
+  public get children(): (MirroredRegularNode | MirroredReferenceNode)[] | null {
     if (!('children' in this.mirroredNode)) return null;
 
     const referencedChildren = this.mirroredNode.children;
     if (referencedChildren === null) return null;
 
-    const children: MirrorNode[] = [];
+    const children: (MirroredRegularNode | MirroredReferenceNode)[] = [];
     for (const child of referencedChildren) {
-      const mirroredChild = new MirrorNode(child);
+      const mirroredChild = isRegularNode(child) ? new MirroredRegularNode(child) : new MirroredReferenceNode(child);
       mirroredChild.parent = this;
       mirroredChild.subpath = child.subpath;
       children.push(mirroredChild);
