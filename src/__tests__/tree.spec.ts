@@ -239,7 +239,7 @@ describe('SchemaTree', () => {
                 │                                         └─ children
                 │                                            └─ 0
                 │                                               └─ #/properties/foo/items/properties/user/items/properties/user/items
-                │                                                  └─ mirrors: #/properties/foo/items/properties/user/items
+                │                                                  └─ mirrors: #/properties/foo/items
                 ├─ 1
                 │  └─ #/properties/bar
                 │     ├─ types
@@ -476,6 +476,13 @@ describe('SchemaTree', () => {
 
         const tree = new SchemaTree(schema);
         tree.populate();
+
+        expect(
+          // @ts-ignore
+          tree.root.children[0].children[2].children[0].children[0].children[0].parent ===
+            // @ts-ignore
+            tree.root.children[0].children[2].children[0].children[0],
+        ).toBe(true);
 
         // @ts-ignore
         expect(tree.root.children[0].children[0].children[0].children[0].children[0].children[0].path).toEqual([

@@ -1,6 +1,6 @@
 import type { Dictionary } from '@stoplight/types';
 
-import { isRegularNode } from '../../guards';
+import { isMirroredNode, isRegularNode } from '../../guards';
 import { BaseNode } from '../BaseNode';
 import type { RegularNode } from '../RegularNode';
 import type { SchemaAnnotations, SchemaCombinerName, SchemaMeta, SchemaNodeKind } from '../types';
@@ -26,7 +26,7 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
   constructor(public readonly mirroredNode: RegularNode) {
     super(mirroredNode.fragment);
 
-    return new Proxy(this, {
+    this._this = new Proxy(this, {
       get(target, key) {
         if (key in target) {
           return target[key];
@@ -43,22 +43,43 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
         return key in target || key in mirroredNode;
       },
     });
+
+    return this._this;
   }
 
+  private readonly _this: MirroredRegularNode;
+  private _children?: (MirroredRegularNode | MirroredReferenceNode)[] | null;
+
   public get children(): (MirroredRegularNode | MirroredReferenceNode)[] | null {
-    if (!('children' in this.mirroredNode)) return null;
+    if (this._children !== void 0) {
+      return this._children;
+    }
+
+    if (!('children' in this.mirroredNode)) {
+      this._children = null;
+      return null;
+    }
 
     const referencedChildren = this.mirroredNode.children;
-    if (referencedChildren === null) return null;
+    if (referencedChildren === null) {
+      this._children = null;
+      return null;
+    }
 
     const children: (MirroredRegularNode | MirroredReferenceNode)[] = [];
     for (const child of referencedChildren) {
-      const mirroredChild = isRegularNode(child) ? new MirroredRegularNode(child) : new MirroredReferenceNode(child);
-      mirroredChild.parent = this;
-      mirroredChild.subpath = child.subpath;
+      // this is to avoid pointing at nested mirroring
+      const actualChild = isMirroredNode(child) ? child.mirroredNode : child;
+      const mirroredChild = isRegularNode(actualChild)
+        ? new MirroredRegularNode(actualChild)
+        : new MirroredReferenceNode(actualChild);
+
+      mirroredChild.parent = this._this;
+      mirroredChild.subpath = actualChild.subpath;
       children.push(mirroredChild);
     }
 
+    this._children = children;
     return children;
   }
 }
