@@ -5,15 +5,15 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "react-hooks/exhaustive-deps": "warn",
     "no-param-reassign": "off",
-    "@typescript-eslint/strict-boolean-expressions": "warn",
-    "@typescript-eslint/prefer-nullish-coalescing": "warn",
+    "@typescript-eslint/strict-boolean-expressions": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
     "@typescript-eslint/prefer-for-of": "error",
     "@typescript-eslint/no-throw-literal": "error",
-    "@typescript-eslint/prefer-optional-chain": "warn",
+    "@typescript-eslint/prefer-optional-chain": "error",
     "@typescript-eslint/no-floating-promises": ["error", { "ignoreVoid": true }],
-    "no-console": "error"
+    "no-console": "warn",
+    "no-undefined": "error"
   },
   "overrides": [
     {
