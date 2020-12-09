@@ -42,25 +42,25 @@
     "@stoplight/eslint-config": "^1.2.0",
     "@stoplight/scripts": "8.2.1",
     "@stoplight/types": "^11.9.0",
-    "@types/jest": "^24.0.18",
-    "@types/json-schema": "^7.0.3",
+    "@types/jest": "^26.0.18",
+    "@types/json-schema": "^7.0.6",
     "@types/node": "^12.7.2",
     "@types/treeify": "^1.0.0",
-    "@typescript-eslint/eslint-plugin": "^2.27.0",
-    "@typescript-eslint/parser": "^2.27.0",
-    "babel-jest": "^24.9.0",
-    "eslint": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^4.9.1",
+    "@typescript-eslint/parser": "^4.9.1",
+    "babel-jest": "^26.6.3",
+    "eslint": "^7.15.0",
     "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jest": "^23.8.2",
-    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-prettier": "^3.2.0",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "eslint-plugin-simple-import-sort": "^5.0.2",
+    "eslint-plugin-simple-import-sort": "^5.0.3",
     "jest": "^26.6.2",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.1",
     "treeify": "^1.1.0",
-    "ts-jest": "^26.4.3",
-    "typescript": "^4.0.5"
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.2"
   },
   "lint-staged": {
     "*.{ts,tsx}$": [
@@ -85,6 +85,5 @@
   },
   "release": {
     "extends": "@stoplight/scripts/release"
-  },
-  "typings": "src/index.d.ts"
+  }
 }
