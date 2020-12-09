@@ -1,43 +1,50 @@
-version: 2
+version: 2.1
+
+orbs:
+  node: circleci/node@3.0.0
+
+executors:
+  linux:
+    docker:
+      - image: cimg/base:2020.01
 
 jobs:
-  test_node_10:
-    docker:
-      - image: circleci/node:10
+  test:
+    parameters:
+      os:
+        type: executor
+      node-version:
+        type: string
+    executor: << parameters.os >>
     steps:
       - checkout
-      - run:
-          name: Download cc-test-reporter
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-      - run: yarn
-      - run:
-          name: cc-before
-          command: |
-            ./cc-test-reporter before-build
+      - node/install:
+          node-version: << parameters.node-version >>.0
+          install-yarn: true
+          install-npm: false
       - run: yarn test.prod
-      - run:
-          name: cc-after
-          command: |
-            ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
 
   release:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - run: yarn
       - run: yarn build
-      - run: yarn build.docs
       - run: yarn release
-      - run: yarn release.docs
 
 workflows:
   version: 2
   test_and_release:
     jobs:
-      - test_node_10
+      - test:
+          matrix:
+            parameters:
+              os:
+                - linux
+              node-version:
+                - "12.9"
+                - "14.9"
       - release:
           filters:
             branches:
@@ -45,4 +52,4 @@ workflows:
                 - master
                 - beta
           requires:
-            - test_node_10
+            - test
