@@ -17,7 +17,7 @@
     "**/*"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=10.8"
   },
   "scripts": {
     "build": "sl-scripts bundle --sourcemap",
