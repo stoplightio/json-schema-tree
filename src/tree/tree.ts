@@ -1,11 +1,10 @@
-import { extractPointerFromRef, extractSourceFromRef, pointerToPath } from '@stoplight/json';
+import { extractPointerFromRef, extractSourceFromRef, resolveInlineRef } from '@stoplight/json';
 
 import { ResolvingError } from '../errors';
 import { RootNode } from '../nodes/RootNode';
 import type { SchemaTreeRefDereferenceFn } from '../resolver/types';
 import type { SchemaFragment } from '../types';
 import { isObjectLiteral } from '../utils';
-import { get } from '../utils/get';
 import { Walker } from '../walker';
 import type { WalkerRefResolver } from '../walker/types';
 
@@ -69,7 +68,7 @@ export class SchemaTree {
     } else if (pointer === null) {
       throw new ResolvingError('The pointer is empty');
     } else {
-      const value = get(this.schema, pointerToPath(pointer));
+      const value = resolveInlineRef(this.schema, pointer);
       if (!isObjectLiteral(value)) {
         throw new ResolvingError('Invalid value');
       }
