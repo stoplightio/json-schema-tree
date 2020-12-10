@@ -20,6 +20,12 @@ import type {
   WalkingOptions,
 } from './types';
 
+type InternalWalkerState = {
+  depth: number;
+  pathLength: number;
+  schemaNode: RegularNode | RootNode;
+};
+
 export class Walker extends EventEmitter<WalkerEmitter> {
   public readonly path: string[];
   public depth: number;
@@ -42,14 +48,14 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.hooks = {};
   }
 
-  public loadState(snapshot: WalkerSnapshot) {
+  public loadSnapshot(snapshot: WalkerSnapshot) {
     this.path.splice(0, this.path.length, ...snapshot.path);
     this.depth = snapshot.depth;
     this.fragment = snapshot.fragment;
     this.schemaNode = snapshot.schemaNode;
   }
 
-  public saveState(): WalkerSnapshot {
+  public saveSnapshot(): WalkerSnapshot {
     return {
       depth: this.depth,
       fragment: this.fragment,
@@ -122,16 +128,26 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.schemaNode = initialSchemaNode;
   }
 
+  protected dumpInternalWalkerState(): InternalWalkerState {
+    return {
+      depth: this.depth,
+      pathLength: this.path.length,
+      schemaNode: this.schemaNode,
+    };
+  }
+
+  protected restoreInternalWalkerState({ depth, pathLength, schemaNode }: InternalWalkerState) {
+    this.depth = depth;
+    this.path.length = pathLength;
+    this.schemaNode = schemaNode;
+  }
+
   protected *walkNodeChildren() {
     const { fragment, schemaNode } = this;
 
     if (!isRegularNode(schemaNode)) return;
 
-    const {
-      depth: initialDepth,
-      schemaNode: initialSchemaNode,
-      path: { length },
-    } = this;
+    const state = this.dumpInternalWalkerState();
 
     if (schemaNode.combiners !== null) {
       for (const combiner of schemaNode.combiners) {
@@ -143,10 +159,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           i++;
           if (!isObjectLiteral(item)) continue;
           this.fragment = item;
-          // todo: spaghetti
-          this.schemaNode = initialSchemaNode;
-          this.depth = initialDepth;
-          this.path.length = length;
+          this.restoreInternalWalkerState(state);
           this.path.push(combiner, String(i));
           yield* this.walk();
         }
@@ -161,17 +174,13 @@ export class Walker extends EventEmitter<WalkerEmitter> {
             i++;
             if (!isObjectLiteral(item)) continue;
             this.fragment = item;
-            this.schemaNode = initialSchemaNode;
-            this.depth = initialDepth;
-            this.path.length = length;
+            this.restoreInternalWalkerState(state);
             this.path.push('items', String(i));
             yield* this.walk();
           }
         } else if (isObjectLiteral(fragment.items)) {
-          this.schemaNode = initialSchemaNode;
-          this.depth = initialDepth;
-          this.path.length = length;
           this.fragment = fragment.items;
+          this.restoreInternalWalkerState(state);
           this.path.push('items');
           yield* this.walk();
         }
@@ -183,9 +192,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
             const value = fragment.properties[key];
             if (!isObjectLiteral(value)) continue;
             this.fragment = value;
-            this.schemaNode = initialSchemaNode;
-            this.depth = initialDepth;
-            this.path.length = length;
+            this.restoreInternalWalkerState(state);
             this.path.push('properties', key);
             yield* this.walk();
           }
@@ -195,10 +202,8 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           for (const key of Object.keys(fragment.patternProperties)) {
             const value = fragment.patternProperties[key];
             if (!isObjectLiteral(value)) continue;
-            this.schemaNode = initialSchemaNode;
-            this.depth = initialDepth;
-            this.path.length = length;
             this.fragment = value;
+            this.restoreInternalWalkerState(state);
             this.path.push('patternProperties', key);
             yield* this.walk();
           }
