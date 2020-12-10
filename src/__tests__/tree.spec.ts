@@ -152,29 +152,29 @@ describe('SchemaTree', () => {
         };
 
         expect(printTree(schema)).toMatchInlineSnapshot(`
-                  "└─ #
-                     ├─ types
-                     │  └─ 0: object
-                     ├─ primaryType: object
-                     └─ children
-                        ├─ 0
-                        │  └─ #/properties/foo
-                        │     ├─ types
-                        │     │  └─ 0: array
-                        │     ├─ primaryType: array
-                        │     └─ children
-                        │        └─ 0
-                        │           └─ #/properties/foo/items
-                        │              ├─ $ref: #/properties/baz
-                        │              ├─ external: false
-                        │              └─ error: Invalid value
-                        └─ 1
-                           └─ #/properties/bar
-                              ├─ $ref: #/properties/bazinga
-                              ├─ external: false
-                              └─ error: Invalid value
-                  "
-              `);
+          "└─ #
+             ├─ types
+             │  └─ 0: object
+             ├─ primaryType: object
+             └─ children
+                ├─ 0
+                │  └─ #/properties/foo
+                │     ├─ types
+                │     │  └─ 0: array
+                │     ├─ primaryType: array
+                │     └─ children
+                │        └─ 0
+                │           └─ #/properties/foo/items
+                │              ├─ $ref: #/properties/baz
+                │              ├─ external: false
+                │              └─ error: Could not resolve '#/properties/baz'
+                └─ 1
+                   └─ #/properties/bar
+                      ├─ $ref: #/properties/bazinga
+                      ├─ external: false
+                      └─ error: Could not resolve '#/properties/bazinga'
+          "
+        `);
       });
 
       it('should handle circular references', () => {

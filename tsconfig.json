@@ -6,6 +6,7 @@
   "compilerOptions": {
     "lib": ["dom", "es2017"],
     "target": "es2017",
-    "importsNotUsedAsValues": "error"
+    "importsNotUsedAsValues": "error",
+    "esModuleInterop": true
   }
 }

@@ -54,14 +54,9 @@ function _mergeAllOf(fragment: SchemaFragment, path: string[], resolveRef: Walke
 }
 
 export function mergeAllOf(fragment: SchemaFragment, path: string[], walkingOptions: WalkingOptions) {
-  try {
-    if (walkingOptions.resolveRef !== null && !store.has(walkingOptions.resolveRef)) {
-      store.set(walkingOptions.resolveRef, new WeakMap());
-    }
-
-    return _mergeAllOf(fragment, path, walkingOptions.resolveRef);
-  } catch (ex) {
-    console.info(ex.message);
-    throw ex;
+  if (walkingOptions.resolveRef !== null && !store.has(walkingOptions.resolveRef)) {
+    store.set(walkingOptions.resolveRef, new WeakMap());
   }
+
+  return _mergeAllOf(fragment, path, walkingOptions.resolveRef);
 }

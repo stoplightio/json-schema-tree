@@ -1,6 +1,8 @@
 import { EventEmitter } from '@stoplight/lifecycle';
 import type { Dictionary } from '@stoplight/types';
+import createMagicError from 'magic-error';
 
+import { MergingError } from '../errors';
 import { isReferenceNode, isRegularNode } from '../guards';
 import { mergeAllOf } from '../mergers/mergeAllOf';
 import { mergeOneOrAnyOf } from '../mergers/mergeOneOrAnyOf';
@@ -10,8 +12,7 @@ import { SchemaCombinerName, SchemaNode, SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
 import { isObjectLiteral } from '../utils/guards';
 import type {
-  WalkerEvent,
-  WalkerEventHandler,
+  WalkerEmitter,
   WalkerHookAction,
   WalkerHookHandler,
   WalkerItem,
@@ -19,7 +20,7 @@ import type {
   WalkingOptions,
 } from './types';
 
-export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEvent>> {
+export class Walker extends EventEmitter<WalkerEmitter> {
   public readonly path: string[];
   public depth: number;
 
@@ -232,6 +233,7 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
         try {
           fragment = walkingOptions.resolveRef(path, fragment.$ref);
         } catch (ex) {
+          super.emit('error', createMagicError(ex));
           return yield new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error');
         }
       } else {
@@ -242,7 +244,8 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
     if (walkingOptions.mergeAllOf && SchemaCombinerName.AllOf in fragment) {
       try {
         fragment = mergeAllOf(fragment, path, walkingOptions);
-      } catch {
+      } catch (ex) {
+        super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
         // no the end of the world - we will render raw unprocessed fragment
       }
     }
@@ -260,7 +263,8 @@ export class Walker extends EventEmitter<Dictionary<WalkerEventHandler, WalkerEv
         }
 
         return;
-      } catch {
+      } catch (ex) {
+        super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
         // no the end of the world - we will render raw unprocessed fragment
       }
     }

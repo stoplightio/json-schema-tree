@@ -24,5 +24,14 @@ export type WalkerSnapshot = {
 export type WalkerHookAction = 'filter' | 'stepIn';
 export type WalkerHookHandler = (node: SchemaNode) => boolean;
 
-export type WalkerEvent = 'newNode' | 'acceptNode' | 'enterNode' | 'exitNode';
-export type WalkerEventHandler = (node: SchemaNode) => void;
+export type WalkerEvent = 'newNode' | 'acceptNode' | 'enterNode' | 'exitNode' | 'error';
+export type WalkerNodeEventHandler = (node: SchemaNode) => void;
+export type WalkerErrorEventHandler = (ex: Error) => void;
+
+export type WalkerEmitter = {
+  newNode: WalkerNodeEventHandler;
+  acceptNode: WalkerNodeEventHandler;
+  enterNode: WalkerNodeEventHandler;
+  exitNode: WalkerNodeEventHandler;
+  error: WalkerErrorEventHandler;
+};

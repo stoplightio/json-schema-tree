@@ -5,11 +5,12 @@
 ### Use cases
 
 - json-schema-viewer
+- json-schema-editor
 - masking
 
 ### Installation
 
-Supported in modern browsers and node.
+Supported in modern browsers and Node.JS (>=10.18).
 
 ```bash
 # latest stable
@@ -31,7 +32,7 @@ tree.walker.hookInto('stepIn', node => {
 });
 
 tree.walker.hookInto('filter', node => {
-  return !!node.type?.includes('integeer'); // sorry, we don't care about integers
+  return !!node.type?.includes('integer'); // if a schema property is of type integer, it won't be included in the tree
 });
 
 tree.walker.on('newNode', node => {
@@ -119,4 +120,4 @@ expect(tree.root.children[0].children[2].children[0].children[0].children[0].chi
 6. Stage relevant files to git.
 7. Commit: `yarn commit`. _NOTE: Commits that don't follow the [conventional](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional) format will be rejected. `yarn commit` creates this format for you, or you can put it together manually and then do a regular `git commit`._
 8. Push: `git push`.
-9. Open PR targeting the `develop` branch.
+9. Open PR targeting the `master` branch.
