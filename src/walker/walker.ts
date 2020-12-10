@@ -11,14 +11,7 @@ import { RootNode } from '../nodes/RootNode';
 import { SchemaCombinerName, SchemaNode, SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
 import { isObjectLiteral } from '../utils/guards';
-import type {
-  WalkerEmitter,
-  WalkerHookAction,
-  WalkerHookHandler,
-  WalkerItem,
-  WalkerSnapshot,
-  WalkingOptions,
-} from './types';
+import type { WalkerEmitter, WalkerHookAction, WalkerHookHandler, WalkerSnapshot, WalkingOptions } from './types';
 
 type InternalWalkerState = {
   depth: number;
@@ -75,7 +68,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.schemaNode = node;
   }
 
-  public *walk(): IterableIterator<WalkerItem> {
+  public walk(): void {
     const {
       depth: initialDepth,
       schemaNode: initialSchemaNode,
@@ -116,7 +109,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
 
         if (this.hooks.stepIn?.(schemaNode) !== false) {
           super.emit('enterNode', schemaNode);
-          yield* this.walkNodeChildren();
+          this.walkNodeChildren();
         }
       }
 
@@ -142,7 +135,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.schemaNode = schemaNode;
   }
 
-  protected *walkNodeChildren() {
+  protected walkNodeChildren(): void {
     const { fragment, schemaNode } = this;
 
     if (!isRegularNode(schemaNode)) return;
@@ -161,7 +154,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           this.fragment = item;
           this.restoreInternalWalkerState(state);
           this.path.push(combiner, String(i));
-          yield* this.walk();
+          this.walk();
         }
       }
     }
@@ -176,13 +169,13 @@ export class Walker extends EventEmitter<WalkerEmitter> {
             this.fragment = item;
             this.restoreInternalWalkerState(state);
             this.path.push('items', String(i));
-            yield* this.walk();
+            this.walk();
           }
         } else if (isObjectLiteral(fragment.items)) {
           this.fragment = fragment.items;
           this.restoreInternalWalkerState(state);
           this.path.push('items');
-          yield* this.walk();
+          this.walk();
         }
 
         break;
@@ -194,7 +187,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
             this.fragment = value;
             this.restoreInternalWalkerState(state);
             this.path.push('properties', key);
-            yield* this.walk();
+            this.walk();
           }
         }
 
@@ -205,7 +198,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
             this.fragment = value;
             this.restoreInternalWalkerState(state);
             this.path.push('patternProperties', key);
-            yield* this.walk();
+            this.walk();
           }
         }
 

@@ -34,8 +34,7 @@ export class SchemaTree {
   }
 
   public invokeWalker(walker: Walker) {
-    const walk = walker.walk();
-    while (walk.next().done !== true);
+    walker.walk();
   }
 
   protected resolveRef: WalkerRefResolver = (path, $ref) => {
