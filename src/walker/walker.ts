@@ -69,14 +69,14 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   }
 
   public walk(): void {
-    const {
-      depth: initialDepth,
-      schemaNode: initialSchemaNode,
-      path: { length },
-    } = this;
+    const { depth: initialDepth, schemaNode: initialSchemaNode, fragment } = this;
+
+    const state = this.dumpInternalWalkerState();
+
+    super.emit('enterFragment', fragment);
 
     for (const schemaNode of this.processFragment()) {
-      super.emit('newNode', schemaNode);
+      super.emit('enterNode', schemaNode);
 
       this.processedFragments.set(schemaNode.fragment, schemaNode);
 
@@ -86,6 +86,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       const shouldSkipNode = this.hooks.filter?.(schemaNode);
 
       if (shouldSkipNode === true) {
+        super.emit('skipNode', schemaNode);
         continue;
       }
 
@@ -102,23 +103,25 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         }
       }
 
-      super.emit('acceptNode', schemaNode);
+      super.emit('includeNode', schemaNode);
 
       if (schemaNode instanceof RegularNode) {
         this.schemaNode = schemaNode;
 
         if (this.hooks.stepIn?.(schemaNode) !== false) {
-          super.emit('enterNode', schemaNode);
+          super.emit('stepInNode', schemaNode);
           this.walkNodeChildren();
+          super.emit('stepOutNode', schemaNode);
+        } else {
+          super.emit('stepOverNode', schemaNode);
         }
       }
 
       super.emit('exitNode', schemaNode);
     }
 
-    this.path.length = length;
-    this.depth = initialDepth;
-    this.schemaNode = initialSchemaNode;
+    this.restoreInternalWalkerState(state);
+    super.emit('exitFragment', fragment);
   }
 
   protected dumpInternalWalkerState(): InternalWalkerState {

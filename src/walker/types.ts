@@ -9,11 +9,6 @@ export type WalkingOptions = {
   resolveRef: WalkerRefResolver | null;
 };
 
-export type WalkerItem = {
-  node: SchemaNode;
-  parentNode: SchemaNode | null;
-};
-
 export type WalkerSnapshot = {
   readonly fragment: SchemaFragment;
   readonly depth: number;
@@ -24,14 +19,23 @@ export type WalkerSnapshot = {
 export type WalkerHookAction = 'filter' | 'stepIn';
 export type WalkerHookHandler = (node: SchemaNode) => boolean;
 
-export type WalkerEvent = 'newNode' | 'acceptNode' | 'enterNode' | 'exitNode' | 'error';
 export type WalkerNodeEventHandler = (node: SchemaNode) => void;
+export type WalkerFragmentEventHandler = (node: SchemaFragment) => void;
 export type WalkerErrorEventHandler = (ex: Error) => void;
 
 export type WalkerEmitter = {
-  newNode: WalkerNodeEventHandler;
-  acceptNode: WalkerNodeEventHandler;
   enterNode: WalkerNodeEventHandler;
   exitNode: WalkerNodeEventHandler;
+
+  includeNode: WalkerNodeEventHandler;
+  skipNode: WalkerNodeEventHandler;
+
+  stepInNode: WalkerNodeEventHandler;
+  stepOverNode: WalkerNodeEventHandler;
+  stepOutNode: WalkerNodeEventHandler;
+
+  enterFragment: WalkerFragmentEventHandler;
+  exitFragment: WalkerFragmentEventHandler;
+
   error: WalkerErrorEventHandler;
 };
