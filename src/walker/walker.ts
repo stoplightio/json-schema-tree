@@ -26,7 +26,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   protected fragment: SchemaFragment;
   protected schemaNode: RegularNode | RootNode;
 
-  private readonly processedFragments: WeakMap<SchemaFragment, SchemaNode>;
+  private processedFragments: WeakMap<SchemaFragment, SchemaNode>;
   private readonly hooks: Partial<Dictionary<WalkerHookHandler, WalkerHookAction>>;
 
   constructor(protected readonly root: RootNode, protected readonly walkingOptions: WalkingOptions) {
@@ -39,6 +39,14 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.processedFragments = new WeakMap<SchemaFragment, SchemaNode>();
 
     this.hooks = {};
+  }
+
+  public destroy() {
+    this.path.length = 0;
+    this.depth = -1;
+    this.fragment = this.root.fragment;
+    this.schemaNode = this.root;
+    this.processedFragments = new WeakMap<SchemaFragment, SchemaNode>();
   }
 
   public loadSnapshot(snapshot: WalkerSnapshot) {
@@ -230,7 +238,9 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     }
 
     if ('$ref' in fragment) {
-      if (walkingOptions.resolveRef !== null && typeof fragment.$ref === 'string') {
+      if (typeof fragment.$ref !== 'string') {
+        return yield new ReferenceNode(fragment, '$ref is not a string');
+      } else if (walkingOptions.resolveRef !== null) {
         try {
           fragment = walkingOptions.resolveRef(path, fragment.$ref);
         } catch (ex) {

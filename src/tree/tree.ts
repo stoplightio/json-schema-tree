@@ -25,8 +25,9 @@ export class SchemaTree {
     });
   }
 
-  public clear() {
+  public destroy() {
     this.root.children.length = 0;
+    this.walker.destroy();
   }
 
   public populate() {
@@ -58,7 +59,7 @@ export class SchemaTree {
   private _resolveRef: WalkerRefResolver = (path, $ref) => {
     const source = extractSourceFromRef($ref);
     const pointer = extractPointerFromRef($ref);
-    const { refResolver } = this.opts ?? {};
+    const refResolver = this.opts?.refResolver;
 
     if (typeof refResolver === 'function') {
       return refResolver({ source, pointer }, path, this.schema);
