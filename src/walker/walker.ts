@@ -70,6 +70,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   }
 
   public restoreWalkerAtNode(node: RegularNode) {
+    this.processedFragments.delete(node.fragment);
     this.path.splice(0, this.path.length, ...node.path);
     this.depth = node.depth;
     this.fragment = node.fragment;
