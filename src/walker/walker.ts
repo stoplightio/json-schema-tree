@@ -91,9 +91,9 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       this.fragment = schemaNode.fragment;
       this.depth = initialDepth + 1;
 
-      const shouldSkipNode = this.hooks.filter?.(schemaNode);
+      const isIncluded = this.hooks.filter?.(schemaNode);
 
-      if (shouldSkipNode === true) {
+      if (isIncluded === false) {
         super.emit('skipNode', schemaNode);
         continue;
       }
