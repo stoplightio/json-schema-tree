@@ -19,28 +19,30 @@ yarn add @stoplight/json-schema-tree
 
 ### Usage
 
-```ts
+```js
 import { SchemaTree } from '@stoplight/json-schema-tree';
 
 const tree = new SchemaTree(mySchema);
 
 const snapshots = [];
-let allowedDepth = 4;
+let allowedDepth = 2;
 
-tree.walker.hookInto('stepIn', node => {
-  return tree.walker.depth >= allowedDepth;
-});
+tree.walker.hookInto('stepIn', node => tree.walker.depth >= allowedDepth);
 
 tree.walker.hookInto('filter', node => {
   return !!node.type?.includes('integer'); // if a schema property is of type integer, it won't be included in the tree
 });
 
-tree.walker.on('newNode', node => {
+tree.walker.on('enterNode', node => {
   // new node in fragment is about to be processed
 });
 
-tree.walker.on('enterNode', node => {
+tree.walker.on('stepIn', node => {
   // node has some children we'll process
+});
+
+tree.walker.on('stepOver', node => {
+  // a node was skipped
 });
 
 tree.walker('exitNode', node => {
