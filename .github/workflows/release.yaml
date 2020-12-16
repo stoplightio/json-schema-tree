@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+      - beta
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Build all
+        run: yarn build
+
+      - name: Upload built artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: dist
+          retention-days: 1 # mostly just for passing to publish, so retention is not needed
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Download the build
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: dist
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Semantic release
+        run: yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

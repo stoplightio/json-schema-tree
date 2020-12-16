@@ -19,10 +19,17 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup node
         uses: actions/setup-node@v2-beta
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn
-      - run: yarn lint
-      - run: yarn test
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test
