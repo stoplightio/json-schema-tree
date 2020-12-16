@@ -40,6 +40,7 @@
     "magic-error": "^0.0.0"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "3",
     "@stoplight/eslint-config": "^1.2.0",
     "@stoplight/scripts": "8.2.1",
     "@stoplight/types": "^11.9.0",

@@ -802,7 +802,7 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@rollup/plugin-typescript@^3.0.0":
+"@rollup/plugin-typescript@3", "@rollup/plugin-typescript@^3.0.0":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-3.1.1.tgz#a39175a552ed82a3e424862e6bb403bf9da451ee"
   integrity sha512-VPY1MbzIJT+obpav9Kns4MlipVJ1FuefwzO4s1uCVXAzVWya+bhhNauOmmqR/hy1zj7tePfh3t9iBN+HbIzyRA==
