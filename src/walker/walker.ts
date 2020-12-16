@@ -3,11 +3,11 @@ import type { Dictionary } from '@stoplight/types';
 import createMagicError from 'magic-error';
 
 import { MergingError } from '../errors';
-import { isReferenceNode, isRegularNode } from '../guards';
+import { isReferenceNode, isRegularNode, isRootNode } from '../guards';
 import { mergeAllOf } from '../mergers/mergeAllOf';
 import { mergeOneOrAnyOf } from '../mergers/mergeOneOrAnyOf';
 import { MirroredReferenceNode, MirroredRegularNode, ReferenceNode, RegularNode } from '../nodes';
-import { RootNode } from '../nodes/RootNode';
+import type { RootNode } from '../nodes/RootNode';
 import { SchemaCombinerName, SchemaNode, SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
 import { isObjectLiteral } from '../utils/guards';
@@ -104,12 +104,12 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         continue;
       }
 
-      if (!(schemaNode instanceof RootNode)) {
+      if (!isRootNode(schemaNode)) {
         schemaNode.parent = initialSchemaNode;
         schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
       }
 
-      if ('children' in initialSchemaNode && !(schemaNode instanceof RootNode)) {
+      if ('children' in initialSchemaNode && !isRootNode(schemaNode)) {
         if (initialSchemaNode.children === null) {
           (initialSchemaNode as RegularNode).children = [schemaNode];
         } else {
@@ -119,7 +119,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
 
       super.emit('includeNode', schemaNode);
 
-      if (schemaNode instanceof RegularNode) {
+      if (isRegularNode(schemaNode)) {
         this.schemaNode = schemaNode;
 
         if (this.hooks.stepIn?.(schemaNode) !== false) {

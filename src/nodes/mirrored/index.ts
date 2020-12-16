@@ -1,2 +1,2 @@
-export * from './MirroredReferenceNode';
-export * from './MirroredRegularNode';
+export { MirroredReferenceNode } from './MirroredReferenceNode';
+export { MirroredRegularNode } from './MirroredRegularNode';

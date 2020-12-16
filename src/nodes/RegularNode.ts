@@ -9,6 +9,7 @@ import { getTypes } from '../accessors/getTypes';
 import { getValidations } from '../accessors/getValidations';
 import { isDeprecated } from '../accessors/isDeprecated';
 import { unwrapArrayOrNull, unwrapStringOrNull } from '../accessors/unwrap';
+import { isRegularNode, isSchemaNode } from '../guards';
 import type { SchemaFragment } from '../types';
 import { BaseNode } from './BaseNode';
 import type { ReferenceNode } from './ReferenceNode';
@@ -65,5 +66,9 @@ export class RegularNode extends BaseNode {
       this.enum === null &&
       Object.keys(this.annotations).length + Object.keys(this.validations).length === 0
     );
+  }
+
+  static [Symbol.hasInstance](instance: unknown) {
+    return isSchemaNode(instance) && isRegularNode(instance);
   }
 }
