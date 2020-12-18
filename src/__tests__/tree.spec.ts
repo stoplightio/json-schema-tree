@@ -439,13 +439,17 @@ describe('SchemaTree', () => {
       `);
     });
 
-    it.each(['array-of-allofs.json', 'allof-with-type.json', 'oneof-with-array-type.json'])(
+    it.each(['array-of-allofs.json', 'allof-with-type.json', 'oneof-with-array-type.json', 'complex-allOf-model.json'])(
       'should generate valid tree for %s',
       filename => {
         const schema = JSON.parse(fs.readFileSync(path.resolve(__dirname, '__fixtures__', filename), 'utf8'));
         expect(printTree(schema)).toMatchSnapshot();
       },
     );
+
+    it('given empty schema, should output empty tree', () => {
+      expect(printTree({})).toEqual('');
+    });
   });
 
   describe('mirroring', () => {

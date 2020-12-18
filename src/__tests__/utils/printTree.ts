@@ -15,7 +15,9 @@ export function printTree(schema: SchemaFragment, opts?: Partial<SchemaTreeOptio
   const root: unknown =
     tree.root.children.length > 1
       ? tree.root.children.map(child => prepareTree.call(new WeakSet(), child))
-      : prepareTree.call(new WeakSet(), tree.root.children[0]);
+      : tree.root.children.length === 1
+      ? prepareTree.call(new WeakSet(), tree.root.children[0])
+      : {};
 
   return treeify.asTree(root as treeify.TreeObject, true, true);
 }

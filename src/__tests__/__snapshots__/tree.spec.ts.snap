@@ -457,6 +457,249 @@ exports[`SchemaTree output should generate valid tree for array-of-allofs.json 1
 "
 `;
 
+exports[`SchemaTree output should generate valid tree for complex-allOf-model.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/foo
+      │     ├─ types
+      │     │  └─ 0: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/foo/properties/user
+      │              ├─ combiners
+      │              │  └─ 0: allOf
+      │              └─ children
+      │                 └─ 0
+      │                    └─ #/properties/foo/properties/user/allOf/0
+      │                       ├─ types
+      │                       │  └─ 0: object
+      │                       ├─ primaryType: object
+      │                       └─ children
+      │                          ├─ 0
+      │                          │  └─ #/properties/foo/properties/user/allOf/0/properties/names
+      │                          │     ├─ types
+      │                          │     │  └─ 0: array
+      │                          │     ├─ primaryType: array
+      │                          │     └─ children
+      │                          │        └─ 0
+      │                          │           └─ #/properties/foo/properties/user/allOf/0/properties/names/items
+      │                          │              ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name
+      │                          │              ├─ external: false
+      │                          │              └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name'
+      │                          └─ 1
+      │                             └─ #/properties/foo/properties/user/allOf/0/properties/users
+      │                                ├─ types
+      │                                │  └─ 0: array
+      │                                ├─ primaryType: array
+      │                                └─ children
+      │                                   └─ 0
+      │                                      └─ #/properties/foo/properties/user/allOf/0/properties/users/items
+      │                                         ├─ types
+      │                                         │  └─ 0: object
+      │                                         ├─ primaryType: object
+      │                                         └─ children
+      │                                            ├─ 0
+      │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation
+      │                                            │     ├─ types
+      │                                            │     │  └─ 0: object
+      │                                            │     ├─ primaryType: object
+      │                                            │     └─ children
+      │                                            │        └─ 0
+      │                                            │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user
+      │                                            │              ├─ combiners
+      │                                            │              │  └─ 0: allOf
+      │                                            │              └─ children
+      │                                            │                 └─ 0
+      │                                            │                    └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+      │                                            │                       ├─ types
+      │                                            │                       │  └─ 0: object
+      │                                            │                       ├─ primaryType: object
+      │                                            │                       └─ children
+      │                                            │                          ├─ 0
+      │                                            │                          │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/names
+      │                                            │                          │     ├─ types
+      │                                            │                          │     │  └─ 0: array
+      │                                            │                          │     ├─ primaryType: array
+      │                                            │                          │     └─ children
+      │                                            │                          │        └─ 0
+      │                                            │                          │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/names/items
+      │                                            │                          │              ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name
+      │                                            │                          │              ├─ external: false
+      │                                            │                          │              └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name'
+      │                                            │                          └─ 1
+      │                                            │                             └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users
+      │                                            │                                ├─ types
+      │                                            │                                │  └─ 0: array
+      │                                            │                                ├─ primaryType: array
+      │                                            │                                └─ children
+      │                                            │                                   └─ 0
+      │                                            │                                      └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items
+      │                                            │                                         ├─ types
+      │                                            │                                         │  └─ 0: object
+      │                                            │                                         ├─ primaryType: object
+      │                                            │                                         └─ children
+      │                                            │                                            ├─ 0
+      │                                            │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation
+      │                                            │                                            │     ├─ types
+      │                                            │                                            │     │  └─ 0: object
+      │                                            │                                            │     ├─ primaryType: object
+      │                                            │                                            │     └─ children
+      │                                            │                                            │        └─ 0
+      │                                            │                                            │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user
+      │                                            │                                            │              ├─ combiners
+      │                                            │                                            │              │  └─ 0: allOf
+      │                                            │                                            │              └─ children
+      │                                            │                                            │                 └─ 0
+      │                                            │                                            │                    └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+      │                                            │                                            │                       ├─ types
+      │                                            │                                            │                       │  └─ 0: object
+      │                                            │                                            │                       ├─ primaryType: object
+      │                                            │                                            │                       └─ children
+      │                                            │                                            │                          ├─ 0
+      │                                            │                                            │                          │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/names
+      │                                            │                                            │                          │     ├─ types
+      │                                            │                                            │                          │     │  └─ 0: array
+      │                                            │                                            │                          │     ├─ primaryType: array
+      │                                            │                                            │                          │     └─ children
+      │                                            │                                            │                          │        └─ 0
+      │                                            │                                            │                          │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/names/items
+      │                                            │                                            │                          │              ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name
+      │                                            │                                            │                          │              ├─ external: false
+      │                                            │                                            │                          │              └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name'
+      │                                            │                                            │                          └─ 1
+      │                                            │                                            │                             └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users
+      │                                            │                                            │                                ├─ types
+      │                                            │                                            │                                │  └─ 0: array
+      │                                            │                                            │                                ├─ primaryType: array
+      │                                            │                                            │                                └─ children
+      │                                            │                                            │                                   └─ 0
+      │                                            │                                            │                                      └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items
+      │                                            │                                            │                                         ├─ types
+      │                                            │                                            │                                         │  └─ 0: object
+      │                                            │                                            │                                         ├─ primaryType: object
+      │                                            │                                            │                                         └─ children
+      │                                            │                                            │                                            ├─ 0
+      │                                            │                                            │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation
+      │                                            │                                            │                                            │     ├─ types
+      │                                            │                                            │                                            │     │  └─ 0: object
+      │                                            │                                            │                                            │     ├─ primaryType: object
+      │                                            │                                            │                                            │     └─ children
+      │                                            │                                            │                                            │        └─ 0
+      │                                            │                                            │                                            │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user
+      │                                            │                                            │                                            │              ├─ combiners
+      │                                            │                                            │                                            │              │  └─ 0: allOf
+      │                                            │                                            │                                            │              └─ children
+      │                                            │                                            │                                            │                 └─ 0
+      │                                            │                                            │                                            │                    └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+      │                                            │                                            │                                            │                       └─ mirrors: #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+      │                                            │                                            │                                            ├─ 1
+      │                                            │                                            │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/foo
+      │                                            │                                            │                                            │     ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │                                            │                                            │     ├─ external: false
+      │                                            │                                            │                                            │     └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            │                                            │                                            └─ 2
+      │                                            │                                            │                                               └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/products
+      │                                            │                                            │                                                  ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │                                            │                                                  ├─ external: false
+      │                                            │                                            │                                                  └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            │                                            ├─ 1
+      │                                            │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/foo
+      │                                            │                                            │     ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │                                            │     ├─ external: false
+      │                                            │                                            │     └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            │                                            └─ 2
+      │                                            │                                               └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/products
+      │                                            │                                                  ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │                                                  ├─ external: false
+      │                                            │                                                  └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            ├─ 1
+      │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/foo
+      │                                            │     ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │     ├─ external: false
+      │                                            │     └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            └─ 2
+      │                                               └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/products
+      │                                                  ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                                  ├─ external: false
+      │                                                  └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      └─ 1
+         └─ #/properties/bar
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/properties/bar/properties/foo
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        └─ 0
+                           └─ #/properties/bar/properties/foo/properties/user
+                              ├─ combiners
+                              │  └─ 0: allOf
+                              └─ children
+                                 └─ 0
+                                    └─ #/properties/bar/properties/foo/properties/user/allOf/0
+                                       ├─ types
+                                       │  └─ 0: object
+                                       ├─ primaryType: object
+                                       └─ children
+                                          ├─ 0
+                                          │  └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/names
+                                          │     ├─ types
+                                          │     │  └─ 0: array
+                                          │     ├─ primaryType: array
+                                          │     └─ children
+                                          │        └─ 0
+                                          │           └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/names/items
+                                          │              ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name
+                                          │              ├─ external: false
+                                          │              └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name'
+                                          └─ 1
+                                             └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users
+                                                ├─ types
+                                                │  └─ 0: array
+                                                ├─ primaryType: array
+                                                └─ children
+                                                   └─ 0
+                                                      └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items
+                                                         ├─ types
+                                                         │  └─ 0: object
+                                                         ├─ primaryType: object
+                                                         └─ children
+                                                            ├─ 0
+                                                            │  └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation
+                                                            │     ├─ types
+                                                            │     │  └─ 0: object
+                                                            │     ├─ primaryType: object
+                                                            │     └─ children
+                                                            │        └─ 0
+                                                            │           └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user
+                                                            │              ├─ combiners
+                                                            │              │  └─ 0: allOf
+                                                            │              └─ children
+                                                            │                 └─ 0
+                                                            │                    └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+                                                            │                       └─ mirrors: #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+                                                            ├─ 1
+                                                            │  └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/foo
+                                                            │     ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+                                                            │     ├─ external: false
+                                                            │     └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+                                                            └─ 2
+                                                               └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/products
+                                                                  ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+                                                                  ├─ external: false
+                                                                  └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+"
+`;
+
 exports[`SchemaTree output should generate valid tree for oneof-with-array-type.json 1`] = `
 "└─ #
    ├─ combiners
