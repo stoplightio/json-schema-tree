@@ -80,13 +80,12 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   public walk(): void {
     const { depth: initialDepth, schemaNode: initialSchemaNode, fragment } = this;
 
-    const state = this.dumpInternalWalkerState();
-
-    if (Object.keys(fragment).length === 0) {
-      // empty fragment, nothing to do.
-      super.emit('skipFragment', fragment);
+    if (initialDepth === -1 && Object.keys(fragment).length === 0) {
+      // empty schema, nothing to do
       return;
     }
+
+    const state = this.dumpInternalWalkerState();
 
     super.emit('enterFragment', fragment);
 

@@ -56,4 +56,14 @@ export class RegularNode extends BaseNode {
       this.primaryType !== SchemaNodeKind.Array && this.primaryType !== SchemaNodeKind.Object && this.combiners === null
     );
   }
+
+  public get unknown() {
+    return (
+      this.types === null &&
+      this.combiners === null &&
+      this.format === null &&
+      this.enum === null &&
+      Object.keys(this.annotations).length + Object.keys(this.validations).length === 0
+    );
+  }
 }

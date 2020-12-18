@@ -22,6 +22,7 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
   public readonly validations!: Readonly<Dictionary<unknown>>;
 
   public readonly simple!: boolean;
+  public readonly unknown!: boolean;
 
   constructor(public readonly mirroredNode: RegularNode) {
     super(mirroredNode.fragment);

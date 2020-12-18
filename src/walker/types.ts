@@ -35,7 +35,6 @@ export type WalkerEmitter = {
   stepOutNode: WalkerNodeEventHandler;
 
   enterFragment: WalkerFragmentEventHandler;
-  skipFragment: WalkerFragmentEventHandler;
   exitFragment: WalkerFragmentEventHandler;
 
   error: WalkerErrorEventHandler;
