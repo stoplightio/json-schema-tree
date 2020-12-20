@@ -457,6 +457,762 @@ exports[`SchemaTree output should generate valid tree for array-of-allofs.json 1
 "
 `;
 
+exports[`SchemaTree output should generate valid tree for arrays/of-allofs.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/properties/array-all-objects
+            ├─ types
+            │  └─ 0: array
+            ├─ primaryType: array
+            └─ children
+               └─ 0
+                  └─ #/properties/array-all-objects/items
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        ├─ 0
+                        │  └─ #/properties/array-all-objects/items/properties/foo
+                        │     ├─ types
+                        │     │  └─ 0: string
+                        │     └─ primaryType: string
+                        └─ 1
+                           └─ #/properties/array-all-objects/items/properties/bar
+                              ├─ types
+                              │  └─ 0: string
+                              └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/of-arrays.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/items
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               ├─ 0
+               │  └─ #/items/properties/bar
+               │     ├─ types
+               │     │  └─ 0: integer
+               │     └─ primaryType: integer
+               └─ 1
+                  └─ #/items/properties/foo
+                     ├─ types
+                     │  └─ 0: array
+                     ├─ primaryType: array
+                     └─ children
+                        └─ 0
+                           └─ #/items/properties/foo/items
+                              ├─ types
+                              │  └─ 0: array
+                              └─ primaryType: array
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/of-objects.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/properties/propertyIsArrayOfObjects
+            ├─ types
+            │  └─ 0: array
+            ├─ primaryType: array
+            └─ children
+               └─ 0
+                  └─ #/properties/propertyIsArrayOfObjects/items
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        └─ 0
+                           └─ #/properties/propertyIsArrayOfObjects/items/properties/ArrayObjectProperty
+                              ├─ types
+                              │  └─ 0: string
+                              └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/of-refs.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/items
+            ├─ $ref: ./models/todo-full.json
+            ├─ external: true
+            └─ error: Cannot dereference external references
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/with-multiple-arrayish-items.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      ├─ 0
+      │  └─ #/items/0
+      │     ├─ types
+      │     │  └─ 0: number
+      │     └─ primaryType: number
+      └─ 1
+         └─ #/items/1
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               ├─ 0
+               │  └─ #/items/1/properties/code
+               │     ├─ types
+               │     │  └─ 0: number
+               │     └─ primaryType: number
+               ├─ 1
+               │  └─ #/items/1/properties/msg
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               └─ 2
+                  └─ #/items/1/properties/ref
+                     ├─ types
+                     │  └─ 0: string
+                     └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/with-ordered-items.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      ├─ 0
+      │  └─ #/items/0
+      │     ├─ types
+      │     │  └─ 0: number
+      │     └─ primaryType: number
+      └─ 1
+         └─ #/items/1
+            ├─ types
+            │  └─ 0: string
+            └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/with-single-arrayish-items.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/items/0
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               ├─ 0
+               │  └─ #/items/0/properties/code
+               │     ├─ types
+               │     │  └─ 0: number
+               │     └─ primaryType: number
+               ├─ 1
+               │  └─ #/items/0/properties/msg
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               └─ 2
+                  └─ #/items/0/properties/ref
+                     ├─ types
+                     │  └─ 0: string
+                     └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for combiners/allOfs/base.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/AllOfMergeObjects
+      │     ├─ types
+      │     │  └─ 0: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        ├─ 0
+      │        │  └─ #/properties/AllOfMergeObjects/properties/Object1Property
+      │        │     ├─ types
+      │        │     │  └─ 0: string
+      │        │     └─ primaryType: string
+      │        └─ 1
+      │           └─ #/properties/AllOfMergeObjects/properties/Object2Property
+      │              ├─ types
+      │              │  └─ 0: number
+      │              └─ primaryType: number
+      ├─ 1
+      │  └─ #/properties/AllOfMergeValidations
+      │     ├─ types
+      │     │  └─ 0: string
+      │     └─ primaryType: string
+      ├─ 2
+      │  └─ #/properties/AllOfMergeTakeMoreLogicalValidation
+      │     ├─ types
+      │     │  └─ 0: number
+      │     └─ primaryType: number
+      ├─ 3
+      │  └─ #/properties/AllOfMergeObjectPropertyValidations
+      │     ├─ types
+      │     │  └─ 0: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/AllOfMergeObjectPropertyValidations/properties/Property
+      │              ├─ types
+      │              │  └─ 0: string
+      │              └─ primaryType: string
+      └─ 4
+         └─ #/properties/AllOfMergeRefs
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               ├─ 0
+               │  └─ #/properties/AllOfMergeRefs/properties/street_address
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               ├─ 1
+               │  └─ #/properties/AllOfMergeRefs/properties/city
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               ├─ 2
+               │  └─ #/properties/AllOfMergeRefs/properties/state
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               └─ 3
+                  └─ #/properties/AllOfMergeRefs/properties/zipCode
+                     ├─ types
+                     │  └─ 0: string
+                     └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for combiners/allOfs/complex.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/foo
+      │     ├─ types
+      │     │  └─ 0: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/foo/properties/user
+      │              ├─ combiners
+      │              │  └─ 0: allOf
+      │              └─ children
+      │                 └─ 0
+      │                    └─ #/properties/foo/properties/user/allOf/0
+      │                       ├─ types
+      │                       │  └─ 0: object
+      │                       ├─ primaryType: object
+      │                       └─ children
+      │                          ├─ 0
+      │                          │  └─ #/properties/foo/properties/user/allOf/0/properties/names
+      │                          │     ├─ types
+      │                          │     │  └─ 0: array
+      │                          │     ├─ primaryType: array
+      │                          │     └─ children
+      │                          │        └─ 0
+      │                          │           └─ #/properties/foo/properties/user/allOf/0/properties/names/items
+      │                          │              ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name
+      │                          │              ├─ external: false
+      │                          │              └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name'
+      │                          └─ 1
+      │                             └─ #/properties/foo/properties/user/allOf/0/properties/users
+      │                                ├─ types
+      │                                │  └─ 0: array
+      │                                ├─ primaryType: array
+      │                                └─ children
+      │                                   └─ 0
+      │                                      └─ #/properties/foo/properties/user/allOf/0/properties/users/items
+      │                                         ├─ types
+      │                                         │  └─ 0: object
+      │                                         ├─ primaryType: object
+      │                                         └─ children
+      │                                            ├─ 0
+      │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation
+      │                                            │     ├─ types
+      │                                            │     │  └─ 0: object
+      │                                            │     ├─ primaryType: object
+      │                                            │     └─ children
+      │                                            │        └─ 0
+      │                                            │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user
+      │                                            │              ├─ combiners
+      │                                            │              │  └─ 0: allOf
+      │                                            │              └─ children
+      │                                            │                 └─ 0
+      │                                            │                    └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+      │                                            │                       ├─ types
+      │                                            │                       │  └─ 0: object
+      │                                            │                       ├─ primaryType: object
+      │                                            │                       └─ children
+      │                                            │                          ├─ 0
+      │                                            │                          │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/names
+      │                                            │                          │     ├─ types
+      │                                            │                          │     │  └─ 0: array
+      │                                            │                          │     ├─ primaryType: array
+      │                                            │                          │     └─ children
+      │                                            │                          │        └─ 0
+      │                                            │                          │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/names/items
+      │                                            │                          │              ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name
+      │                                            │                          │              ├─ external: false
+      │                                            │                          │              └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name'
+      │                                            │                          └─ 1
+      │                                            │                             └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users
+      │                                            │                                ├─ types
+      │                                            │                                │  └─ 0: array
+      │                                            │                                ├─ primaryType: array
+      │                                            │                                └─ children
+      │                                            │                                   └─ 0
+      │                                            │                                      └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items
+      │                                            │                                         ├─ types
+      │                                            │                                         │  └─ 0: object
+      │                                            │                                         ├─ primaryType: object
+      │                                            │                                         └─ children
+      │                                            │                                            ├─ 0
+      │                                            │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation
+      │                                            │                                            │     ├─ types
+      │                                            │                                            │     │  └─ 0: object
+      │                                            │                                            │     ├─ primaryType: object
+      │                                            │                                            │     └─ children
+      │                                            │                                            │        └─ 0
+      │                                            │                                            │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user
+      │                                            │                                            │              ├─ combiners
+      │                                            │                                            │              │  └─ 0: allOf
+      │                                            │                                            │              └─ children
+      │                                            │                                            │                 └─ 0
+      │                                            │                                            │                    └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+      │                                            │                                            │                       ├─ types
+      │                                            │                                            │                       │  └─ 0: object
+      │                                            │                                            │                       ├─ primaryType: object
+      │                                            │                                            │                       └─ children
+      │                                            │                                            │                          ├─ 0
+      │                                            │                                            │                          │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/names
+      │                                            │                                            │                          │     ├─ types
+      │                                            │                                            │                          │     │  └─ 0: array
+      │                                            │                                            │                          │     ├─ primaryType: array
+      │                                            │                                            │                          │     └─ children
+      │                                            │                                            │                          │        └─ 0
+      │                                            │                                            │                          │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/names/items
+      │                                            │                                            │                          │              ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name
+      │                                            │                                            │                          │              ├─ external: false
+      │                                            │                                            │                          │              └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name'
+      │                                            │                                            │                          └─ 1
+      │                                            │                                            │                             └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users
+      │                                            │                                            │                                ├─ types
+      │                                            │                                            │                                │  └─ 0: array
+      │                                            │                                            │                                ├─ primaryType: array
+      │                                            │                                            │                                └─ children
+      │                                            │                                            │                                   └─ 0
+      │                                            │                                            │                                      └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items
+      │                                            │                                            │                                         ├─ types
+      │                                            │                                            │                                         │  └─ 0: object
+      │                                            │                                            │                                         ├─ primaryType: object
+      │                                            │                                            │                                         └─ children
+      │                                            │                                            │                                            ├─ 0
+      │                                            │                                            │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation
+      │                                            │                                            │                                            │     ├─ types
+      │                                            │                                            │                                            │     │  └─ 0: object
+      │                                            │                                            │                                            │     ├─ primaryType: object
+      │                                            │                                            │                                            │     └─ children
+      │                                            │                                            │                                            │        └─ 0
+      │                                            │                                            │                                            │           └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user
+      │                                            │                                            │                                            │              ├─ combiners
+      │                                            │                                            │                                            │              │  └─ 0: allOf
+      │                                            │                                            │                                            │              └─ children
+      │                                            │                                            │                                            │                 └─ 0
+      │                                            │                                            │                                            │                    └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+      │                                            │                                            │                                            │                       └─ mirrors: #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+      │                                            │                                            │                                            ├─ 1
+      │                                            │                                            │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/foo
+      │                                            │                                            │                                            │     ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │                                            │                                            │     ├─ external: false
+      │                                            │                                            │                                            │     └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            │                                            │                                            └─ 2
+      │                                            │                                            │                                               └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/products
+      │                                            │                                            │                                                  ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │                                            │                                                  ├─ external: false
+      │                                            │                                            │                                                  └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            │                                            ├─ 1
+      │                                            │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/foo
+      │                                            │                                            │     ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │                                            │     ├─ external: false
+      │                                            │                                            │     └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            │                                            └─ 2
+      │                                            │                                               └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/products
+      │                                            │                                                  ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │                                                  ├─ external: false
+      │                                            │                                                  └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            ├─ 1
+      │                                            │  └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/foo
+      │                                            │     ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                            │     ├─ external: false
+      │                                            │     └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      │                                            └─ 2
+      │                                               └─ #/properties/foo/properties/user/allOf/0/properties/users/items/properties/products
+      │                                                  ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+      │                                                  ├─ external: false
+      │                                                  └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+      └─ 1
+         └─ #/properties/bar
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/properties/bar/properties/foo
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        └─ 0
+                           └─ #/properties/bar/properties/foo/properties/user
+                              ├─ combiners
+                              │  └─ 0: allOf
+                              └─ children
+                                 └─ 0
+                                    └─ #/properties/bar/properties/foo/properties/user/allOf/0
+                                       ├─ types
+                                       │  └─ 0: object
+                                       ├─ primaryType: object
+                                       └─ children
+                                          ├─ 0
+                                          │  └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/names
+                                          │     ├─ types
+                                          │     │  └─ 0: array
+                                          │     ├─ primaryType: array
+                                          │     └─ children
+                                          │        └─ 0
+                                          │           └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/names/items
+                                          │              ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name
+                                          │              ├─ external: false
+                                          │              └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/name'
+                                          └─ 1
+                                             └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users
+                                                ├─ types
+                                                │  └─ 0: array
+                                                ├─ primaryType: array
+                                                └─ children
+                                                   └─ 0
+                                                      └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items
+                                                         ├─ types
+                                                         │  └─ 0: object
+                                                         ├─ primaryType: object
+                                                         └─ children
+                                                            ├─ 0
+                                                            │  └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation
+                                                            │     ├─ types
+                                                            │     │  └─ 0: object
+                                                            │     ├─ primaryType: object
+                                                            │     └─ children
+                                                            │        └─ 0
+                                                            │           └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user
+                                                            │              ├─ combiners
+                                                            │              │  └─ 0: allOf
+                                                            │              └─ children
+                                                            │                 └─ 0
+                                                            │                    └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+                                                            │                       └─ mirrors: #/properties/foo/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0/properties/users/items/properties/creation/properties/user/allOf/0
+                                                            ├─ 1
+                                                            │  └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/foo
+                                                            │     ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+                                                            │     ├─ external: false
+                                                            │     └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+                                                            └─ 2
+                                                               └─ #/properties/bar/properties/foo/properties/user/allOf/0/properties/users/items/properties/products
+                                                                  ├─ $ref: #/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts
+                                                                  ├─ external: false
+                                                                  └─ error: Could not resolve '#/allOf/0/allOf/0/properties/foo/definitions/event/allOf/0/properties/contacts'
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for combiners/allOfs/todo-full.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/items
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               ├─ 0
+               │  └─ #/items/properties/name
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               ├─ 1
+               │  └─ #/items/properties/completed
+               │     ├─ types
+               │     │  ├─ 0: boolean
+               │     │  └─ 1: null
+               │     └─ primaryType: boolean
+               ├─ 2
+               │  └─ #/items/properties/id
+               │     ├─ types
+               │     │  └─ 0: integer
+               │     └─ primaryType: integer
+               ├─ 3
+               │  └─ #/items/properties/completed_at
+               │     ├─ types
+               │     │  ├─ 0: string
+               │     │  └─ 1: null
+               │     └─ primaryType: string
+               ├─ 4
+               │  └─ #/items/properties/created_at
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               ├─ 5
+               │  └─ #/items/properties/updated_at
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               └─ 6
+                  └─ #/items/properties/user
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        ├─ 0
+                        │  └─ #/items/properties/user/properties/name
+                        │     ├─ types
+                        │     │  └─ 0: string
+                        │     └─ primaryType: string
+                        └─ 1
+                           └─ #/items/properties/user/properties/age
+                              ├─ types
+                              │  └─ 0: number
+                              └─ primaryType: number
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for combiners/allOfs/todo-full-2.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/test
+      │     ├─ types
+      │     │  └─ 0: string
+      │     └─ primaryType: string
+      ├─ 1
+      │  └─ #/properties/id
+      │     ├─ types
+      │     │  └─ 0: integer
+      │     └─ primaryType: integer
+      ├─ 2
+      │  └─ #/properties/completed_at
+      │     ├─ types
+      │     │  ├─ 0: string
+      │     │  └─ 1: null
+      │     └─ primaryType: string
+      ├─ 3
+      │  └─ #/properties/created_at
+      │     ├─ types
+      │     │  └─ 0: string
+      │     └─ primaryType: string
+      └─ 4
+         └─ #/properties/updated_at
+            ├─ types
+            │  └─ 0: string
+            └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for combiners/allOfs/with-type.json 1`] = `
+"└─ #
+   ├─ combiners
+   │  └─ 0: oneOf
+   └─ children
+      ├─ 0
+      │  └─ #/oneOf/0
+      │     ├─ types
+      │     │  └─ 0: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        ├─ 0
+      │        │  └─ #/oneOf/0/properties/actionType
+      │        │     ├─ types
+      │        │     │  └─ 0: string
+      │        │     ├─ primaryType: string
+      │        │     └─ enum
+      │        │        ├─ 0: Cancel
+      │        │        ├─ 1: Confirm
+      │        │        └─ 2: Update
+      │        ├─ 1
+      │        │  └─ #/oneOf/0/properties/id
+      │        │     ├─ types
+      │        │     │  └─ 0: string
+      │        │     └─ primaryType: string
+      │        ├─ 2
+      │        │  └─ #/oneOf/0/properties/externalId
+      │        │     ├─ types
+      │        │     │  └─ 0: string
+      │        │     └─ primaryType: string
+      │        ├─ 3
+      │        │  └─ #/oneOf/0/properties/calculateCosts
+      │        │     ├─ types
+      │        │     │  └─ 0: boolean
+      │        │     └─ primaryType: boolean
+      │        ├─ 4
+      │        │  └─ #/oneOf/0/properties/calculateDates
+      │        │     ├─ types
+      │        │     │  └─ 0: boolean
+      │        │     └─ primaryType: boolean
+      │        └─ 5
+      │           └─ #/oneOf/0/properties/items
+      │              ├─ types
+      │              │  └─ 0: array
+      │              ├─ primaryType: array
+      │              └─ children
+      │                 └─ 0
+      │                    └─ #/oneOf/0/properties/items/items
+      │                       ├─ types
+      │                       │  └─ 0: string
+      │                       └─ primaryType: string
+      └─ 1
+         └─ #/oneOf/1
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               ├─ 0
+               │  └─ #/oneOf/1/properties/actionType
+               │     ├─ types
+               │     │  └─ 0: string
+               │     ├─ primaryType: string
+               │     └─ enum
+               │        └─ 0: Create
+               ├─ 1
+               │  └─ #/oneOf/1/properties/id
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               ├─ 2
+               │  └─ #/oneOf/1/properties/externalId
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               ├─ 3
+               │  └─ #/oneOf/1/properties/calculateCosts
+               │     ├─ types
+               │     │  └─ 0: boolean
+               │     └─ primaryType: boolean
+               ├─ 4
+               │  └─ #/oneOf/1/properties/calculateDates
+               │     ├─ types
+               │     │  └─ 0: boolean
+               │     └─ primaryType: boolean
+               └─ 5
+                  └─ #/oneOf/1/properties/items
+                     ├─ types
+                     │  └─ 0: array
+                     ├─ primaryType: array
+                     └─ children
+                        └─ 0
+                           └─ #/oneOf/1/properties/items/items
+                              ├─ types
+                              │  └─ 0: string
+                              └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for combiners/oneof-with-array-type.json 1`] = `
+"└─ #
+   ├─ combiners
+   │  └─ 0: oneOf
+   └─ children
+      ├─ 0
+      │  └─ #/oneOf/0
+      │     ├─ types
+      │     │  └─ 0: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/oneOf/0/items
+      │              ├─ types
+      │              │  └─ 0: object
+      │              ├─ primaryType: object
+      │              └─ children
+      │                 ├─ 0
+      │                 │  └─ #/oneOf/0/items/properties/foo
+      │                 │     ├─ types
+      │                 │     │  └─ 0: string
+      │                 │     ├─ primaryType: string
+      │                 │     └─ enum
+      │                 │        └─ 0: test
+      │                 └─ 1
+      │                    └─ #/oneOf/0/items/properties/baz
+      │                       ├─ types
+      │                       │  └─ 0: integer
+      │                       └─ primaryType: integer
+      └─ 1
+         └─ #/oneOf/1
+            ├─ types
+            │  └─ 0: array
+            ├─ primaryType: array
+            └─ children
+               └─ 0
+                  └─ #/oneOf/1/items
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        ├─ 0
+                        │  └─ #/oneOf/1/items/properties/foo
+                        │     ├─ types
+                        │     │  └─ 0: number
+                        │     └─ primaryType: number
+                        ├─ 1
+                        │  └─ #/oneOf/1/items/properties/baz
+                        │     ├─ types
+                        │     │  └─ 0: integer
+                        │     └─ primaryType: integer
+                        └─ 2
+                           └─ #/oneOf/1/items/properties/bar
+                              ├─ types
+                              │  └─ 0: string
+                              └─ primaryType: string
+"
+`;
+
 exports[`SchemaTree output should generate valid tree for complex-allOf-model.json 1`] = `
 "└─ #
    ├─ types
@@ -700,6 +1456,180 @@ exports[`SchemaTree output should generate valid tree for complex-allOf-model.js
 "
 `;
 
+exports[`SchemaTree output should generate valid tree for default-schema.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/name
+      │     ├─ types
+      │     │  └─ 0: string
+      │     └─ primaryType: string
+      ├─ 1
+      │  └─ #/properties/age
+      │     ├─ types
+      │     │  └─ 0: number
+      │     └─ primaryType: number
+      ├─ 2
+      │  └─ #/properties/completed_at
+      │     ├─ types
+      │     │  └─ 0: string
+      │     └─ primaryType: string
+      ├─ 3
+      │  └─ #/properties/items
+      │     ├─ types
+      │     │  ├─ 0: null
+      │     │  └─ 1: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/items/items
+      │              ├─ types
+      │              │  ├─ 0: string
+      │              │  └─ 1: number
+      │              └─ primaryType: string
+      ├─ 4
+      │  └─ #/properties/email
+      │     ├─ types
+      │     │  └─ 0: string
+      │     └─ primaryType: string
+      ├─ 5
+      │  └─ #/properties/plan
+      │     ├─ combiners
+      │     │  └─ 0: anyOf
+      │     └─ children
+      │        ├─ 0
+      │        │  └─ #/properties/plan/anyOf/0
+      │        │     ├─ types
+      │        │     │  └─ 0: object
+      │        │     ├─ primaryType: object
+      │        │     └─ children
+      │        │        ├─ 0
+      │        │        │  └─ #/properties/plan/anyOf/0/properties/foo
+      │        │        │     ├─ types
+      │        │        │     │  └─ 0: string
+      │        │        │     └─ primaryType: string
+      │        │        └─ 1
+      │        │           └─ #/properties/plan/anyOf/0/properties/bar
+      │        │              ├─ types
+      │        │              │  └─ 0: string
+      │        │              └─ primaryType: string
+      │        └─ 1
+      │           └─ #/properties/plan/anyOf/1
+      │              ├─ types
+      │              │  └─ 0: array
+      │              ├─ primaryType: array
+      │              └─ children
+      │                 └─ 0
+      │                    └─ #/properties/plan/anyOf/1/items
+      │                       ├─ types
+      │                       │  └─ 0: integer
+      │                       └─ primaryType: integer
+      ├─ 6
+      │  └─ #/properties/permissions
+      │     ├─ types
+      │     │  ├─ 0: string
+      │     │  └─ 1: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/permissions/properties/ids
+      │              ├─ types
+      │              │  └─ 0: array
+      │              ├─ primaryType: array
+      │              └─ children
+      │                 └─ 0
+      │                    └─ #/properties/permissions/properties/ids/items
+      │                       ├─ types
+      │                       │  └─ 0: integer
+      │                       └─ primaryType: integer
+      ├─ 7
+      │  └─ #/properties/ref
+      │     ├─ types
+      │     │  ├─ 0: string
+      │     │  └─ 1: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/ref/properties/ids
+      │              ├─ types
+      │              │  └─ 0: array
+      │              ├─ primaryType: array
+      │              └─ children
+      │                 └─ 0
+      │                    └─ #/properties/ref/properties/ids/items
+      │                       ├─ types
+      │                       │  └─ 0: integer
+      │                       └─ primaryType: integer
+      ├─ 8
+      │  └─ #/patternProperties/^id_
+      │     ├─ types
+      │     │  └─ 0: number
+      │     └─ primaryType: number
+      ├─ 9
+      │  └─ #/patternProperties/foo
+      │     ├─ types
+      │     │  └─ 0: integer
+      │     └─ primaryType: integer
+      └─ 10
+         └─ #/patternProperties/_name$
+            ├─ types
+            │  └─ 0: string
+            └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for formats-schema.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/date-of-birth
+      │     ├─ types
+      │     │  ├─ 0: number
+      │     │  ├─ 1: string
+      │     │  └─ 2: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/date-of-birth/items
+      ├─ 1
+      │  └─ #/properties/name
+      │     ├─ types
+      │     │  └─ 0: string
+      │     └─ primaryType: string
+      ├─ 2
+      │  └─ #/properties/id
+      │     ├─ types
+      │     │  └─ 0: number
+      │     └─ primaryType: number
+      ├─ 3
+      │  └─ #/properties/notype
+      └─ 4
+         └─ #/properties/permissions
+            ├─ types
+            │  ├─ 0: string
+            │  └─ 1: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/properties/permissions/properties/ids
+                     ├─ types
+                     │  └─ 0: array
+                     ├─ primaryType: array
+                     └─ children
+                        └─ 0
+                           └─ #/properties/permissions/properties/ids/items
+                              ├─ types
+                              │  └─ 0: integer
+                              └─ primaryType: integer
+"
+`;
+
 exports[`SchemaTree output should generate valid tree for oneof-with-array-type.json 1`] = `
 "└─ #
    ├─ combiners
@@ -756,5 +1686,223 @@ exports[`SchemaTree output should generate valid tree for oneof-with-array-type.
                               ├─ types
                               │  └─ 0: string
                               └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for references/base.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/billing_address
+      │     ├─ types
+      │     │  └─ 0: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        ├─ 0
+      │        │  └─ #/properties/billing_address/properties/street_address
+      │        │     ├─ types
+      │        │     │  └─ 0: string
+      │        │     └─ primaryType: string
+      │        ├─ 1
+      │        │  └─ #/properties/billing_address/properties/city
+      │        │     ├─ types
+      │        │     │  └─ 0: string
+      │        │     └─ primaryType: string
+      │        └─ 2
+      │           └─ #/properties/billing_address/properties/state
+      │              ├─ types
+      │              │  └─ 0: string
+      │              └─ primaryType: string
+      └─ 1
+         └─ #/properties/shipping_address
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               ├─ 0
+               │  └─ #/properties/shipping_address/properties/street_address
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               ├─ 1
+               │  └─ #/properties/shipping_address/properties/city
+               │     ├─ types
+               │     │  └─ 0: string
+               │     └─ primaryType: string
+               └─ 2
+                  └─ #/properties/shipping_address/properties/state
+                     ├─ types
+                     │  └─ 0: string
+                     └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for references/nullish.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/properties/empty-ref
+            ├─ $ref
+            ├─ external: false
+            └─ error: $ref is not a string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for tickets.schema.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/availableTicketingOptions
+      │     ├─ types
+      │     │  └─ 0: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/availableTicketingOptions/items
+      │              ├─ $ref: ../TicketingOptionInfo/TicketingOptionInfo.v1-0.yaml
+      │              ├─ external: true
+      │              └─ error: Cannot dereference external references
+      ├─ 1
+      │  └─ #/properties/commonTicketingOptions
+      │     ├─ types
+      │     │  └─ 0: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/commonTicketingOptions/items
+      │              ├─ types
+      │              │  └─ 0: string
+      │              └─ primaryType: string
+      └─ 2
+         └─ #/properties/ticketingOptionChoice
+            ├─ types
+            │  └─ 0: array
+            ├─ primaryType: array
+            └─ children
+               └─ 0
+                  └─ #/properties/ticketingOptionChoice/items
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        ├─ 0
+                        │  └─ #/properties/ticketingOptionChoice/items/properties/state
+                        │     ├─ types
+                        │     │  └─ 0: string
+                        │     ├─ primaryType: string
+                        │     └─ enum
+                        │        ├─ 0: COMPLETED
+                        │        └─ 1: ACTIVE
+                        └─ 1
+                           └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown
+                              ├─ types
+                              │  └─ 0: array
+                              ├─ primaryType: array
+                              └─ children
+                                 └─ 0
+                                    └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items
+                                       ├─ types
+                                       │  └─ 0: object
+                                       ├─ primaryType: object
+                                       └─ children
+                                          ├─ 0
+                                          │  └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/orderItemId
+                                          │     ├─ types
+                                          │     │  └─ 0: string
+                                          │     └─ primaryType: string
+                                          └─ 1
+                                             └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options
+                                                ├─ types
+                                                │  └─ 0: array
+                                                ├─ primaryType: array
+                                                └─ children
+                                                   └─ 0
+                                                      └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items
+                                                         ├─ types
+                                                         │  └─ 0: object
+                                                         ├─ primaryType: object
+                                                         └─ children
+                                                            ├─ 0
+                                                            │  └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/title
+                                                            │     ├─ types
+                                                            │     │  └─ 0: string
+                                                            │     ├─ primaryType: string
+                                                            │     └─ enum
+                                                            │        ├─ 0: HOMEPRINT
+                                                            │        ├─ 1: TICKETLESS
+                                                            │        ├─ 2: PRINT_AT_KIOSK
+                                                            │        └─ 3: SECURE_PAPER
+                                                            ├─ 1
+                                                            │  └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/selected
+                                                            │     ├─ types
+                                                            │     │  └─ 0: boolean
+                                                            │     └─ primaryType: boolean
+                                                            ├─ 2
+                                                            │  └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/additionalRequiredInfo
+                                                            │     ├─ types
+                                                            │     │  └─ 0: string
+                                                            │     └─ primaryType: string
+                                                            └─ 3
+                                                               └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/deliveryInfo
+                                                                  ├─ types
+                                                                  │  └─ 0: object
+                                                                  ├─ primaryType: object
+                                                                  └─ children
+                                                                     ├─ 0
+                                                                     │  └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/deliveryInfo/properties/availableDeliveryTypes
+                                                                     │     ├─ types
+                                                                     │     │  └─ 0: array
+                                                                     │     ├─ primaryType: array
+                                                                     │     └─ children
+                                                                     │        └─ 0
+                                                                     │           └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/deliveryInfo/properties/availableDeliveryTypes/items
+                                                                     │              ├─ types
+                                                                     │              │  └─ 0: string
+                                                                     │              ├─ primaryType: string
+                                                                     │              └─ enum
+                                                                     │                 ├─ 0: POSTAL
+                                                                     │                 ├─ 1: PICK_UP_STATION
+                                                                     │                 ├─ 2: E-MAIL
+                                                                     │                 └─ 3: LOYALTY_CARD
+                                                                     ├─ 1
+                                                                     │  └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/deliveryInfo/properties/ticketRecipients
+                                                                     │     ├─ types
+                                                                     │     │  └─ 0: array
+                                                                     │     ├─ primaryType: array
+                                                                     │     └─ children
+                                                                     │        └─ 0
+                                                                     │           └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/deliveryInfo/properties/ticketRecipients/items
+                                                                     │              ├─ types
+                                                                     │              │  └─ 0: string
+                                                                     │              ├─ primaryType: string
+                                                                     │              └─ enum
+                                                                     │                 ├─ 0: BOOKER
+                                                                     │                 ├─ 1: CUSTOMER
+                                                                     │                 ├─ 2: PASSENGER
+                                                                     │                 └─ 3: THIRD_PARTY
+                                                                     ├─ 2
+                                                                     │  └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/deliveryInfo/properties/ccEmail
+                                                                     │     ├─ types
+                                                                     │     │  └─ 0: string
+                                                                     │     └─ primaryType: string
+                                                                     ├─ 3
+                                                                     │  └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/deliveryInfo/properties/postalAddress
+                                                                     │     ├─ $ref: ../Address/Address.v0-1.yaml
+                                                                     │     ├─ external: true
+                                                                     │     └─ error: Cannot dereference external references
+                                                                     └─ 4
+                                                                        └─ #/properties/ticketingOptionChoice/items/properties/orderItemBreakdown/items/properties/options/items/properties/deliveryInfo/properties/pickUpAtStation
+                                                                           ├─ types
+                                                                           │  └─ 0: string
+                                                                           └─ primaryType: string
 "
 `;

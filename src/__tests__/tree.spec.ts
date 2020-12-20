@@ -1,3 +1,4 @@
+import * as fastGlob from 'fast-glob';
 import * as fs from 'fs';
 import type { JSONSchema4 } from 'json-schema';
 import * as path from 'path';
@@ -7,6 +8,16 @@ import { printTree } from './utils/printTree';
 
 describe('SchemaTree', () => {
   describe('output', () => {
+    it.each(
+      fastGlob.sync('**/*.json', {
+        cwd: path.join(__dirname, '__fixtures__'),
+        ignore: ['stress-schema.json'],
+      }),
+    )('should generate valid tree for %s', async filename => {
+      const schema = JSON.parse(await fs.promises.readFile(path.resolve(__dirname, '__fixtures__', filename), 'utf8'));
+      expect(printTree(schema)).toMatchSnapshot();
+    });
+
     describe('allOf failures', () => {
       it('given incompatible values, should bail out and display unmerged allOf', () => {
         const schema: JSONSchema4 = {
@@ -438,14 +449,6 @@ describe('SchemaTree', () => {
         "
       `);
     });
-
-    it.each(['array-of-allofs.json', 'allof-with-type.json', 'oneof-with-array-type.json', 'complex-allOf-model.json'])(
-      'should generate valid tree for %s',
-      filename => {
-        const schema = JSON.parse(fs.readFileSync(path.resolve(__dirname, '__fixtures__', filename), 'utf8'));
-        expect(printTree(schema)).toMatchSnapshot();
-      },
-    );
 
     it('given empty schema, should output empty tree', () => {
       expect(printTree({})).toEqual('');

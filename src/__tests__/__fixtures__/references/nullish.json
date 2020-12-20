@@ -1,0 +1,7 @@
+{
+  "properties": {
+    "empty-ref": {
+      "$ref": null
+    }
+  }
+}
