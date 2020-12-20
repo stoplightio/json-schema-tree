@@ -3,7 +3,7 @@ import type { MirroredRegularNode } from './mirrored';
 import type { RegularNode } from './RegularNode';
 import type { RootNode } from './RootNode';
 
-let SEED = 0;
+let SEED = BigInt(0); // cannot use literal, cause TS.
 
 export abstract class BaseNode {
   public readonly id: string;

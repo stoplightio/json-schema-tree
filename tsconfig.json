@@ -4,8 +4,8 @@
   "include": ["."],
   "exclude": ["**/__mocks__/**", "dist/"],
   "compilerOptions": {
-    "lib": ["dom", "es2017"],
-    "target": "es2017",
+    "lib": ["dom", "ES2018"],
+    "target": "ES2020",
     "importsNotUsedAsValues": "error",
     "esModuleInterop": true
   }
