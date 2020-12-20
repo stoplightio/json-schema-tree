@@ -2,16 +2,11 @@ import { extractPointerFromRef, extractSourceFromRef, resolveInlineRef } from '@
 
 import { ResolvingError } from '../errors';
 import { RootNode } from '../nodes/RootNode';
-import type { SchemaTreeRefDereferenceFn } from '../resolver/types';
 import type { SchemaFragment } from '../types';
 import { isObjectLiteral } from '../utils';
 import { Walker } from '../walker';
 import type { WalkerRefResolver } from '../walker/types';
-
-export type SchemaTreeOptions = {
-  mergeAllOf: boolean;
-  refResolver: SchemaTreeRefDereferenceFn | null;
-};
+import type { SchemaTreeOptions } from './types';
 
 export class SchemaTree {
   public walker: Walker;
