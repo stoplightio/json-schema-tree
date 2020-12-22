@@ -1,7 +1,9 @@
 import type { Dictionary } from '@stoplight/types';
 
-import { isMirroredNode, isRegularNode } from '../../guards';
+import { isRegularNode } from '../../guards';
+import { isNonNullable } from '../../utils';
 import { BaseNode } from '../BaseNode';
+import type { ReferenceNode } from '../ReferenceNode';
 import type { RegularNode } from '../RegularNode';
 import type { SchemaAnnotations, SchemaCombinerName, SchemaMeta, SchemaNodeKind } from '../types';
 import { MirroredReferenceNode } from './MirroredReferenceNode';
@@ -24,8 +26,12 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
   public readonly simple!: boolean;
   public readonly unknown!: boolean;
 
+  private readonly cache: WeakMap<RegularNode | ReferenceNode, MirroredRegularNode | MirroredReferenceNode>;
+
   constructor(public readonly mirroredNode: RegularNode) {
     super(mirroredNode.fragment);
+
+    this.cache = new WeakMap();
 
     this._this = new Proxy(this, {
       get(target, key) {
@@ -49,38 +55,40 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
   }
 
   private readonly _this: MirroredRegularNode;
-  private _children?: (MirroredRegularNode | MirroredReferenceNode)[] | null;
 
-  public get children(): (MirroredRegularNode | MirroredReferenceNode)[] | null {
-    if (this._children !== void 0) {
-      return this._children;
-    }
+  private _children?: (MirroredRegularNode | MirroredReferenceNode)[];
 
-    if (!('children' in this.mirroredNode)) {
-      this._children = null;
-      return null;
-    }
-
+  public get children(): (MirroredRegularNode | MirroredReferenceNode)[] | null | undefined {
     const referencedChildren = this.mirroredNode.children;
-    if (referencedChildren === null) {
-      this._children = null;
-      return null;
+
+    if (!isNonNullable(referencedChildren)) {
+      return referencedChildren;
     }
 
-    const children: (MirroredRegularNode | MirroredReferenceNode)[] = [];
+    if (this._children === void 0) {
+      this._children = [];
+    } else {
+      this._children.length = 0;
+    }
+
+    const children: (MirroredRegularNode | MirroredReferenceNode)[] = this._children;
     for (const child of referencedChildren) {
       // this is to avoid pointing at nested mirroring
-      const actualChild = isMirroredNode(child) ? child.mirroredNode : child;
-      const mirroredChild = isRegularNode(actualChild)
-        ? new MirroredRegularNode(actualChild)
-        : new MirroredReferenceNode(actualChild);
+      const cached = this.cache.get(child);
+
+      if (cached !== void 0) {
+        children.push(cached);
+        continue;
+      }
+
+      const mirroredChild = isRegularNode(child) ? new MirroredRegularNode(child) : new MirroredReferenceNode(child);
 
       mirroredChild.parent = this._this;
-      mirroredChild.subpath = actualChild.subpath;
+      mirroredChild.subpath = child.subpath;
+      this.cache.set(child, mirroredChild);
       children.push(mirroredChild);
     }
 
-    this._children = children;
     return children;
   }
 }

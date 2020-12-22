@@ -250,7 +250,7 @@ describe('SchemaTree', () => {
                 │                                         └─ children
                 │                                            └─ 0
                 │                                               └─ #/properties/foo/items/properties/user/items/properties/user/items
-                │                                                  └─ mirrors: #/properties/foo/items
+                │                                                  └─ mirrors: #/properties/foo/items/properties/user/items
                 ├─ 1
                 │  └─ #/properties/bar
                 │     ├─ types

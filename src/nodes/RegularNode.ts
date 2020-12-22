@@ -26,7 +26,7 @@ export class RegularNode extends BaseNode {
   public readonly title: string | null;
   public readonly deprecated: boolean;
 
-  public children: (RegularNode | ReferenceNode | MirroredSchemaNode)[] | null;
+  public children: (RegularNode | ReferenceNode | MirroredSchemaNode)[] | null | undefined;
 
   public readonly meta: Readonly<Partial<Dictionary<unknown, SchemaMeta>>>;
   public readonly annotations: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
@@ -49,7 +49,7 @@ export class RegularNode extends BaseNode {
     this.annotations = getAnnotations(fragment);
     this.validations = getValidations(fragment, this.types);
 
-    this.children = null;
+    this.children = void 0;
   }
 
   public get simple() {

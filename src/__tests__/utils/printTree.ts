@@ -7,6 +7,7 @@ import type { MirroredSchemaNode, ReferenceNode, RegularNode, SchemaNode } from 
 import type { SchemaTreeOptions } from '../../tree';
 import { SchemaTree } from '../../tree';
 import type { SchemaFragment } from '../../types';
+import { isNonNullable } from '../../utils';
 
 export function printTree(schema: SchemaFragment, opts?: Partial<SchemaTreeOptions>) {
   const tree = new SchemaTree(schema, opts);
@@ -28,7 +29,7 @@ function printRegularNode(this: WeakSet<SchemaFragment>, node: RegularNode): Dic
     ...(node.primaryType !== null ? { primaryType: node.primaryType } : null),
     ...(node.combiners !== null ? { combiners: node.combiners } : null),
     ...(node.enum !== null ? { enum: node.enum } : null),
-    ...(node.children !== null ? { children: node.children.map(prepareTree, this) } : null),
+    ...(isNonNullable(node.children) ? { children: node.children.map(prepareTree, this) } : null),
   };
 }
 

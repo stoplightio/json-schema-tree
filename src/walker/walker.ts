@@ -3,7 +3,7 @@ import type { Dictionary } from '@stoplight/types';
 import createMagicError from 'magic-error';
 
 import { MergingError } from '../errors';
-import { isReferenceNode, isRegularNode, isRootNode } from '../guards';
+import { isMirroredNode, isReferenceNode, isRegularNode, isRootNode } from '../guards';
 import { mergeAllOf } from '../mergers/mergeAllOf';
 import { mergeOneOrAnyOf } from '../mergers/mergeOneOrAnyOf';
 import { MirroredReferenceNode, MirroredRegularNode, ReferenceNode, RegularNode } from '../nodes';
@@ -78,11 +78,26 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   }
 
   public walk(): void {
-    const { depth: initialDepth, schemaNode: initialSchemaNode, fragment } = this;
+    const { depth: initialDepth, fragment } = this;
+    let { schemaNode: initialSchemaNode } = this;
 
     if (initialDepth === -1 && Object.keys(fragment).length === 0) {
       // empty schema, nothing to do
       return;
+    }
+
+    while (isMirroredNode(initialSchemaNode)) {
+      if (!isRegularNode(initialSchemaNode.mirroredNode)) {
+        return;
+      }
+
+      if (initialSchemaNode.mirroredNode.children === void 0) {
+        this.restoreWalkerAtNode(initialSchemaNode.mirroredNode);
+        initialSchemaNode = this.schemaNode;
+        this.depth = initialDepth;
+      } else {
+        return;
+      }
     }
 
     const state = this.dumpInternalWalkerState();
@@ -110,10 +125,10 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       }
 
       if ('children' in initialSchemaNode && !isRootNode(schemaNode)) {
-        if (initialSchemaNode.children === null) {
+        if (initialSchemaNode.children === void 0) {
           (initialSchemaNode as RegularNode).children = [schemaNode];
         } else {
-          initialSchemaNode.children.push(schemaNode);
+          initialSchemaNode.children!.push(schemaNode);
         }
       }
 
