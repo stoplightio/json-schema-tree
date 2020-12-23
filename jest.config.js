@@ -10,6 +10,7 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.{ts,tsx}'],
   globals: {
     'ts-jest': {
+      tsconfig: 'tsconfig.build.json',
       diagnostics: {
         ignoreCodes: [151001],
       },
