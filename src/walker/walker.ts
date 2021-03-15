@@ -46,7 +46,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.depth = -1;
     this.fragment = this.root.fragment;
     this.schemaNode = this.root;
-    this.processedFragments = new WeakMap<SchemaFragment, SchemaNode>();
+    this.processedFragments = new WeakMap<SchemaFragment, RegularNode | ReferenceNode>();
   }
 
   public loadSnapshot(snapshot: WalkerSnapshot) {
@@ -107,7 +107,10 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     for (const schemaNode of this.processFragment()) {
       super.emit('enterNode', schemaNode);
 
-      this.processedFragments.set(schemaNode.fragment, schemaNode);
+      this.processedFragments.set(
+        schemaNode.fragment,
+        isMirroredNode(schemaNode) ? schemaNode.mirroredNode : schemaNode,
+      );
 
       this.fragment = schemaNode.fragment;
       this.depth = initialDepth + 1;
