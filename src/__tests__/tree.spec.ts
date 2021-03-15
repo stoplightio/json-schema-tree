@@ -243,7 +243,7 @@ describe('SchemaTree', () => {
                 │     └─ children
                 │        └─ 0
                 │           └─ #/properties/bar/items
-                │              └─ mirrors: #/properties/foo/items/properties/user/items
+                │              └─ mirrors: #/properties/foo/items
                 └─ 2
                    └─ #/properties/baz
                       ├─ types
@@ -252,7 +252,7 @@ describe('SchemaTree', () => {
                       └─ children
                          └─ 0
                             └─ #/properties/baz/items
-                               └─ mirrors: #/properties/bar/items
+                               └─ mirrors: #/properties/foo/items
           "
         `);
       });
