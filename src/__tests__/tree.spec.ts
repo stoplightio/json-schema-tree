@@ -228,31 +228,86 @@ describe('SchemaTree', () => {
                 │              └─ children
                 │                 └─ 0
                 │                    └─ #/properties/foo/items/properties/user
-                │                       ├─ types
-                │                       │  └─ 0: array
-                │                       ├─ primaryType: array
-                │                       └─ children
-                │                          └─ 0
-                │                             └─ #/properties/foo/items/properties/user/items
-                │                                └─ mirrors: #/properties/foo/items
+                │                       └─ mirrors: #/properties/foo
                 ├─ 1
                 │  └─ #/properties/bar
-                │     ├─ types
-                │     │  └─ 0: array
-                │     ├─ primaryType: array
-                │     └─ children
-                │        └─ 0
-                │           └─ #/properties/bar/items
-                │              └─ mirrors: #/properties/foo/items
+                │     └─ mirrors: #/properties/foo
                 └─ 2
                    └─ #/properties/baz
+                      └─ mirrors: #/properties/foo
+          "
+        `);
+      });
+
+      it('should handle circular references pointing at parents', () => {
+        const schema: JSONSchema4 = {
+          properties: {
+            bar: {
+              properties: {
+                foo: {
+                  type: 'string',
+                },
+                baz: {
+                  $ref: '#/properties/bar',
+                },
+              },
+            },
+          },
+        };
+
+        expect(printTree(schema)).toMatchInlineSnapshot(`
+          "└─ #
+             ├─ types
+             │  └─ 0: object
+             ├─ primaryType: object
+             └─ children
+                └─ 0
+                   └─ #/properties/bar
                       ├─ types
-                      │  └─ 0: array
-                      ├─ primaryType: array
+                      │  └─ 0: object
+                      ├─ primaryType: object
+                      └─ children
+                         ├─ 0
+                         │  └─ #/properties/bar/properties/foo
+                         │     ├─ types
+                         │     │  └─ 0: string
+                         │     └─ primaryType: string
+                         └─ 1
+                            └─ #/properties/bar/properties/baz
+                               └─ mirrors: #/properties/bar
+          "
+        `);
+      });
+
+      it('should handle circular references pointing at document', () => {
+        const schema: JSONSchema4 = {
+          title: 'root',
+          properties: {
+            bar: {
+              properties: {
+                baz: {
+                  $ref: '#',
+                },
+              },
+            },
+          },
+        };
+
+        expect(printTree(schema)).toMatchInlineSnapshot(`
+          "└─ #
+             ├─ types
+             │  └─ 0: object
+             ├─ primaryType: object
+             └─ children
+                └─ 0
+                   └─ #/properties/bar
+                      ├─ types
+                      │  └─ 0: object
+                      ├─ primaryType: object
                       └─ children
                          └─ 0
-                            └─ #/properties/baz/items
-                               └─ mirrors: #/properties/foo/items
+                            └─ #/properties/bar/properties/baz
+                               └─ mirrors: #
           "
         `);
       });
