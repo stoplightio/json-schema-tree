@@ -97,9 +97,7 @@ describe('SchemaTree', () => {
                 │     └─ primaryType: boolean
                 └─ 1
                    └─ #/properties/bar
-                      ├─ types
-                      │  └─ 0: boolean
-                      └─ primaryType: boolean
+                      └─ mirrors: #/properties/foo
           "
         `);
       });
@@ -139,9 +137,7 @@ describe('SchemaTree', () => {
                 │              └─ primaryType: boolean
                 └─ 1
                    └─ #/properties/bar
-                      ├─ types
-                      │  └─ 0: boolean
-                      └─ primaryType: boolean
+                      └─ mirrors: #/properties/foo/items
           "
         `);
       });
@@ -238,19 +234,7 @@ describe('SchemaTree', () => {
                 │                       └─ children
                 │                          └─ 0
                 │                             └─ #/properties/foo/items/properties/user/items
-                │                                ├─ types
-                │                                │  └─ 0: object
-                │                                ├─ primaryType: object
-                │                                └─ children
-                │                                   └─ 0
-                │                                      └─ #/properties/foo/items/properties/user/items/properties/user
-                │                                         ├─ types
-                │                                         │  └─ 0: array
-                │                                         ├─ primaryType: array
-                │                                         └─ children
-                │                                            └─ 0
-                │                                               └─ #/properties/foo/items/properties/user/items/properties/user/items
-                │                                                  └─ mirrors: #/properties/foo/items/properties/user/items
+                │                                └─ mirrors: #/properties/foo/items
                 ├─ 1
                 │  └─ #/properties/bar
                 │     ├─ types

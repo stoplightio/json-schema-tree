@@ -15,21 +15,21 @@ export function printTree(schema: SchemaFragment, opts?: Partial<SchemaTreeOptio
 
   const root: unknown =
     tree.root.children.length > 1
-      ? tree.root.children.map(child => prepareTree.call(new WeakSet(), child))
+      ? tree.root.children.map(child => prepareTree(child))
       : tree.root.children.length === 1
-      ? prepareTree.call(new WeakSet(), tree.root.children[0])
+      ? prepareTree(tree.root.children[0])
       : {};
 
   return treeify.asTree(root as treeify.TreeObject, true, true);
 }
 
-function printRegularNode(this: WeakSet<SchemaFragment>, node: RegularNode): Dictionary<unknown> {
+function printRegularNode(node: RegularNode): Dictionary<unknown> {
   return {
     ...(node.types !== null ? { types: node.types } : null),
     ...(node.primaryType !== null ? { primaryType: node.primaryType } : null),
     ...(node.combiners !== null ? { combiners: node.combiners } : null),
     ...(node.enum !== null ? { enum: node.enum } : null),
-    ...(isNonNullable(node.children) ? { children: node.children.map(prepareTree, this) } : null),
+    ...(isNonNullable(node.children) ? { children: node.children.map(prepareTree) } : null),
   };
 }
 
@@ -41,31 +41,26 @@ function printReferenceNode(node: ReferenceNode) {
   };
 }
 
-function printMirrorNode(this: WeakSet<SchemaFragment>, node: MirroredSchemaNode): any {
-  if (this.has(node.fragment)) {
-    return {
-      mirrors: pathToPointer(node.mirroredNode.path as string[]),
-    };
-  }
-
-  this.add(node.fragment);
-  return isRegularNode(node) ? printRegularNode.call(this, node) : printReferenceNode.call(this, node);
+function printMirrorNode(node: MirroredSchemaNode): any {
+  return {
+    mirrors: pathToPointer(node.mirroredNode.path as string[]),
+  };
 }
 
-function printNode(this: WeakSet<SchemaFragment>, node: SchemaNode) {
+function printNode(node: SchemaNode) {
   return isMirroredNode(node)
-    ? printMirrorNode.call(this, node)
+    ? printMirrorNode(node)
     : isRegularNode(node)
-    ? printRegularNode.call(this, node)
+    ? printRegularNode(node)
     : isReferenceNode(node)
-    ? printReferenceNode.call(this, node)
+    ? printReferenceNode(node)
     : {
         kind: 'unknown node',
       };
 }
 
-function prepareTree(this: WeakSet<SchemaFragment>, node: SchemaNode) {
+function prepareTree(node: SchemaNode) {
   return {
-    [pathToPointer(node.path as string[])]: printNode.call(this, node),
+    [pathToPointer(node.path as string[])]: printNode(node),
   };
 }
