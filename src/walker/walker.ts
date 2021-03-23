@@ -6,11 +6,11 @@ import { MergingError } from '../errors';
 import { isMirroredNode, isReferenceNode, isRegularNode, isRootNode } from '../guards';
 import { mergeAllOf } from '../mergers/mergeAllOf';
 import { mergeOneOrAnyOf } from '../mergers/mergeOneOrAnyOf';
-import { MirroredReferenceNode, MirroredRegularNode, ReferenceNode, RegularNode } from '../nodes';
+import { MirroredReferenceNode, MirroredRegularNode, MirroredSchemaNode, ReferenceNode, RegularNode } from '../nodes';
 import type { RootNode } from '../nodes/RootNode';
 import { SchemaCombinerName, SchemaNode, SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
-import { isObjectLiteral } from '../utils/guards';
+import { isNonNullable, isObjectLiteral } from '../utils/guards';
 import type { WalkerEmitter, WalkerHookAction, WalkerHookHandler, WalkerSnapshot, WalkingOptions } from './types';
 
 type InternalWalkerState = {
@@ -243,22 +243,30 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.schemaNode = schemaNode;
   }
 
-  protected *processFragment(): IterableIterator<SchemaNode> {
-    const { walkingOptions, path, processedFragments } = this;
-    let { fragment } = this;
-
-    const processedSchemaNode = processedFragments.get(fragment);
+  protected retrieveFromFragment(fragment: SchemaFragment): MirroredSchemaNode | void {
+    const processedSchemaNode = this.processedFragments.get(fragment);
     if (processedSchemaNode !== void 0) {
       if (isRegularNode(processedSchemaNode)) {
-        return yield new MirroredRegularNode(processedSchemaNode);
+        return new MirroredRegularNode(processedSchemaNode);
       }
 
       if (isReferenceNode(processedSchemaNode)) {
-        return yield new MirroredReferenceNode(processedSchemaNode);
+        return new MirroredReferenceNode(processedSchemaNode);
       }
 
       // whoops, we don't know what to do with it
       throw new TypeError('Cannot mirror the node');
+    }
+  }
+
+  protected *processFragment(): IterableIterator<SchemaNode> {
+    const { walkingOptions, path } = this;
+    let { fragment } = this;
+
+    let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
+
+    if (retrieved) {
+      return yield retrieved;
     }
 
     if ('$ref' in fragment) {
@@ -302,6 +310,12 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
         // no the end of the world - we will render raw unprocessed fragment
       }
+    }
+
+    retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
+
+    if (retrieved) {
+      return yield retrieved;
     }
 
     yield new RegularNode(fragment);
