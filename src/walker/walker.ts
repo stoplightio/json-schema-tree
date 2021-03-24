@@ -103,55 +103,49 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     const state = this.dumpInternalWalkerState();
 
     super.emit('enterFragment', fragment);
+    const schemaNode = this.processFragment();
+    super.emit('enterNode', schemaNode);
 
-    for (const schemaNode of this.processFragment()) {
-      super.emit('enterNode', schemaNode);
+    this.processedFragments.set(schemaNode.fragment, isMirroredNode(schemaNode) ? schemaNode.mirroredNode : schemaNode);
 
-      this.processedFragments.set(
-        schemaNode.fragment,
-        isMirroredNode(schemaNode) ? schemaNode.mirroredNode : schemaNode,
-      );
+    this.fragment = schemaNode.fragment;
+    this.depth = initialDepth + 1;
 
-      this.fragment = schemaNode.fragment;
-      this.depth = initialDepth + 1;
+    const isIncluded = this.hooks.filter?.(schemaNode);
 
-      const isIncluded = this.hooks.filter?.(schemaNode);
-
-      if (isIncluded === false) {
-        super.emit('skipNode', schemaNode);
-        continue;
-      }
-
-      if (!isRootNode(schemaNode)) {
-        schemaNode.parent = initialSchemaNode;
-        schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
-      }
-
-      if ('children' in initialSchemaNode && !isRootNode(schemaNode)) {
-        if (initialSchemaNode.children === void 0) {
-          (initialSchemaNode as RegularNode).children = [schemaNode];
-        } else {
-          initialSchemaNode.children!.push(schemaNode);
-        }
-      }
-
-      super.emit('includeNode', schemaNode);
-
-      if (isRegularNode(schemaNode)) {
-        this.schemaNode = schemaNode;
-
-        if (this.hooks.stepIn?.(schemaNode) !== false) {
-          super.emit('stepInNode', schemaNode);
-          this.walkNodeChildren();
-          super.emit('stepOutNode', schemaNode);
-        } else {
-          super.emit('stepOverNode', schemaNode);
-        }
-      }
-
-      super.emit('exitNode', schemaNode);
+    if (isIncluded === false) {
+      super.emit('skipNode', schemaNode);
+      return;
     }
 
+    if (!isRootNode(schemaNode)) {
+      schemaNode.parent = initialSchemaNode;
+      schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
+    }
+
+    if ('children' in initialSchemaNode && !isRootNode(schemaNode)) {
+      if (initialSchemaNode.children === void 0) {
+        (initialSchemaNode as RegularNode).children = [schemaNode];
+      } else {
+        initialSchemaNode.children!.push(schemaNode);
+      }
+    }
+
+    super.emit('includeNode', schemaNode);
+
+    if (isRegularNode(schemaNode)) {
+      this.schemaNode = schemaNode;
+
+      if (this.hooks.stepIn?.(schemaNode) !== false) {
+        super.emit('stepInNode', schemaNode);
+        this.walkNodeChildren();
+        super.emit('stepOutNode', schemaNode);
+      } else {
+        super.emit('stepOverNode', schemaNode);
+      }
+    }
+
+    super.emit('exitNode', schemaNode);
     this.restoreInternalWalkerState(state);
     super.emit('exitFragment', fragment);
   }
@@ -259,28 +253,28 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     }
   }
 
-  protected *processFragment(): IterableIterator<SchemaNode> {
+  protected processFragment(): SchemaNode {
     const { walkingOptions, path } = this;
     let { fragment } = this;
 
     let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
 
     if (retrieved) {
-      return yield retrieved;
+      return retrieved;
     }
 
     if ('$ref' in fragment) {
       if (typeof fragment.$ref !== 'string') {
-        return yield new ReferenceNode(fragment, '$ref is not a string');
+        return new ReferenceNode(fragment, '$ref is not a string');
       } else if (walkingOptions.resolveRef !== null) {
         try {
           fragment = walkingOptions.resolveRef(path, fragment.$ref);
         } catch (ex) {
           super.emit('error', createMagicError(ex));
-          return yield new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error');
+          return new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error');
         }
       } else {
-        return yield new ReferenceNode(fragment, null);
+        return new ReferenceNode(fragment, null);
       }
     }
 
@@ -297,15 +291,13 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       try {
         const merged = mergeOneOrAnyOf(fragment, path, walkingOptions);
         if (merged.length === 1) {
-          yield new RegularNode(merged[0]);
+          return new RegularNode(merged[0]);
         } else {
           const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
-          yield new RegularNode({
+          return new RegularNode({
             [combiner]: merged,
           });
         }
-
-        return;
       } catch (ex) {
         super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
         // no the end of the world - we will render raw unprocessed fragment
@@ -315,9 +307,9 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
 
     if (retrieved) {
-      return yield retrieved;
+      return retrieved;
     }
 
-    yield new RegularNode(fragment);
+    return new RegularNode(fragment);
   }
 }
