@@ -37,7 +37,7 @@
   "peerDependencies": {},
   "dependencies": {
     "@stoplight/json": "^3.10.0",
-    "@stoplight/json-schema-merge-allof": "^0.7.2",
+    "@stoplight/json-schema-merge-allof": "^0.7.5",
     "@stoplight/lifecycle": "^2.3.2",
     "magic-error": "^0.0.0"
   },
