@@ -301,14 +301,14 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       try {
         const merged = mergeOneOrAnyOf(fragment, path, walkingOptions);
         if (merged.length === 1) {
-          return [new RegularNode(merged[0]), fragment];
+          return [new RegularNode(merged[0]), initialFragment];
         } else {
           const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
           return [
             new RegularNode({
               [combiner]: merged,
             }),
-            fragment,
+            initialFragment,
           ];
         }
       } catch (ex) {
