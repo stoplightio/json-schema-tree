@@ -554,6 +554,53 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/base.
 "
 `;
 
+exports[`SchemaTree output should generate valid tree for combiners/allOfs/circular-regular-level.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/properties/someProp
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/properties/someProp/properties/parent
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        ├─ 0
+                        │  └─ #/properties/someProp/properties/parent/properties/parent
+                        │     └─ mirrors: #/properties/someProp/properties/parent
+                        └─ 1
+                           └─ #/properties/someProp/properties/parent/properties/foo
+                              ├─ types
+                              │  └─ 0: string
+                              └─ primaryType: string
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for combiners/allOfs/circular-top-level.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/properties/parent
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/properties/parent/properties/parent
+                     └─ mirrors: #/properties/parent
+"
+`;
+
 exports[`SchemaTree output should generate valid tree for combiners/allOfs/complex.json 1`] = `
 "└─ #
    ├─ types

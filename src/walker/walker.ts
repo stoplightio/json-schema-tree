@@ -19,6 +19,8 @@ type InternalWalkerState = {
   schemaNode: RegularNode | RootNode;
 };
 
+type ProcessedFragment = SchemaFragment | SchemaFragment[];
+
 export class Walker extends EventEmitter<WalkerEmitter> {
   public readonly path: string[];
   public depth: number;
@@ -26,7 +28,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   protected fragment: SchemaFragment;
   protected schemaNode: RegularNode | RootNode;
 
-  private processedFragments: WeakMap<SchemaFragment, SchemaNode>;
+  private processedFragments: WeakMap<ProcessedFragment, SchemaNode>;
   private readonly hooks: Partial<Dictionary<WalkerHookHandler, WalkerHookAction>>;
 
   constructor(protected readonly root: RootNode, protected readonly walkingOptions: WalkingOptions) {
@@ -103,10 +105,12 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     const state = this.dumpInternalWalkerState();
 
     super.emit('enterFragment', fragment);
-    const schemaNode = this.processFragment();
+    const [schemaNode, initialFragment] = this.processFragment();
     super.emit('enterNode', schemaNode);
 
-    this.processedFragments.set(schemaNode.fragment, isMirroredNode(schemaNode) ? schemaNode.mirroredNode : schemaNode);
+    const actualNode = isMirroredNode(schemaNode) ? schemaNode.mirroredNode : schemaNode;
+    this.processedFragments.set(schemaNode.fragment, actualNode);
+    this.processedFragments.set(initialFragment, actualNode);
 
     this.fragment = schemaNode.fragment;
     this.depth = initialDepth + 1;
@@ -237,15 +241,15 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.schemaNode = schemaNode;
   }
 
-  protected retrieveFromFragment(fragment: SchemaFragment): MirroredSchemaNode | void {
+  protected retrieveFromFragment(fragment: ProcessedFragment): [MirroredSchemaNode, ProcessedFragment] | void {
     const processedSchemaNode = this.processedFragments.get(fragment);
     if (processedSchemaNode !== void 0) {
       if (isRegularNode(processedSchemaNode)) {
-        return new MirroredRegularNode(processedSchemaNode);
+        return [new MirroredRegularNode(processedSchemaNode), fragment];
       }
 
       if (isReferenceNode(processedSchemaNode)) {
-        return new MirroredReferenceNode(processedSchemaNode);
+        return [new MirroredReferenceNode(processedSchemaNode), fragment];
       }
 
       // whoops, we don't know what to do with it
@@ -253,7 +257,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     }
   }
 
-  protected processFragment(): SchemaNode {
+  protected processFragment(): [SchemaNode, ProcessedFragment] {
     const { walkingOptions, path } = this;
     let { fragment } = this;
 
@@ -265,23 +269,29 @@ export class Walker extends EventEmitter<WalkerEmitter> {
 
     if ('$ref' in fragment) {
       if (typeof fragment.$ref !== 'string') {
-        return new ReferenceNode(fragment, '$ref is not a string');
+        return [new ReferenceNode(fragment, '$ref is not a string'), fragment];
       } else if (walkingOptions.resolveRef !== null) {
         try {
           fragment = walkingOptions.resolveRef(path, fragment.$ref);
         } catch (ex) {
           super.emit('error', createMagicError(ex));
-          return new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error');
+          return [new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error'), fragment];
         }
       } else {
-        return new ReferenceNode(fragment, null);
+        return [new ReferenceNode(fragment, null), fragment];
       }
     }
 
+    let initialFragment: ProcessedFragment = fragment;
     if (walkingOptions.mergeAllOf && SchemaCombinerName.AllOf in fragment) {
       try {
+        if (Array.isArray(fragment.allOf)) {
+          initialFragment = fragment.allOf;
+        }
+
         fragment = mergeAllOf(fragment, path, walkingOptions);
       } catch (ex) {
+        initialFragment = fragment;
         super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
         // no the end of the world - we will render raw unprocessed fragment
       }
@@ -291,12 +301,15 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       try {
         const merged = mergeOneOrAnyOf(fragment, path, walkingOptions);
         if (merged.length === 1) {
-          return new RegularNode(merged[0]);
+          return [new RegularNode(merged[0]), fragment];
         } else {
           const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
-          return new RegularNode({
-            [combiner]: merged,
-          });
+          return [
+            new RegularNode({
+              [combiner]: merged,
+            }),
+            fragment,
+          ];
         }
       } catch (ex) {
         super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
@@ -304,12 +317,12 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       }
     }
 
-    retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
+    retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(initialFragment) : null;
 
     if (retrieved) {
       return retrieved;
     }
 
-    return new RegularNode(fragment);
+    return [new RegularNode(fragment), initialFragment];
   }
 }
