@@ -1,6 +1,6 @@
 import type { Dictionary } from '@stoplight/types';
 
-export function pick(target: object, keys: (string | number)[]) {
+export function pick(target: object, keys: readonly (string | number)[]) {
   const source: Dictionary<unknown, string | number> = {};
 
   for (const key of keys) {

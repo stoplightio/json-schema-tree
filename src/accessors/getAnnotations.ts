@@ -1,9 +1,16 @@
-import type { SchemaAnnotations } from '../nodes/types';
 import type { SchemaFragment } from '../types';
 import { pick } from '../utils/pick';
 
-const ANNOTATIONS: SchemaAnnotations[] = ['description', 'default', 'examples', 'const', 'x-example'];
+const ANNOTATIONS = ['description', 'default', 'examples'] as const;
+
+export type SchemaAnnotations = typeof ANNOTATIONS[number];
 
 export function getAnnotations(fragment: SchemaFragment) {
-  return pick(fragment, ANNOTATIONS);
+  const annotations = pick(fragment, ANNOTATIONS);
+  if ('example' in fragment && !Array.isArray(annotations.examples)) {
+    // example is more OAS-ish, but it's common enough to be worth supporting
+    annotations.examples = [fragment.example];
+  }
+
+  return annotations;
 }

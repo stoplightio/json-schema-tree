@@ -5,10 +5,11 @@ import { isNonNullable } from '../../utils';
 import { BaseNode } from '../BaseNode';
 import type { ReferenceNode } from '../ReferenceNode';
 import type { RegularNode } from '../RegularNode';
-import type { SchemaAnnotations, SchemaCombinerName, SchemaMeta, SchemaNodeKind } from '../types';
+import type { SchemaAnnotations, SchemaCombinerName, SchemaNodeKind } from '../types';
 import { MirroredReferenceNode } from './MirroredReferenceNode';
 
 export class MirroredRegularNode extends BaseNode implements RegularNode {
+  public readonly $id!: string | null;
   public readonly types!: SchemaNodeKind[] | null;
   public readonly primaryType!: SchemaNodeKind | null;
   public readonly combiners!: SchemaCombinerName[] | null;
@@ -19,7 +20,6 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
   public readonly title!: string | null;
   public readonly deprecated!: boolean;
 
-  public readonly meta!: Readonly<Partial<Dictionary<unknown, SchemaMeta>>>;
   public readonly annotations!: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
   public readonly validations!: Readonly<Dictionary<unknown>>;
 

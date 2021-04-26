@@ -25,6 +25,4 @@ export enum SchemaCombinerName {
   OneOf = 'oneOf',
 }
 
-export type SchemaAnnotations = 'description' | 'default' | 'examples' | 'const' | 'example' | 'x-example';
-
-export type SchemaMeta = 'id' | '$schema';
+export { SchemaAnnotations } from '../accessors/getAnnotations';
