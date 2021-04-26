@@ -62,13 +62,15 @@ export class SchemaTree {
       throw new ResolvingError('Cannot dereference external references');
     } else if (pointer === null) {
       throw new ResolvingError('The pointer is empty');
-    } else {
+    } else if (isObjectLiteral(this.schema)) {
       const value = resolveInlineRef(this.schema, pointer);
       if (!isObjectLiteral(value)) {
         throw new ResolvingError('Invalid value');
       }
 
       return value;
+    } else {
+      throw new ResolvingError('Unexpected input');
     }
   };
 }

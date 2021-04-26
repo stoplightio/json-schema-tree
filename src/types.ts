@@ -1,6 +1,5 @@
-import type { Dictionary } from '@stoplight/types';
-import type { JSONSchema4 } from 'json-schema';
+import type { JSONSchema4, JSONSchema6, JSONSchema7 } from 'json-schema';
 
 export type ViewMode = 'read' | 'write' | 'standalone';
 
-export type SchemaFragment = Dictionary<unknown, keyof JSONSchema4>;
+export type SchemaFragment = Record<string, unknown> | JSONSchema4 | JSONSchema6 | JSONSchema7;
