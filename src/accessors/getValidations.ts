@@ -1,22 +1,12 @@
 import type { Dictionary } from '@stoplight/types';
-import type { JSONSchema4 } from 'json-schema';
 
 import type { SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
 import { pick } from '../utils/pick';
 
-export const COMMON_VALIDATION_TYPES: (keyof JSONSchema4)[] = [
-  'default',
-  'example',
-  'nullable',
-  'discriminator',
-  'readOnly',
-  'writeOnly',
-  'xml',
-  'externalDocs',
-];
+export const COMMON_VALIDATION_TYPES: string[] = ['readOnly', 'writeOnly'];
 
-const VALIDATION_TYPES: Partial<Dictionary<(keyof JSONSchema4)[], SchemaNodeKind>> = {
+const VALIDATION_TYPES: Partial<Dictionary<(keyof SchemaFragment)[], SchemaNodeKind>> = {
   string: ['minLength', 'maxLength', 'pattern'],
   number: ['multipleOf', 'minimum', 'exclusiveMinimum', 'maximum', 'exclusiveMaximum'],
   get integer() {
@@ -26,8 +16,8 @@ const VALIDATION_TYPES: Partial<Dictionary<(keyof JSONSchema4)[], SchemaNodeKind
   array: ['additionalItems', 'minItems', 'maxItems', 'uniqueItems'],
 };
 
-function getTypeValidations(types: SchemaNodeKind[]): (keyof JSONSchema4)[] | null {
-  let extraValidations: (keyof JSONSchema4)[] | null = null;
+function getTypeValidations(types: SchemaNodeKind[]): (keyof SchemaFragment)[] | null {
+  let extraValidations: (keyof SchemaFragment)[] | null = null;
 
   for (const type of types) {
     const value = VALIDATION_TYPES[type];

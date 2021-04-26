@@ -36,18 +36,18 @@
   },
   "peerDependencies": {},
   "dependencies": {
-    "@stoplight/json": "^3.10.0",
+    "@stoplight/json": "^3.12.0",
     "@stoplight/json-schema-merge-allof": "^0.7.5",
     "@stoplight/lifecycle": "^2.3.2",
+    "@types/json-schema": "^7.0.7",
     "magic-error": "^0.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "3",
     "@stoplight/eslint-config": "^2.0.0",
     "@stoplight/scripts": "8.2.1",
-    "@stoplight/types": "^11.9.0",
+    "@stoplight/types": "^12.0.0",
     "@types/jest": "^26.0.19",
-    "@types/json-schema": "^7.0.6",
     "@types/node": "^14.14.14",
     "@types/treeify": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
