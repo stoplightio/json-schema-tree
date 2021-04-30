@@ -1,7 +1,7 @@
 import type { SchemaFragment } from '../types';
 import { pick } from '../utils/pick';
 
-const ANNOTATIONS = ['description', 'default', 'examples'] as const;
+const ANNOTATIONS = ['description', 'default', 'examples', 'nullable'] as const;
 
 export type SchemaAnnotations = typeof ANNOTATIONS[number];
 
