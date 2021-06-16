@@ -22,6 +22,7 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
   public readonly meta!: Readonly<Partial<Dictionary<unknown, SchemaMeta>>>;
   public readonly annotations!: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
   public readonly validations!: Readonly<Dictionary<unknown>>;
+  public readonly context!: Readonly<{ originalRef?: string }>;
 
   public readonly simple!: boolean;
   public readonly unknown!: boolean;
