@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import type { JSONSchema4 } from 'json-schema';
 import * as path from 'path';
 
+import { isRegularNode } from '../guards';
+import type { RegularNode } from '../nodes';
 import { SchemaTree } from '../tree';
 import { printTree } from './utils/printTree';
 
@@ -100,6 +102,27 @@ describe('SchemaTree', () => {
                       └─ mirrors: #/properties/foo
           "
         `);
+      });
+
+      it('preserves the original $ref info', () => {
+        const schema: JSONSchema4 = {
+          type: 'object',
+          properties: {
+            foo: {
+              $ref: '#/properties/bar',
+            },
+            bar: {
+              type: 'boolean',
+            },
+          },
+        };
+
+        const tree = new SchemaTree(schema);
+        tree.populate();
+
+        const topLevelObject = tree.root.children[0] as RegularNode;
+        const fooObj = topLevelObject.children!.find(child => child.path[child.path.length - 1] === 'foo')!;
+        expect(isRegularNode(fooObj) && fooObj.context.originalRef).toBe('#/properties/bar');
       });
 
       it('given an array with $reffed items, should resolve', () => {

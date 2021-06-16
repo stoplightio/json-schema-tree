@@ -260,6 +260,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   protected processFragment(): [SchemaNode, ProcessedFragment] {
     const { walkingOptions, path } = this;
     let { fragment } = this;
+    const originalRef = typeof fragment.$ref === 'string' ? fragment.$ref : void 0;
 
     let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
 
@@ -301,7 +302,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       try {
         const merged = mergeOneOrAnyOf(fragment, path, walkingOptions);
         if (merged.length === 1) {
-          return [new RegularNode(merged[0]), initialFragment];
+          return [new RegularNode(merged[0], { originalRef }), initialFragment];
         } else {
           const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
           return [
@@ -323,6 +324,6 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       return retrieved;
     }
 
-    return [new RegularNode(fragment), initialFragment];
+    return [new RegularNode(fragment, { originalRef }), initialFragment];
   }
 }

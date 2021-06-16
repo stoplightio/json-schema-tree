@@ -29,8 +29,9 @@ export class RegularNode extends BaseNode {
 
   public readonly annotations: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
   public readonly validations: Readonly<Dictionary<unknown>>;
+  public readonly context: Readonly<{ originalRef?: string }>;
 
-  constructor(public readonly fragment: SchemaFragment) {
+  constructor(public readonly fragment: SchemaFragment, context?: { originalRef?: string }) {
     super(fragment);
 
     this.$id = unwrapStringOrNull('id' in fragment ? fragment.id : fragment.$id);
@@ -46,6 +47,7 @@ export class RegularNode extends BaseNode {
 
     this.annotations = getAnnotations(fragment);
     this.validations = getValidations(fragment, this.types);
+    this.context = context ?? {};
 
     this.children = void 0;
   }
