@@ -122,7 +122,7 @@ describe('SchemaTree', () => {
 
         const topLevelObject = tree.root.children[0] as RegularNode;
         const fooObj = topLevelObject.children!.find(child => child.path[child.path.length - 1] === 'foo')!;
-        expect(isRegularNode(fooObj) && fooObj.context.originalRef).toBe('#/properties/bar');
+        expect(isRegularNode(fooObj) && fooObj.originalFragment.$ref).toBe('#/properties/bar');
       });
 
       it('given an array with $reffed items, should resolve', () => {
