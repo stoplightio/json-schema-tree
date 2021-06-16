@@ -1,6 +1,7 @@
 import type { Dictionary } from '@stoplight/types';
 
 import { isRegularNode } from '../../guards';
+import type { SchemaFragment } from '../../types';
 import { isNonNullable } from '../../utils';
 import { BaseNode } from '../BaseNode';
 import type { ReferenceNode } from '../ReferenceNode';
@@ -22,7 +23,7 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
 
   public readonly annotations!: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
   public readonly validations!: Readonly<Dictionary<unknown>>;
-  public readonly context!: Readonly<{ originalRef?: string }>;
+  public readonly originalFragment!: SchemaFragment;
 
   public readonly simple!: boolean;
   public readonly unknown!: boolean;
