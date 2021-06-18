@@ -304,10 +304,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           return [new RegularNode(merged[0], { originalFragment }), initialFragment];
         } else {
           const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
-          return [
-            new RegularNode({
-              [combiner]: merged,
-            }),
+          return [new RegularNode({ [combiner]: merged }, { originalFragment }),
             initialFragment,
           ];
         }
