@@ -241,11 +241,14 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.schemaNode = schemaNode;
   }
 
-  protected retrieveFromFragment(fragment: ProcessedFragment): [MirroredSchemaNode, ProcessedFragment] | void {
+  protected retrieveFromFragment(
+    fragment: ProcessedFragment,
+    originalFragment: SchemaFragment,
+  ): [MirroredSchemaNode, ProcessedFragment] | void {
     const processedSchemaNode = this.processedFragments.get(fragment);
     if (processedSchemaNode !== void 0) {
       if (isRegularNode(processedSchemaNode)) {
-        return [new MirroredRegularNode(processedSchemaNode), fragment];
+        return [new MirroredRegularNode(processedSchemaNode, { originalFragment }), fragment];
       }
 
       if (isReferenceNode(processedSchemaNode)) {
@@ -258,10 +261,10 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   }
 
   protected processFragment(): [SchemaNode, ProcessedFragment] {
-    const { walkingOptions, path } = this;
+    const { walkingOptions, path, fragment: originalFragment } = this;
     let { fragment } = this;
 
-    let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
+    let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment, originalFragment) : null;
 
     if (retrieved) {
       return retrieved;
@@ -301,15 +304,10 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       try {
         const merged = mergeOneOrAnyOf(fragment, path, walkingOptions);
         if (merged.length === 1) {
-          return [new RegularNode(merged[0]), initialFragment];
+          return [new RegularNode(merged[0], { originalFragment }), initialFragment];
         } else {
           const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
-          return [
-            new RegularNode({
-              [combiner]: merged,
-            }),
-            initialFragment,
-          ];
+          return [new RegularNode({ [combiner]: merged }, { originalFragment }), initialFragment];
         }
       } catch (ex) {
         super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
@@ -317,12 +315,12 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       }
     }
 
-    retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(initialFragment) : null;
+    retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(initialFragment, originalFragment) : null;
 
     if (retrieved) {
       return retrieved;
     }
 
-    return [new RegularNode(fragment), initialFragment];
+    return [new RegularNode(fragment, { originalFragment }), initialFragment];
   }
 }

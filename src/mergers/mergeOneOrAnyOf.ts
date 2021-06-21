@@ -28,14 +28,13 @@ export function mergeOneOrAnyOf(
       const prunedSchema = { ...fragment };
       delete prunedSchema[combiner];
 
-      const resolvedItem =
-        typeof item.$ref === 'string' && walkingOptions.resolveRef !== null
-          ? walkingOptions.resolveRef(null, item.$ref)
-          : item;
-
       if (Object.keys(prunedSchema).length === 0) {
-        merged.push(resolvedItem);
+        merged.push(item);
       } else {
+        const resolvedItem =
+          typeof item.$ref === 'string' && walkingOptions.resolveRef !== null
+            ? walkingOptions.resolveRef(null, item.$ref)
+            : item;
         const mergedSchema = {
           allOf: [prunedSchema, resolvedItem],
         };
