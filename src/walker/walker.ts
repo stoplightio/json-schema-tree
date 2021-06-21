@@ -274,7 +274,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           fragment = walkingOptions.resolveRef(path, fragment.$ref);
         } catch (ex) {
           super.emit('error', createMagicError(ex));
-          return new ReferenceNode(fragment, ex?.message ?? 'Unknown   resolving error');
+          return new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error');
         }
       } else {
         return new ReferenceNode(fragment, null);
