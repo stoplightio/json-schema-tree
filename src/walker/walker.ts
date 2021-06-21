@@ -307,9 +307,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           return [new RegularNode(merged[0], { originalFragment }), initialFragment];
         } else {
           const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
-          return [new RegularNode({ [combiner]: merged }, { originalFragment }),
-            initialFragment,
-          ];
+          return [new RegularNode({ [combiner]: merged }, { originalFragment }), initialFragment];
         }
       } catch (ex) {
         super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
