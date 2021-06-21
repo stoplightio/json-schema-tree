@@ -1,6 +1,7 @@
 import type { Dictionary } from '@stoplight/types';
 
 import { isRegularNode } from '../../guards';
+import type { SchemaFragment } from '../../types';
 import { isNonNullable } from '../../utils';
 import { BaseNode } from '../BaseNode';
 import type { ReferenceNode } from '../ReferenceNode';
@@ -22,14 +23,16 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
   public readonly meta!: Readonly<Partial<Dictionary<unknown, SchemaMeta>>>;
   public readonly annotations!: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
   public readonly validations!: Readonly<Dictionary<unknown>>;
+  public readonly originalFragment!: SchemaFragment;
 
   public readonly simple!: boolean;
   public readonly unknown!: boolean;
 
   private readonly cache: WeakMap<RegularNode | ReferenceNode, MirroredRegularNode | MirroredReferenceNode>;
 
-  constructor(public readonly mirroredNode: RegularNode) {
+  constructor(public readonly mirroredNode: RegularNode, context?: { originalFragment?: SchemaFragment }) {
     super(mirroredNode.fragment);
+    this.originalFragment = context?.originalFragment ?? mirroredNode.originalFragment;
 
     this.cache = new WeakMap();
 

@@ -31,8 +31,9 @@ export class RegularNode extends BaseNode {
   public readonly meta: Readonly<Partial<Dictionary<unknown, SchemaMeta>>>;
   public readonly annotations: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
   public readonly validations: Readonly<Dictionary<unknown>>;
+  public readonly originalFragment: SchemaFragment;
 
-  constructor(public readonly fragment: SchemaFragment) {
+  constructor(public readonly fragment: SchemaFragment, context?: { originalFragment?: SchemaFragment }) {
     super(fragment);
 
     this.types = getTypes(fragment);
@@ -48,6 +49,7 @@ export class RegularNode extends BaseNode {
     this.meta = getMeta(fragment);
     this.annotations = getAnnotations(fragment);
     this.validations = getValidations(fragment, this.types);
+    this.originalFragment = context?.originalFragment ?? fragment;
 
     this.children = void 0;
   }
