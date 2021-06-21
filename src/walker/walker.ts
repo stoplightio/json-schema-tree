@@ -237,11 +237,14 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.schemaNode = schemaNode;
   }
 
-  protected retrieveFromFragment(fragment: SchemaFragment): MirroredSchemaNode | void {
+  protected retrieveFromFragment(
+    fragment: SchemaFragment,
+    originalFragment: SchemaFragment,
+  ): MirroredSchemaNode | void {
     const processedSchemaNode = this.processedFragments.get(fragment);
     if (processedSchemaNode !== void 0) {
       if (isRegularNode(processedSchemaNode)) {
-        return new MirroredRegularNode(processedSchemaNode);
+        return new MirroredRegularNode(processedSchemaNode, { originalFragment });
       }
 
       if (isReferenceNode(processedSchemaNode)) {
@@ -257,7 +260,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     const { walkingOptions, path, fragment: originalFragment } = this;
     let { fragment } = this;
 
-    let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
+    let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment, originalFragment) : null;
 
     if (retrieved) {
       return retrieved;
@@ -271,7 +274,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           fragment = walkingOptions.resolveRef(path, fragment.$ref);
         } catch (ex) {
           super.emit('error', createMagicError(ex));
-          return new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error');
+          return new ReferenceNode(fragment, ex?.message ?? 'Unknown   resolving error');
         }
       } else {
         return new ReferenceNode(fragment, null);
@@ -302,7 +305,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       }
     }
 
-    retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment) : null;
+    retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment, originalFragment) : null;
 
     if (retrieved) {
       return retrieved;

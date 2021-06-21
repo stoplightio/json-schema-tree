@@ -30,8 +30,9 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
 
   private readonly cache: WeakMap<RegularNode | ReferenceNode, MirroredRegularNode | MirroredReferenceNode>;
 
-  constructor(public readonly mirroredNode: RegularNode) {
+  constructor(public readonly mirroredNode: RegularNode, context?: { originalFragment?: SchemaFragment }) {
     super(mirroredNode.fragment);
+    this.originalFragment = context?.originalFragment ?? mirroredNode.originalFragment;
 
     this.cache = new WeakMap();
 
