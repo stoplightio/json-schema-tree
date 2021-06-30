@@ -40,7 +40,7 @@
     "@stoplight/json-schema-merge-allof": "^0.7.5",
     "@stoplight/lifecycle": "^2.3.2",
     "@types/json-schema": "^7.0.7",
-    "magic-error": "^0.0.0"
+    "magic-error": "0.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "3",
