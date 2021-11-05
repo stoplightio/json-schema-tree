@@ -936,10 +936,10 @@
   dependencies:
     eslint-config-prettier "^7.1.0"
 
-"@stoplight/json-schema-merge-allof@^0.7.5":
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/@stoplight/json-schema-merge-allof/-/json-schema-merge-allof-0.7.5.tgz#f844c41f8ae19dbf8e64578372ccb581cc8b97db"
-  integrity sha512-pbi/sfVKyezFhSTVzSQkDN3WanpoZFSjisYhTbpWMgTFoZz/pUPLLLZvBGUme4IfzQjFZweiKT3nl29h8Elsnw==
+"@stoplight/json-schema-merge-allof@^0.7.7":
+  version "0.7.7"
+  resolved "https://registry.yarnpkg.com/@stoplight/json-schema-merge-allof/-/json-schema-merge-allof-0.7.7.tgz#d79ca8729aa5d6420e40cc545b1854b518b9240f"
+  integrity sha512-3QrZ+2hhTvsPAjl8HD9rQI3MPHSCl/kCf0rEkKM4YjLumDsfX1TSrhESDIt4lSzpSdNyT2oXSJx0ADVGE2gTyA==
   dependencies:
     compute-lcm "^1.1.0"
     json-schema-compare "^0.2.2"
