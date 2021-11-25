@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SchemaTree output given anyOf combiner placed next to allOf given allOf merging disabled, should still merge 1`] = `
+exports[`SchemaTree output compound keywords given anyOf combiner placed next to allOf given allOf merging disabled, should still merge 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: anyOf
@@ -77,7 +77,7 @@ exports[`SchemaTree output given anyOf combiner placed next to allOf given allOf
 "
 `;
 
-exports[`SchemaTree output given anyOf combiner placed next to allOf given allOf merging enabled, should merge contents of allOf combiners 1`] = `
+exports[`SchemaTree output compound keywords given anyOf combiner placed next to allOf given allOf merging enabled, should merge contents of allOf combiners 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: anyOf
@@ -148,7 +148,7 @@ exports[`SchemaTree output given anyOf combiner placed next to allOf given allOf
 "
 `;
 
-exports[`SchemaTree output given oneOf combiner placed next to allOf given allOf merging disabled, should still merge 1`] = `
+exports[`SchemaTree output compound keywords given oneOf combiner placed next to allOf given allOf merging disabled, should still merge 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: oneOf
@@ -225,7 +225,7 @@ exports[`SchemaTree output given oneOf combiner placed next to allOf given allOf
 "
 `;
 
-exports[`SchemaTree output given oneOf combiner placed next to allOf given allOf merging enabled, should merge contents of allOf combiners 1`] = `
+exports[`SchemaTree output compound keywords given oneOf combiner placed next to allOf given allOf merging enabled, should merge contents of allOf combiners 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: oneOf
