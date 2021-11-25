@@ -20,28 +20,141 @@ describe('SchemaTree', () => {
       expect(printTree(schema)).toMatchSnapshot();
     });
 
-    describe('allOf failures', () => {
-      it('given incompatible values, should bail out and display unmerged allOf', () => {
-        const schema: JSONSchema4 = {
-          allOf: [
-            {
-              type: 'string',
-            },
-            {
-              type: 'number',
-            },
-            {
-              type: 'object',
-              properties: {
-                name: {
-                  type: 'string',
+    describe('compound keywords', () => {
+      describe.each(['anyOf', 'oneOf'])('given %s combiner placed next to allOf', combiner => {
+        let schema: JSONSchema4;
+
+        beforeEach(() => {
+          schema = {
+            type: 'object',
+            title: 'Account',
+            allOf: [
+              {
+                type: 'object',
+                properties: {
+                  type: {
+                    type: 'string',
+                    enum: ['admin', 'editor'],
+                  },
+                  enabled: {
+                    type: 'boolean',
+                    description: 'Is this account enabled',
+                  },
                 },
+                required: ['type'],
+              },
+            ],
+            [combiner]: [
+              {
+                type: 'object',
+                title: 'Admin',
+                properties: {
+                  root: {
+                    type: 'boolean',
+                  },
+                  group: {
+                    type: 'string',
+                  },
+                  expirationDate: {
+                    type: 'string',
+                  },
+                },
+              },
+              {
+                type: 'object',
+                title: 'Editor',
+                properties: {
+                  supervisor: {
+                    type: 'string',
+                  },
+                  key: {
+                    type: 'string',
+                  },
+                },
+              },
+            ],
+          };
+        });
+
+        it('given allOf merging disabled, should still merge', () => {
+          expect(printTree(schema, { mergeAllOf: false })).toMatchSnapshot();
+        });
+
+        it('given allOf merging enabled, should merge contents of allOf combiners', () => {
+          expect(printTree(schema)).toMatchSnapshot();
+        });
+      });
+
+      it('given array with oneOf containing items, should merge it correctly', () => {
+        const schema: JSONSchema4 = {
+          oneOf: [
+            {
+              items: {
+                type: 'string',
+              },
+            },
+            {
+              items: {
+                type: 'number',
               },
             },
           ],
+          type: 'array',
         };
 
         expect(printTree(schema)).toMatchInlineSnapshot(`
+                  "└─ #
+                     ├─ combiners
+                     │  └─ 0: oneOf
+                     └─ children
+                        ├─ 0
+                        │  └─ #/oneOf/0
+                        │     ├─ types
+                        │     │  └─ 0: array
+                        │     ├─ primaryType: array
+                        │     └─ children
+                        │        └─ 0
+                        │           └─ #/oneOf/0/items
+                        │              ├─ types
+                        │              │  └─ 0: string
+                        │              └─ primaryType: string
+                        └─ 1
+                           └─ #/oneOf/1
+                              ├─ types
+                              │  └─ 0: array
+                              ├─ primaryType: array
+                              └─ children
+                                 └─ 0
+                                    └─ #/oneOf/1/items
+                                       ├─ types
+                                       │  └─ 0: number
+                                       └─ primaryType: number
+                  "
+              `);
+      });
+
+      describe('allOf handling', () => {
+        it('given incompatible values, should bail out and display unmerged allOf', () => {
+          const schema: JSONSchema4 = {
+            allOf: [
+              {
+                type: 'string',
+              },
+              {
+                type: 'number',
+              },
+              {
+                type: 'object',
+                properties: {
+                  name: {
+                    type: 'string',
+                  },
+                },
+              },
+            ],
+          };
+
+          expect(printTree(schema)).toMatchInlineSnapshot(`
                   "└─ #
                      ├─ combiners
                      │  └─ 0: allOf
@@ -69,6 +182,102 @@ describe('SchemaTree', () => {
                                        └─ primaryType: string
                   "
               `);
+        });
+
+        it('should handle simple circular $refs', () => {
+          const schema = {
+            title: 'Sign Request',
+            type: 'object',
+            allOf: [
+              {
+                $ref: '#/definitions/SignRequestCreateRequest',
+              },
+              {
+                properties: {
+                  signers: {
+                    type: 'array',
+                    items: {
+                      $ref: '#/definitions/SignRequestSigner',
+                    },
+                  },
+                },
+              },
+            ],
+            definitions: {
+              SignRequestCreateRequest: {
+                title: 'Create a sign request',
+                type: 'object',
+                required: ['signers', 'source_files', 'parent_folder'],
+                properties: {
+                  signers: {
+                    type: 'array',
+                    items: {
+                      $ref: '#/definitions/SignRequestCreateSigner',
+                    },
+                  },
+                },
+              },
+              SignRequestCreateSigner: {
+                title: 'Signer fields for Create Sign Request',
+                type: 'object',
+                required: ['email'],
+                properties: {
+                  email: {
+                    type: 'string',
+                  },
+                },
+              },
+              SignRequestSigner: {
+                title: 'Signer fields for GET Sign Request response',
+                type: 'object',
+                required: ['email'],
+                allOf: [
+                  {
+                    $ref: '#/definitions/SignRequestCreateSigner',
+                  },
+                  {
+                    properties: {
+                      has_viewed_document: {
+                        type: 'boolean',
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          };
+
+          expect(printTree(schema)).toMatchInlineSnapshot(`
+            "└─ #
+               ├─ types
+               │  └─ 0: object
+               ├─ primaryType: object
+               └─ children
+                  └─ 0
+                     └─ #/properties/signers
+                        ├─ types
+                        │  └─ 0: array
+                        ├─ primaryType: array
+                        └─ children
+                           └─ 0
+                              └─ #/properties/signers/items
+                                 ├─ types
+                                 │  └─ 0: object
+                                 ├─ primaryType: object
+                                 └─ children
+                                    ├─ 0
+                                    │  └─ #/properties/signers/items/properties/email
+                                    │     ├─ types
+                                    │     │  └─ 0: string
+                                    │     └─ primaryType: string
+                                    └─ 1
+                                       └─ #/properties/signers/items/properties/has_viewed_document
+                                          ├─ types
+                                          │  └─ 0: boolean
+                                          └─ primaryType: boolean
+            "
+          `);
+        });
       });
     });
 
@@ -396,118 +605,6 @@ describe('SchemaTree', () => {
                              ├─ types
                              │  └─ 0: integer
                              └─ primaryType: integer
-        "
-      `);
-    });
-
-    describe.each(['anyOf', 'oneOf'])('given %s combiner placed next to allOf', combiner => {
-      let schema: JSONSchema4;
-
-      beforeEach(() => {
-        schema = {
-          type: 'object',
-          title: 'Account',
-          allOf: [
-            {
-              type: 'object',
-              properties: {
-                type: {
-                  type: 'string',
-                  enum: ['admin', 'editor'],
-                },
-                enabled: {
-                  type: 'boolean',
-                  description: 'Is this account enabled',
-                },
-              },
-              required: ['type'],
-            },
-          ],
-          [combiner]: [
-            {
-              type: 'object',
-              title: 'Admin',
-              properties: {
-                root: {
-                  type: 'boolean',
-                },
-                group: {
-                  type: 'string',
-                },
-                expirationDate: {
-                  type: 'string',
-                },
-              },
-            },
-            {
-              type: 'object',
-              title: 'Editor',
-              properties: {
-                supervisor: {
-                  type: 'string',
-                },
-                key: {
-                  type: 'string',
-                },
-              },
-            },
-          ],
-        };
-      });
-
-      it('given allOf merging disabled, should still merge', () => {
-        expect(printTree(schema, { mergeAllOf: false })).toMatchSnapshot();
-      });
-
-      it('given allOf merging enabled, should merge contents of allOf combiners', () => {
-        expect(printTree(schema)).toMatchSnapshot();
-      });
-    });
-
-    it('given array with oneOf containing items, should merge it correctly', () => {
-      const schema: JSONSchema4 = {
-        oneOf: [
-          {
-            items: {
-              type: 'string',
-            },
-          },
-          {
-            items: {
-              type: 'number',
-            },
-          },
-        ],
-        type: 'array',
-      };
-
-      expect(printTree(schema)).toMatchInlineSnapshot(`
-        "└─ #
-           ├─ combiners
-           │  └─ 0: oneOf
-           └─ children
-              ├─ 0
-              │  └─ #/oneOf/0
-              │     ├─ types
-              │     │  └─ 0: array
-              │     ├─ primaryType: array
-              │     └─ children
-              │        └─ 0
-              │           └─ #/oneOf/0/items
-              │              ├─ types
-              │              │  └─ 0: string
-              │              └─ primaryType: string
-              └─ 1
-                 └─ #/oneOf/1
-                    ├─ types
-                    │  └─ 0: array
-                    ├─ primaryType: array
-                    └─ children
-                       └─ 0
-                          └─ #/oneOf/1/items
-                             ├─ types
-                             │  └─ 0: number
-                             └─ primaryType: number
         "
       `);
     });

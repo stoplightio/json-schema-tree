@@ -40,7 +40,8 @@ function _mergeAllOf(fragment: SchemaFragment, path: string[], resolveRef: Walke
 
             if (Array.isArray(resolved.allOf)) {
               for (const member of resolved.allOf) {
-                if (typeof member.$ref === 'string' && schemaRefs.includes(member.$ref)) {
+                const index = schemaRefs.indexOf(member.$ref);
+                if (typeof member.$ref === 'string' && index !== -1 && index !== schemaRefs.lastIndexOf(member.$ref)) {
                   throw new ResolvingError('Circular reference detected');
                 }
               }
