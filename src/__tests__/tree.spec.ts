@@ -278,6 +278,71 @@ describe('SchemaTree', () => {
             "
           `);
         });
+
+        it('given allOf having a $ref pointing at another allOf, should merge it', () => {
+          const schema: JSONSchema4 = {
+            type: 'object',
+            allOf: [
+              {
+                $ref: '#/definitions/Item',
+              },
+              {
+                properties: {
+                  summary: {
+                    type: 'string',
+                  },
+                },
+              },
+            ],
+            definitions: {
+              Item: {
+                allOf: [
+                  {
+                    properties: {
+                      id: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                  {
+                    properties: {
+                      description: {
+                        type: 'string',
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          };
+
+          const tree = new SchemaTree(schema);
+          tree.populate();
+
+          expect(printTree(schema)).toMatchInlineSnapshot(`
+            "└─ #
+               ├─ types
+               │  └─ 0: object
+               ├─ primaryType: object
+               └─ children
+                  ├─ 0
+                  │  └─ #/properties/summary
+                  │     ├─ types
+                  │     │  └─ 0: string
+                  │     └─ primaryType: string
+                  ├─ 1
+                  │  └─ #/properties/id
+                  │     ├─ types
+                  │     │  └─ 0: string
+                  │     └─ primaryType: string
+                  └─ 2
+                     └─ #/properties/description
+                        ├─ types
+                        │  └─ 0: string
+                        └─ primaryType: string
+            "
+          `);
+        });
       });
     });
 
