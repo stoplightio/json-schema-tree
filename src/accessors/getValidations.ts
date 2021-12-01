@@ -4,7 +4,7 @@ import type { SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
 import { pick } from '../utils/pick';
 
-export const COMMON_VALIDATION_TYPES: string[] = ['readOnly', 'writeOnly'];
+export const COMMON_VALIDATION_TYPES: string[] = ['readOnly', 'writeOnly', 'style'];
 
 const VALIDATION_TYPES: Partial<Dictionary<(keyof SchemaFragment)[], SchemaNodeKind>> = {
   string: ['minLength', 'maxLength', 'pattern'],
