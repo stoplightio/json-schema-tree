@@ -19,6 +19,22 @@ export abstract class BaseNode {
     return this.parent === null ? 0 : this.parent.depth + 1;
   }
 
+  private get parentChildren(): BaseNode[] {
+    return (this.parent?.children ?? []) as BaseNode[];
+  }
+
+  public get pos(): number {
+    return Math.max(0, this.parentChildren.indexOf(this));
+  }
+
+  public get isFirst(): boolean {
+    return this.pos === 0;
+  }
+
+  public get isLast(): boolean {
+    return this.pos === this.parentChildren.length - 1;
+  }
+
   protected constructor(public readonly fragment: SchemaFragment) {
     this.id = String(SEED++);
     this.subpath = [];
