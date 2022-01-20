@@ -679,6 +679,74 @@ describe('SchemaTree', () => {
     });
   });
 
+  describe('position', () => {
+    let schema: JSONSchema4;
+
+    beforeEach(() => {
+      schema = {
+        type: ['string', 'object'],
+        properties: {
+          ids: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+          },
+          tag: {
+            type: 'string',
+          },
+          uuid: {
+            type: 'string',
+          },
+        },
+      };
+    });
+
+    it('given node being the only child, should have correct position info', () => {
+      const tree = new SchemaTree(schema);
+      tree.populate();
+
+      const node = tree.root.children[0];
+
+      expect(node.isFirst).toBe(true);
+      expect(node.isLast).toBe(true);
+      expect(node.pos).toEqual(0);
+    });
+
+    it('given node being the first child among other children, should have correct position info', () => {
+      const tree = new SchemaTree(schema);
+      tree.populate();
+
+      const node = (tree.root.children[0] as RegularNode).children![0];
+
+      expect(node.isFirst).toBe(true);
+      expect(node.isLast).toBe(false);
+      expect(node.pos).toEqual(0);
+    });
+
+    it('given node being the last child among other children, should have correct position info', () => {
+      const tree = new SchemaTree(schema);
+      tree.populate();
+
+      const node = (tree.root.children[0] as RegularNode).children![2];
+
+      expect(node.isFirst).toBe(false);
+      expect(node.isLast).toBe(true);
+      expect(node.pos).toEqual(2);
+    });
+
+    it('given node not being the first nor the child among other children, should have correct position info', () => {
+      const tree = new SchemaTree(schema);
+      tree.populate();
+
+      const node = (tree.root.children[0] as RegularNode).children![1];
+
+      expect(node.isFirst).toBe(false);
+      expect(node.isLast).toBe(false);
+      expect(node.pos).toEqual(1);
+    });
+  });
+
   describe('mirroring', () => {
     describe('circular references', () => {
       it('should self expand', () => {
