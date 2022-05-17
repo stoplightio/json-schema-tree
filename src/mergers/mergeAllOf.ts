@@ -59,9 +59,9 @@ export function mergeAllOf(fragment: SchemaFragment, path: string[], walkingOpti
     store.set(walkingOptions.resolveRef, new WeakMap());
   }
 
-  const merged = _mergeAllOf(fragment, path, walkingOptions.resolveRef);
-  if ('allOf' in merged) {
-    return _mergeAllOf(merged, path, walkingOptions.resolveRef);
+  let merged = _mergeAllOf(fragment, path, walkingOptions.resolveRef);
+  while ('allOf' in merged) {
+    merged = _mergeAllOf(merged, path, walkingOptions.resolveRef);
   }
 
   return merged;
