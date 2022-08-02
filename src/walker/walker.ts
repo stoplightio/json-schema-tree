@@ -275,7 +275,14 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         return [new ReferenceNode(fragment, '$ref is not a string'), fragment];
       } else if (walkingOptions.resolveRef !== null) {
         try {
-          fragment = walkingOptions.resolveRef(path, fragment.$ref);
+          let newFragment = walkingOptions.resolveRef(path, fragment.$ref);
+
+          if (typeof fragment.description === 'string') {
+            newFragment = { ...newFragment };
+            Object.assign(newFragment, { description: fragment.description });
+          }
+
+          fragment = newFragment;
         } catch (ex) {
           super.emit('error', createMagicError(ex));
           return [new ReferenceNode(fragment, ex?.message ?? 'Unknown resolving error'), fragment];

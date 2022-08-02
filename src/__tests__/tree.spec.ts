@@ -677,6 +677,86 @@ describe('SchemaTree', () => {
     it('given empty schema, should output empty tree', () => {
       expect(printTree({})).toEqual('');
     });
+
+    it('should override description', () => {
+      const schema = {
+        type: 'object',
+        properties: {
+          caves: {
+            type: 'array',
+            items: {
+              summary: 'Bear cave',
+              $ref: '#/$defs/Cave',
+              description: 'Apparently Tom likes bears',
+            },
+          },
+          greatestBear: {
+            $ref: '#/$defs/Bear',
+            description: 'The greatest bear!',
+          },
+          bestBear: {
+            $ref: '#/$defs/Bear',
+            summary: 'The best bear!',
+          },
+        },
+        $defs: {
+          Bear: {
+            type: 'string',
+            summary: "Tom's favorite bear",
+          },
+          Cave: {
+            type: 'string',
+            summary: 'A cave',
+            description: '_Everyone_ ~hates~ loves caves',
+          },
+        },
+      };
+
+      const tree = new SchemaTree(schema, {});
+      tree.populate();
+
+      expect(tree.root).toEqual(
+        expect.objectContaining({
+          children: [
+            expect.objectContaining({
+              primaryType: 'object',
+              types: ['object'],
+              children: [
+                expect.objectContaining({
+                  primaryType: 'array',
+                  subpath: ['properties', 'caves'],
+                  types: ['array'],
+                  children: [
+                    expect.objectContaining({
+                      primaryType: 'string',
+                      types: ['string'],
+                      subpath: ['items'],
+                      annotations: {
+                        description: 'Apparently Tom likes bears',
+                      },
+                    }),
+                  ],
+                }),
+                expect.objectContaining({
+                  primaryType: 'string',
+                  types: ['string'],
+                  subpath: ['properties', 'greatestBear'],
+                  annotations: {
+                    description: 'The greatest bear!',
+                  },
+                }),
+                expect.objectContaining({
+                  primaryType: 'string',
+                  types: ['string'],
+                  subpath: ['properties', 'bestBear'],
+                  annotations: {},
+                }),
+              ],
+            }),
+          ],
+        }),
+      );
+    });
   });
 
   describe('position', () => {
