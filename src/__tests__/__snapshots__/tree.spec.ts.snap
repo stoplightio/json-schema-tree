@@ -694,6 +694,144 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/compl
 "
 `;
 
+exports[`SchemaTree output should generate valid tree for combiners/allOfs/nested-refs.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      ├─ 0
+      │  └─ #/properties/dimensions
+      │     ├─ types
+      │     │  └─ 0: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/dimensions/items
+      │              ├─ types
+      │              │  └─ 0: string
+      │              └─ primaryType: string
+      ├─ 1
+      │  └─ #/properties/measures
+      │     ├─ types
+      │     │  └─ 0: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/measures/items
+      │              ├─ types
+      │              │  └─ 0: string
+      │              └─ primaryType: string
+      ├─ 2
+      │  └─ #/properties/limit
+      │     ├─ types
+      │     │  └─ 0: integer
+      │     └─ primaryType: integer
+      ├─ 3
+      │  └─ #/properties/offset
+      │     ├─ types
+      │     │  └─ 0: integer
+      │     └─ primaryType: integer
+      ├─ 4
+      │  └─ #/properties/filters
+      │     ├─ types
+      │     │  └─ 0: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/filters/items
+      │              ├─ combiners
+      │              │  └─ 0: oneOf
+      │              └─ children
+      │                 ├─ 0
+      │                 │  └─ #/properties/filters/items/oneOf/0
+      │                 │     ├─ types
+      │                 │     │  └─ 0: object
+      │                 │     ├─ primaryType: object
+      │                 │     ├─ combiners
+      │                 │     │  └─ 0: anyOf
+      │                 │     └─ children
+      │                 │        ├─ 0
+      │                 │        │  └─ #/properties/filters/items/oneOf/0/anyOf/0
+      │                 │        │     └─ mirrors: #/properties/filters/items/oneOf/0
+      │                 │        └─ 1
+      │                 │           └─ #/properties/filters/items/oneOf/0/anyOf/1
+      │                 │              ├─ types
+      │                 │              │  └─ 0: object
+      │                 │              ├─ primaryType: object
+      │                 │              ├─ combiners
+      │                 │              │  └─ 0: anyOf
+      │                 │              └─ children
+      │                 │                 ├─ 0
+      │                 │                 │  └─ #/properties/filters/items/oneOf/0/anyOf/1/anyOf/0
+      │                 │                 │     └─ mirrors: #/properties/filters/items/oneOf/0
+      │                 │                 ├─ 1
+      │                 │                 │  └─ #/properties/filters/items/oneOf/0/anyOf/1/anyOf/1
+      │                 │                 │     └─ mirrors: #/properties/filters/items/oneOf/0/anyOf/1
+      │                 │                 ├─ 2
+      │                 │                 │  └─ #/properties/filters/items/oneOf/0/anyOf/1/properties/member
+      │                 │                 │     ├─ types
+      │                 │                 │     │  └─ 0: string
+      │                 │                 │     └─ primaryType: string
+      │                 │                 ├─ 3
+      │                 │                 │  └─ #/properties/filters/items/oneOf/0/anyOf/1/properties/operator
+      │                 │                 │     ├─ types
+      │                 │                 │     │  └─ 0: string
+      │                 │                 │     └─ primaryType: string
+      │                 │                 └─ 4
+      │                 │                    └─ #/properties/filters/items/oneOf/0/anyOf/1/properties/values
+      │                 │                       ├─ types
+      │                 │                       │  └─ 0: array
+      │                 │                       ├─ primaryType: array
+      │                 │                       └─ children
+      │                 │                          └─ 0
+      │                 │                             └─ #/properties/filters/items/oneOf/0/anyOf/1/properties/values/items
+      │                 │                                ├─ types
+      │                 │                                │  └─ 0: object
+      │                 │                                └─ primaryType: object
+      │                 └─ 1
+      │                    └─ #/properties/filters/items/oneOf/1
+      │                       └─ mirrors: #/properties/filters/items/oneOf/0/anyOf/1
+      ├─ 5
+      │  └─ #/properties/timeDimensions
+      │     ├─ types
+      │     │  └─ 0: array
+      │     ├─ primaryType: array
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/timeDimensions/items
+      │              ├─ types
+      │              │  └─ 0: object
+      │              ├─ primaryType: object
+      │              └─ children
+      │                 ├─ 0
+      │                 │  └─ #/properties/timeDimensions/items/properties/dimension
+      │                 │     ├─ types
+      │                 │     │  └─ 0: string
+      │                 │     └─ primaryType: string
+      │                 ├─ 1
+      │                 │  └─ #/properties/timeDimensions/items/properties/granularity
+      │                 │     ├─ types
+      │                 │     │  └─ 0: string
+      │                 │     └─ primaryType: string
+      │                 └─ 2
+      │                    └─ #/properties/timeDimensions/items/properties/dateRange
+      │                       ├─ types
+      │                       │  └─ 0: object
+      │                       └─ primaryType: object
+      ├─ 6
+      │  └─ #/properties/order
+      │     ├─ types
+      │     │  └─ 0: object
+      │     └─ primaryType: object
+      └─ 7
+         └─ #/properties/nextToken
+            ├─ types
+            │  └─ 0: string
+            └─ primaryType: string
+"
+`;
+
 exports[`SchemaTree output should generate valid tree for combiners/allOfs/todo-full.json 1`] = `
 "└─ #
    ├─ types
