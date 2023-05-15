@@ -1,4 +1,4 @@
-import { pathToPointer, stringify } from '@stoplight/json';
+import { pathToPointer } from '@stoplight/json';
 
 import { ResolvingError } from '../errors';
 import type { SchemaFragment } from '../types';
@@ -8,8 +8,18 @@ const resolveAllOf = require('@stoplight/json-schema-merge-allof');
 
 const store = new WeakMap<WalkerRefResolver, WeakMap<SchemaFragment, string[]>>();
 
-function _mergeAllOf(fragment: SchemaFragment, path: string[], resolveRef: WalkerRefResolver | null): SchemaFragment {
-  return resolveAllOf(fragment, {
+function _mergeAllOf(
+  fragment: SchemaFragment,
+  path: string[],
+  resolveRef: WalkerRefResolver | null,
+  seen: WeakMap<SchemaFragment, SchemaFragment>,
+): SchemaFragment {
+  const cached = seen.get(fragment);
+  if (cached !== void 0) {
+    return cached;
+  }
+
+  const merged = resolveAllOf(fragment, {
     deep: false,
     resolvers: resolveAllOf.stoplightResolvers,
     ...(resolveRef !== null
@@ -30,8 +40,8 @@ function _mergeAllOf(fragment: SchemaFragment, path: string[], resolveRef: Walke
               schemaRefs = [$ref];
               allRefs.set(fragment, schemaRefs);
             } else if (schemaRefs.includes($ref)) {
-              const safelyResolved = JSON.parse(stringify(resolveRef(null, $ref)));
-              return 'allOf' in safelyResolved ? _mergeAllOf(safelyResolved, path, resolveRef) : safelyResolved;
+              const resolved = resolveRef(null, $ref);
+              return 'allOf' in resolved ? _mergeAllOf(resolved, path, resolveRef, seen) : resolved;
             } else {
               schemaRefs.push($ref);
             }
@@ -52,17 +62,25 @@ function _mergeAllOf(fragment: SchemaFragment, path: string[], resolveRef: Walke
         }
       : null),
   });
+
+  seen.set(fragment, merged);
+  return merged;
 }
 
-export function mergeAllOf(fragment: SchemaFragment, path: string[], walkingOptions: WalkingOptions) {
+export function mergeAllOf(
+  fragment: SchemaFragment,
+  path: string[],
+  walkingOptions: WalkingOptions,
+  seen: WeakMap<SchemaFragment, SchemaFragment>,
+) {
   if (walkingOptions.resolveRef !== null && !store.has(walkingOptions.resolveRef)) {
     store.set(walkingOptions.resolveRef, new WeakMap());
   }
 
-  let merged = _mergeAllOf(fragment, path, walkingOptions.resolveRef);
-  while ('allOf' in merged) {
-    merged = _mergeAllOf(merged, path, walkingOptions.resolveRef);
-  }
+  let merged = fragment;
+  do {
+    merged = _mergeAllOf(merged, path, walkingOptions.resolveRef, seen);
+  } while ('allOf' in merged);
 
   return merged;
 }

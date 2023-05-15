@@ -7,6 +7,7 @@ export function mergeOneOrAnyOf(
   fragment: SchemaFragment,
   path: string[],
   walkingOptions: WalkingOptions,
+  mergedAllOfs: WeakMap<SchemaFragment, SchemaFragment>,
 ): SchemaFragment[] {
   const combiner = SchemaCombinerName.OneOf in fragment ? SchemaCombinerName.OneOf : SchemaCombinerName.AnyOf;
   const items = fragment[combiner];
@@ -15,7 +16,7 @@ export function mergeOneOrAnyOf(
 
   const merged: SchemaFragment[] = [];
 
-  if (Array.isArray(fragment.allOf) && Array.isArray(items)) {
+  if (Array.isArray(fragment.allOf)) {
     for (const item of items) {
       merged.push({
         allOf: [...fragment.allOf, item],
@@ -24,26 +25,23 @@ export function mergeOneOrAnyOf(
 
     return merged;
   } else {
-    for (const item of items) {
-      const prunedSchema = { ...fragment };
-      delete prunedSchema[combiner];
+    const prunedSchema = { ...fragment };
+    delete prunedSchema[combiner];
 
+    for (const item of items) {
       if (Object.keys(prunedSchema).length === 0) {
         merged.push(item);
       } else {
-        const resolvedItem =
-          typeof item.$ref === 'string' && walkingOptions.resolveRef !== null
-            ? walkingOptions.resolveRef(null, item.$ref)
-            : item;
-        const mergedSchema = {
-          allOf: [prunedSchema, resolvedItem],
-        };
-
-        try {
-          merged.push(mergeAllOf(mergedSchema, path, walkingOptions));
-        } catch {
-          merged.push(mergedSchema);
-        }
+        merged.push(
+          mergeAllOf(
+            {
+              allOf: [prunedSchema, item],
+            },
+            path,
+            walkingOptions,
+            mergedAllOfs,
+          ),
+        );
       }
     }
   }

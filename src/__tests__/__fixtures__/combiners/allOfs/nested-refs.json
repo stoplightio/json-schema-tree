@@ -1,0 +1,60 @@
+{
+  "required": ["limit", "order"],
+  "type": "object",
+  "properties": {
+    "dimensions": { "type": "array", "items": { "type": "string" } },
+    "measures": { "type": "array", "items": { "type": "string" } },
+    "limit": {
+      "maximum": 2000,
+      "minimum": 0,
+      "type": "integer",
+      "format": "int32"
+    },
+    "offset": {
+      "minimum": 0,
+      "type": "integer",
+      "format": "int32",
+      "maximum": 2147483647
+    },
+    "filters": {
+      "type": "array",
+      "items": { "oneOf": [{ "$ref": "#/$defs/Logical" }, { "$ref": "#/$defs/Plain" }] }
+    },
+    "timeDimensions": {
+      "maxItems": 1,
+      "minItems": 0,
+      "type": "array",
+      "items": { "$ref": "#/$defs/TimeDimension" }
+    },
+    "order": { "type": "object", "additionalProperties": { "type": "string", "enum": ["ASC", "DESC"] } },
+    "nextToken": { "type": "string" }
+  },
+  "$defs": {
+    "Logical": { "type": "object", "allOf": [{ "$ref": "#/$defs/Filter" }] },
+    "Filter": { "type": "object", "anyOf": [{ "$ref": "#/$defs/Logical" }, { "$ref": "#/$defs/Plain" }] },
+    "Plain": {
+      "required": ["member", "operator"],
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/$defs/Filter" },
+        {
+          "type": "object",
+          "properties": {
+            "member": { "type": "string" },
+            "operator": { "pattern": "equals|notEquals|gt|gte|lt|lte|set|notSet|inDateRange", "type": "string" },
+            "values": { "type": "array", "items": { "type": "object" } }
+          }
+        }
+      ]
+    },
+    "TimeDimension": {
+      "required": ["dateRange", "dimension", "granularity"],
+      "type": "object",
+      "properties": {
+        "dimension": { "type": "string" },
+        "granularity": { "pattern": "second|minute|hour|day", "type": "string" },
+        "dateRange": { "type": "object", "example": ["2022-04-19T16:00:00.000Z", "2022-04-19T17:00:00.000Z"] }
+      }
+    }
+  }
+}

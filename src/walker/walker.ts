@@ -28,7 +28,9 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   protected fragment: SchemaFragment;
   protected schemaNode: RegularNode | RootNode;
 
+  private mergedAllOfs: WeakMap<SchemaFragment, SchemaFragment>;
   private processedFragments: WeakMap<ProcessedFragment, SchemaNode>;
+
   private readonly hooks: Partial<Dictionary<WalkerHookHandler, WalkerHookAction>>;
 
   constructor(protected readonly root: RootNode, protected readonly walkingOptions: WalkingOptions) {
@@ -39,6 +41,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.fragment = root.fragment;
     this.schemaNode = root;
     this.processedFragments = new WeakMap<SchemaFragment, SchemaNode>();
+    this.mergedAllOfs = new WeakMap();
 
     this.hooks = {};
   }
@@ -49,6 +52,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.fragment = this.root.fragment;
     this.schemaNode = this.root;
     this.processedFragments = new WeakMap<SchemaFragment, RegularNode | ReferenceNode>();
+    this.mergedAllOfs = new WeakMap();
   }
 
   public loadSnapshot(snapshot: WalkerSnapshot) {
@@ -299,7 +303,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           initialFragment = fragment.allOf;
         }
 
-        fragment = mergeAllOf(fragment, path, walkingOptions);
+        fragment = mergeAllOf(fragment, path, walkingOptions, this.mergedAllOfs);
       } catch (ex) {
         initialFragment = fragment;
         super.emit('error', createMagicError(new MergingError(ex?.message ?? 'Unknown merging error')));
@@ -309,7 +313,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
 
     if (SchemaCombinerName.OneOf in fragment || SchemaCombinerName.AnyOf in fragment) {
       try {
-        const merged = mergeOneOrAnyOf(fragment, path, walkingOptions);
+        const merged = mergeOneOrAnyOf(fragment, path, walkingOptions, this.mergedAllOfs);
         if (merged.length === 1) {
           return [new RegularNode(merged[0], { originalFragment }), initialFragment];
         } else {
