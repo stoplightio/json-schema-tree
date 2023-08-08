@@ -295,7 +295,29 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         return [new ReferenceNode(fragment, null), fragment];
       }
     }
-
+    //fragment with type 'array' and no description should adopt description of $ref if it exists
+    if (fragment.type === 'array' && fragment.description === void 0) {
+      if (fragment.items !== void 0 && isObjectLiteral(fragment.items)) {
+        for (const key of Object.keys(fragment.items)) {
+          if (key === '$ref') {
+            const refToResolve = fragment.items[key];
+            if (typeof refToResolve !== 'string') {
+              return [new ReferenceNode(fragment, '$ref is not a string'), fragment];
+            } else if (walkingOptions.resolveRef !== null) {
+              try {
+                let newFragment = walkingOptions.resolveRef(path, refToResolve);
+                if (newFragment.description !== void 0) {
+                  newFragment = { ...newFragment };
+                  Object.assign(fragment, { description: newFragment.description });
+                }
+              } catch (ex) {
+                super.emit('error', createMagicError(ex));
+              }
+            }
+          }
+        }
+      }
+    }
     let initialFragment: ProcessedFragment = fragment;
     if (walkingOptions.mergeAllOf && SchemaCombinerName.AllOf in fragment) {
       try {
