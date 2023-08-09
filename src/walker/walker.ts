@@ -295,7 +295,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         return [new ReferenceNode(fragment, null), fragment];
       }
     }
-    //fragment with type 'array' and no description should adopt description of $ref if it exists
+    //fragment with type 'array' and no description should adopt description of $ref if it exists.
     if (fragment.type === 'array' && fragment.description === void 0) {
       if (fragment.items !== void 0 && isObjectLiteral(fragment.items)) {
         for (const key of Object.keys(fragment.items)) {
