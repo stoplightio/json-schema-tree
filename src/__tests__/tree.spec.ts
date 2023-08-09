@@ -757,6 +757,101 @@ describe('SchemaTree', () => {
         }),
       );
     });
+
+    it('node of type array should adopt description of referenced node', () => {
+      const schema = {
+        definitions: {
+          Cave: {
+            type: 'string',
+            summary: 'A cave',
+            description: '_Everyone_ ~hates~ loves caves',
+          },
+        },
+        type: 'object',
+        properties: {
+          caves: {
+            type: 'array',
+            items: {
+              $ref: '#/definitions/Cave',
+            },
+          },
+        },
+      };
+
+      const tree = new SchemaTree(schema);
+      tree.populate();
+
+      expect(
+        // @ts-ignore
+        tree.root.children[0].children[0].annotations.description,
+      ).toEqual('_Everyone_ ~hates~ loves caves');
+    });
+
+    it('node of type array should keep its own description even when referenced node has a description', () => {
+      const schema = {
+        definitions: {
+          Cave: {
+            type: 'string',
+            summary: 'A cave',
+            description: '_Everyone_ ~hates~ loves caves',
+          },
+        },
+        type: 'object',
+        properties: {
+          caves: {
+            type: 'array',
+            description: 'I have my own description',
+            items: {
+              $ref: '#/definitions/Cave',
+            },
+          },
+        },
+      };
+
+      const tree = new SchemaTree(schema);
+      tree.populate();
+
+      expect(
+        // @ts-ignore
+        tree.root.children[0].children[0].annotations.description,
+      ).toEqual('I have my own description');
+    });
+
+    it('referenced node description should appear for all properties with that ref', () => {
+      const schema = {
+        definitions: {
+          Cave: {
+            type: 'string',
+            summary: 'A cave',
+            description: '_Everyone_ ~hates~ loves caves',
+          },
+        },
+        type: 'object',
+        properties: {
+          caves: {
+            type: 'array',
+            items: {
+              $ref: '#/definitions/Cave',
+            },
+          },
+          bear: {
+            $ref: '#/definitions/Cave',
+          },
+        },
+      };
+
+      const tree = new SchemaTree(schema);
+      tree.populate();
+
+      expect(
+        // @ts-ignore
+        tree.root.children[0].children[0].annotations.description,
+      ).toEqual('_Everyone_ ~hates~ loves caves');
+      expect(
+        // @ts-ignore
+        tree.root.children[0].children[1].annotations.description,
+      ).toEqual('_Everyone_ ~hates~ loves caves');
+    });
   });
 
   describe('position', () => {
