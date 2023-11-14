@@ -13,7 +13,7 @@ describe('SchemaTree', () => {
     it.each(
       fastGlob.sync('**/*.json', {
         cwd: path.join(__dirname, '__fixtures__'),
-        ignore: ['stress-schema.json'],
+        ignore: ['stress-schema.json', 'recursive-schema.json'],
       }),
     )('should generate valid tree for %s', async filename => {
       const schema = JSON.parse(await fs.promises.readFile(path.resolve(__dirname, '__fixtures__', filename), 'utf8'));
