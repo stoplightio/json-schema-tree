@@ -6,7 +6,10 @@ export type WalkerRefResolver = (path: string[] | null, $ref: string) => SchemaF
 
 export type WalkingOptions = {
   mergeAllOf: boolean;
+  /** Resolves references to the schemas. If providing a custom implementation, it must return the same object reference for the same reference string. */
   resolveRef: WalkerRefResolver | null;
+  /** Controls the level of recursion of refs. Prevents overly complex trees and running out of stack depth. */
+  maxRefDepth?: number | null;
 };
 
 export type WalkerSnapshot = {

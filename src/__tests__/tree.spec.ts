@@ -13,7 +13,7 @@ describe('SchemaTree', () => {
     it.each(
       fastGlob.sync('**/*.json', {
         cwd: path.join(__dirname, '__fixtures__'),
-        ignore: ['stress-schema.json'],
+        ignore: ['stress-schema.json', 'recursive-schema.json'],
       }),
     )('should generate valid tree for %s', async filename => {
       const schema = JSON.parse(await fs.promises.readFile(path.resolve(__dirname, '__fixtures__', filename), 'utf8'));
@@ -983,6 +983,19 @@ describe('SchemaTree', () => {
 
         // todo: add some more assertions here
       });
+    });
+  });
+
+  describe('recursive walking', () => {
+    it('should load with a max depth', async () => {
+      const schema = JSON.parse(
+        await fs.promises.readFile(path.resolve(__dirname, '__fixtures__', 'recursive-schema.json'), 'utf8'),
+      );
+
+      const w = new SchemaTree(schema, {
+        maxRefDepth: 1000,
+      });
+      w.populate();
     });
   });
 });

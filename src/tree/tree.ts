@@ -19,6 +19,7 @@ export class SchemaTree {
     this.walker = new Walker(this.root, {
       mergeAllOf: this.opts?.mergeAllOf !== false,
       resolveRef: opts?.refResolver === null ? null : this.resolveRef,
+      maxRefDepth: opts?.maxRefDepth,
     });
   }
 
