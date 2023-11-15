@@ -1293,6 +1293,29 @@ exports[`SchemaTree output should generate valid tree for references/nullish.jso
 "
 `;
 
+exports[`SchemaTree output should generate valid tree for references/with-overrides.json 1`] = `
+"└─ #
+   ├─ combiners
+   │  └─ 0: oneOf
+   └─ children
+      └─ 0
+         └─ #/oneOf/0
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/oneOf/0/properties/manager
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        └─ 0
+                           └─ #/oneOf/0/properties/manager/properties/manager
+                              └─ mirrors: #/oneOf/0/properties/manager
+"
+`;
+
 exports[`SchemaTree output should generate valid tree for tickets.schema.json 1`] = `
 "└─ #
    ├─ types

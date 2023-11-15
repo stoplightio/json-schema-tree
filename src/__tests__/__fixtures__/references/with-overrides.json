@@ -1,0 +1,23 @@
+{
+  "oneOf": [
+    {
+      "$ref": "#/definitions/User"
+    }
+  ],
+  "description": "User Model",
+  "definitions": {
+    "User": {
+      "type": "object",
+      "description": "Plain User",
+      "properties": {
+        "manager": {
+          "$ref": "#/definitions/Admin"
+        }
+      }
+    },
+    "Admin": {
+      "$ref": "#/definitions/User",
+      "description": "Admin User"
+    }
+  }
+}
