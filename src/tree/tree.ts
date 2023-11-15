@@ -11,18 +11,22 @@ import type { SchemaTreeOptions } from './types';
 export class SchemaTree {
   public walker: Walker;
   public root: RootNode;
+  private readonly resolvedRefs = new Map();
 
   constructor(public schema: SchemaFragment, protected readonly opts?: Partial<SchemaTreeOptions>) {
     this.root = new RootNode(schema);
+    this.resolvedRefs = new Map();
     this.walker = new Walker(this.root, {
       mergeAllOf: this.opts?.mergeAllOf !== false,
       resolveRef: opts?.refResolver === null ? null : this.resolveRef,
+      maxRefDepth: opts?.maxRefDepth,
     });
   }
 
   public destroy() {
     this.root.children.length = 0;
     this.walker.destroy();
+    this.resolvedRefs.clear();
   }
 
   public populate() {
@@ -34,6 +38,10 @@ export class SchemaTree {
   }
 
   protected resolveRef: WalkerRefResolver = (path, $ref) => {
+    if (this.resolvedRefs.has($ref)) {
+      return this.resolvedRefs.get($ref);
+    }
+
     const seenRefs: string[] = [];
     let cur$ref: unknown = $ref;
     let resolvedValue!: SchemaFragment;
@@ -48,6 +56,7 @@ export class SchemaTree {
       cur$ref = resolvedValue.$ref;
     }
 
+    this.resolvedRefs.set($ref, resolvedValue);
     return resolvedValue;
   };
 

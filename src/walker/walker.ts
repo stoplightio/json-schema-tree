@@ -36,11 +36,22 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   constructor(protected readonly root: RootNode, protected readonly walkingOptions: WalkingOptions) {
     super();
 
+    let maxRefDepth = walkingOptions.maxRefDepth ?? null;
+    if (typeof maxRefDepth === 'number') {
+      if (maxRefDepth < 1) {
+        maxRefDepth = null;
+      } else if (maxRefDepth > 1000) {
+        // experimented with 1500 and the recursion limit is still lower than that
+        maxRefDepth = 1000;
+      }
+    }
+    walkingOptions.maxRefDepth = maxRefDepth;
+
     this.path = [];
     this.depth = -1;
     this.fragment = root.fragment;
     this.schemaNode = root;
-    this.processedFragments = new WeakMap<SchemaFragment, SchemaNode>();
+    this.processedFragments = new WeakMap();
     this.mergedAllOfs = new WeakMap();
 
     this.hooks = {};
@@ -51,7 +62,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.depth = -1;
     this.fragment = this.root.fragment;
     this.schemaNode = this.root;
-    this.processedFragments = new WeakMap<SchemaFragment, RegularNode | ReferenceNode>();
+    this.processedFragments = new WeakMap();
     this.mergedAllOfs = new WeakMap();
   }
 
@@ -265,7 +276,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   }
 
   protected processFragment(): [SchemaNode, ProcessedFragment] {
-    const { walkingOptions, path, fragment: originalFragment } = this;
+    const { walkingOptions, path, fragment: originalFragment, depth } = this;
     let { fragment } = this;
 
     let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment, originalFragment) : null;
@@ -275,7 +286,9 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     }
 
     if ('$ref' in fragment) {
-      if (typeof fragment.$ref !== 'string') {
+      if (typeof walkingOptions.maxRefDepth === 'number' && walkingOptions.maxRefDepth < depth) {
+        return [new ReferenceNode(fragment, `max $ref depth limit reached`), fragment];
+      } else if (typeof fragment.$ref !== 'string') {
         return [new ReferenceNode(fragment, '$ref is not a string'), fragment];
       } else if (walkingOptions.resolveRef !== null) {
         try {

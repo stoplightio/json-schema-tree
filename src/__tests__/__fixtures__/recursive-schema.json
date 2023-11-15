@@ -1,0 +1,24 @@
+{
+  "title": "Thing",
+  "allOf": [
+    {
+      "$ref": "#/definitions/User"
+    }
+  ],
+  "description": "baz",
+  "definitions": {
+    "User": {
+      "type": "object",
+      "description": "user",
+      "properties": {
+        "manager": {
+          "$ref": "#/definitions/Boss"
+        }
+      }
+    },
+    "Boss": {
+      "$ref": "#/definitions/User",
+      "description": "xyz"
+    }
+  }
+}
