@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "properties": {
+    "order": {
+      "$ref": "#/definitions/Order",
+      "description": "My Order"
+    }
+  },
+  "definitions": {
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/Order",
+          "description": "My Order"
+        }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "member": {
+          "$ref": "#/definitions/Member",
+          "description": "Member"
+        }
+      }
+    },
+    "Member": {
+      "type": "object",
+      "properties": {
+        "referredMember": {
+          "$ref": "#/definitions/Member",
+          "description": "Member"
+        }
+      }
+    }
+  }
+}

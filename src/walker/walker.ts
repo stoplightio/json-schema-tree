@@ -285,6 +285,8 @@ export class Walker extends EventEmitter<WalkerEmitter> {
       return retrieved;
     }
 
+    let initialFragment: ProcessedFragment = fragment;
+
     if ('$ref' in fragment) {
       if (typeof walkingOptions.maxRefDepth === 'number' && walkingOptions.maxRefDepth < depth) {
         return [new ReferenceNode(fragment, `max $ref depth limit reached`), fragment];
@@ -297,6 +299,11 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           if (typeof fragment.description === 'string') {
             newFragment = { ...newFragment };
             Object.assign(newFragment, { description: fragment.description });
+          } else {
+            retrieved = this.retrieveFromFragment(newFragment, originalFragment);
+            if (retrieved) {
+              return retrieved;
+            }
           }
 
           fragment = newFragment;
@@ -331,7 +338,6 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         }
       }
     }
-    let initialFragment: ProcessedFragment = fragment;
     if (walkingOptions.mergeAllOf && SchemaCombinerName.AllOf in fragment) {
       try {
         if (Array.isArray(fragment.allOf)) {
