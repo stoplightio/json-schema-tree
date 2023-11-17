@@ -1279,6 +1279,36 @@ exports[`SchemaTree output should generate valid tree for references/base.json 1
 "
 `;
 
+exports[`SchemaTree output should generate valid tree for references/circular-with-overrides.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/properties/order
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/properties/order/properties/member
+                     ├─ types
+                     │  └─ 0: object
+                     ├─ primaryType: object
+                     └─ children
+                        └─ 0
+                           └─ #/properties/order/properties/member/properties/referredMember
+                              ├─ types
+                              │  └─ 0: object
+                              ├─ primaryType: object
+                              └─ children
+                                 └─ 0
+                                    └─ #/properties/order/properties/member/properties/referredMember/properties/referredMember
+                                       └─ mirrors: #/properties/order/properties/member/properties/referredMember
+"
+`;
+
 exports[`SchemaTree output should generate valid tree for references/nullish.json 1`] = `
 "└─ #
    ├─ types
