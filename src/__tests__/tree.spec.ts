@@ -787,6 +787,61 @@ describe('SchemaTree', () => {
       ).toEqual('_Everyone_ ~hates~ loves caves');
     });
 
+    it('should not override description reference siblings', () => {
+      const schema = {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          AAAAA: {
+            allOf: [{ description: 'AAAAA', type: 'string' }, { examples: ['AAAAA'] }],
+          },
+          BBBBB: {
+            allOf: [
+              {
+                $ref: '#/properties/AAAAA/allOf/0',
+                description: 'BBBBB',
+              },
+              { examples: ['BBBBB'] },
+            ],
+          },
+        },
+      };
+
+      const tree = new SchemaTree(schema, {});
+      tree.populate();
+
+      expect(tree.root).toEqual(
+        expect.objectContaining({
+          children: [
+            expect.objectContaining({
+              primaryType: 'object',
+              types: ['object'],
+              children: [
+                expect.objectContaining({
+                  primaryType: 'string',
+                  subpath: ['properties', 'AAAAA'],
+                  types: ['string'],
+                  annotations: {
+                    description: 'AAAAA',
+                    examples: ['AAAAA'],
+                  },
+                }),
+                expect.objectContaining({
+                  primaryType: 'string',
+                  subpath: ['properties', 'BBBBB'],
+                  types: ['string'],
+                  annotations: {
+                    description: 'BBBBB',
+                    examples: ['BBBBB'],
+                  },
+                }),
+              ],
+            }),
+          ],
+        }),
+      );
+    });
+
     it('node of type array should keep its own description even when referenced node has a description', () => {
       const schema = {
         definitions: {
