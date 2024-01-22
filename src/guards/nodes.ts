@@ -7,6 +7,7 @@ import {
   RootNode,
   SchemaNode,
 } from '../nodes';
+import type { BooleanishNode } from '../nodes/BooleanishNode';
 
 export function isSchemaNode(node: unknown): node is SchemaNode {
   const name = Object.getPrototypeOf(node).constructor.name;
@@ -33,4 +34,8 @@ export function isMirroredNode(node: SchemaNode): node is MirroredSchemaNode {
 
 export function isReferenceNode(node: SchemaNode): node is ReferenceNode {
   return 'external' in node && 'value' in node;
+}
+
+export function isBooleanishNode(node: SchemaNode): node is BooleanishNode {
+  return typeof node.fragment === 'boolean';
 }

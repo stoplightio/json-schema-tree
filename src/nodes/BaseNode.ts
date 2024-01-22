@@ -1,4 +1,3 @@
-import type { SchemaFragment } from '../types';
 import type { MirroredRegularNode } from './mirrored';
 import type { RegularNode } from './RegularNode';
 import type { RootNode } from './RootNode';
@@ -35,7 +34,7 @@ export abstract class BaseNode {
     return this.pos === this.parentChildren.length - 1;
   }
 
-  protected constructor(public readonly fragment: SchemaFragment) {
+  protected constructor() {
     this.id = String(SEED++);
     this.subpath = [];
   }

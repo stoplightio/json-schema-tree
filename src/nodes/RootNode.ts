@@ -7,7 +7,7 @@ export class RootNode extends BaseNode {
   public readonly children: SchemaNode[];
 
   constructor(public readonly fragment: SchemaFragment) {
-    super(fragment);
+    super();
     this.children = [];
   }
 }

@@ -7,8 +7,8 @@ import { BaseNode } from './BaseNode';
 export class ReferenceNode extends BaseNode {
   public readonly value: string | null;
 
-  constructor(fragment: SchemaFragment, public readonly error: string | null) {
-    super(fragment);
+  constructor(public readonly fragment: SchemaFragment, public readonly error: string | null) {
+    super();
 
     this.value = unwrapStringOrNull(fragment.$ref);
   }

@@ -2,8 +2,9 @@ import { pathToPointer } from '@stoplight/json';
 import type { Dictionary } from '@stoplight/types';
 import * as treeify from 'treeify';
 
-import { isMirroredNode, isReferenceNode, isRegularNode } from '../../guards';
+import { isBooleanishNode, isMirroredNode, isReferenceNode, isRegularNode, isRootNode } from '../../guards';
 import type { MirroredSchemaNode, ReferenceNode, RegularNode, SchemaNode } from '../../nodes';
+import type { BooleanishNode } from '../../nodes/BooleanishNode';
 import type { SchemaTreeOptions } from '../../tree';
 import { SchemaTree } from '../../tree';
 import type { SchemaFragment } from '../../types';
@@ -41,6 +42,12 @@ function printReferenceNode(node: ReferenceNode) {
   };
 }
 
+function printBooleanishNode(node: BooleanishNode) {
+  return {
+    value: node.fragment,
+  };
+}
+
 function printMirrorNode(node: MirroredSchemaNode): any {
   return {
     mirrors: pathToPointer(node.mirroredNode.path as string[]),
@@ -48,15 +55,17 @@ function printMirrorNode(node: MirroredSchemaNode): any {
 }
 
 function printNode(node: SchemaNode) {
-  return isMirroredNode(node)
-    ? printMirrorNode(node)
-    : isRegularNode(node)
-    ? printRegularNode(node)
-    : isReferenceNode(node)
-    ? printReferenceNode(node)
-    : {
-        kind: 'unknown node',
-      };
+  if (isMirroredNode(node)) {
+    return printMirrorNode(node);
+  } else if (isRegularNode(node)) {
+    return printRegularNode(node);
+  } else if (isReferenceNode(node)) {
+    return printReferenceNode(node);
+  } else if (isBooleanishNode(node)) {
+    return printBooleanishNode(node);
+  } else if (isRootNode(node)) {
+    return {};
+  }
 }
 
 function prepareTree(node: SchemaNode) {

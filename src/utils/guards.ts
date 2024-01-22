@@ -1,5 +1,7 @@
 import type { Dictionary } from '@stoplight/types';
 
+import type { SchemaFragment } from '../types';
+
 export function isStringOrNumber(value: unknown): value is number | string {
   return typeof value === 'string' || typeof value === 'number';
 }
@@ -22,4 +24,8 @@ export function isObjectLiteral(maybeObj: unknown): maybeObj is Dictionary<unkno
 
 export function isNonNullable<T = unknown>(maybeNullable: T): maybeNullable is NonNullable<T> {
   return maybeNullable !== void 0 && maybeNullable !== null;
+}
+
+export function isValidSchemaFragment(maybeSchemaFragment: unknown): maybeSchemaFragment is SchemaFragment {
+  return typeof maybeSchemaFragment === 'boolean' || isObjectLiteral(maybeSchemaFragment);
 }

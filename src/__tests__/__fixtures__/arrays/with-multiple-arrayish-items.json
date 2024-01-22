@@ -17,10 +17,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "code",
-        "msg"
-      ]
+      "required": ["code", "msg"]
     }
   ]
 }
