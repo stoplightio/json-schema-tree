@@ -133,16 +133,16 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     this.fragment = schemaNode.fragment;
     this.depth = initialDepth + 1;
 
+    if (!isRootNode(schemaNode)) {
+      schemaNode.parent = initialSchemaNode;
+      schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
+    }
+
     const isIncluded = this.hooks.filter?.(schemaNode);
 
     if (isIncluded === false) {
       super.emit('skipNode', schemaNode);
       return;
-    }
-
-    if (!isRootNode(schemaNode)) {
-      schemaNode.parent = initialSchemaNode;
-      schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
     }
 
     if ('children' in initialSchemaNode && !isRootNode(schemaNode)) {
