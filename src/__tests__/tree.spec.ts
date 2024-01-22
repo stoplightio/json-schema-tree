@@ -907,6 +907,34 @@ describe('SchemaTree', () => {
         tree.root.children[0].children[1].annotations.description,
       ).toEqual('_Everyone_ ~hates~ loves caves');
     });
+
+    it('should render true/false schemas', () => {
+      const schema = {
+        type: 'object',
+        properties: {
+          bear: true,
+          cave: false,
+        },
+      };
+
+      const tree = new SchemaTree(schema);
+      tree.populate();
+
+      expect(printTree(schema)).toMatchInlineSnapshot(`
+        "└─ #
+           ├─ types
+           │  └─ 0: object
+           ├─ primaryType: object
+           └─ children
+              ├─ 0
+              │  └─ #/properties/bear
+              │     └─ value: true
+              └─ 1
+                 └─ #/properties/cave
+                    └─ value: false
+        "
+      `);
+    });
   });
 
   describe('position', () => {
