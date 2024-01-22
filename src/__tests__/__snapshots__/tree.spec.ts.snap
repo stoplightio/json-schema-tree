@@ -300,7 +300,10 @@ exports[`SchemaTree output should generate valid tree for arrays/additional-empt
 "└─ #
    ├─ types
    │  └─ 0: array
-   └─ primaryType: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/additionalItems
 "
 `;
 
@@ -308,7 +311,11 @@ exports[`SchemaTree output should generate valid tree for arrays/additional-fals
 "└─ #
    ├─ types
    │  └─ 0: array
-   └─ primaryType: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/additionalItems
+            └─ value: false
 "
 `;
 
@@ -316,7 +323,19 @@ exports[`SchemaTree output should generate valid tree for arrays/additional-sche
 "└─ #
    ├─ types
    │  └─ 0: array
-   └─ primaryType: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/additionalItems
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/additionalItems/properties/baz
+                     ├─ types
+                     │  └─ 0: number
+                     └─ primaryType: number
 "
 `;
 
@@ -324,7 +343,11 @@ exports[`SchemaTree output should generate valid tree for arrays/additional-true
 "└─ #
    ├─ types
    │  └─ 0: array
-   └─ primaryType: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/additionalItems
+            └─ value: true
 "
 `;
 

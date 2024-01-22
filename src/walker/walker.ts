@@ -222,11 +222,20 @@ export class Walker extends EventEmitter<WalkerEmitter> {
             this.path.push('items', String(i));
             this.walk();
           }
-        } else if (isObjectLiteral(fragment.items)) {
-          this.fragment = fragment.items;
-          this.restoreInternalWalkerState(state);
-          this.path.push('items');
-          this.walk();
+        } else {
+          if (isObjectLiteral(fragment.items)) {
+            this.fragment = fragment.items;
+            this.restoreInternalWalkerState(state);
+            this.path.push('items');
+            this.walk();
+          }
+
+          if (isValidSchemaFragment(fragment.additionalItems)) {
+            this.fragment = fragment.additionalItems;
+            this.restoreInternalWalkerState(state);
+            this.path.push('additionalItems');
+            this.walk();
+          }
         }
 
         break;
