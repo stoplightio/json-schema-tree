@@ -1,6 +1,7 @@
 module.exports = {
   rootDir: process.cwd(),
   testEnvironment: 'node',
+  roots: ['<rootDir>/src'],
   setupFilesAfterEnv: ['./setupTests.ts'],
   testMatch: ['<rootDir>/src/**/__tests__/*.(ts|js)?(x)'],
   transform: {

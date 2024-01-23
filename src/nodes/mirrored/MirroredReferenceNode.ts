@@ -1,9 +1,13 @@
+import type { SchemaFragment } from '../../types';
 import { BaseNode } from '../BaseNode';
 import type { ReferenceNode } from '../ReferenceNode';
 
 export class MirroredReferenceNode extends BaseNode implements ReferenceNode {
+  public readonly fragment: SchemaFragment;
+
   constructor(public readonly mirroredNode: ReferenceNode) {
-    super(mirroredNode.fragment);
+    super();
+    this.fragment = mirroredNode.fragment;
   }
 
   get error() {

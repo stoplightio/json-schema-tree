@@ -13,7 +13,7 @@ export type WalkingOptions = {
 };
 
 export type WalkerSnapshot = {
-  readonly fragment: SchemaFragment;
+  readonly fragment: SchemaFragment | boolean;
   readonly depth: number;
   readonly schemaNode: RegularNode | RootNode;
   readonly path: string[];
@@ -23,7 +23,7 @@ export type WalkerHookAction = 'filter' | 'stepIn';
 export type WalkerHookHandler = (node: SchemaNode) => boolean;
 
 export type WalkerNodeEventHandler = (node: SchemaNode) => void;
-export type WalkerFragmentEventHandler = (node: SchemaFragment) => void;
+export type WalkerFragmentEventHandler = (node: SchemaFragment | boolean) => void;
 export type WalkerErrorEventHandler = (ex: Error) => void;
 
 export type WalkerEmitter = {

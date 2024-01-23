@@ -296,6 +296,61 @@ exports[`SchemaTree output compound keywords given oneOf combiner placed next to
 "
 `;
 
+exports[`SchemaTree output should generate valid tree for arrays/additional-empty.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/additionalItems
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/additional-false.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/additionalItems
+            └─ value: false
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/additional-schema.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/additionalItems
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/additionalItems/properties/baz
+                     ├─ types
+                     │  └─ 0: number
+                     └─ primaryType: number
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for arrays/additional-true.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: array
+   ├─ primaryType: array
+   └─ children
+      └─ 0
+         └─ #/additionalItems
+            └─ value: true
+"
+`;
+
 exports[`SchemaTree output should generate valid tree for arrays/of-allofs.json 1`] = `
 "└─ #
    ├─ types
@@ -823,7 +878,16 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/neste
       │  └─ #/properties/order
       │     ├─ types
       │     │  └─ 0: object
-      │     └─ primaryType: object
+      │     ├─ primaryType: object
+      │     └─ children
+      │        └─ 0
+      │           └─ #/properties/order/additionalProperties
+      │              ├─ types
+      │              │  └─ 0: string
+      │              ├─ primaryType: string
+      │              └─ enum
+      │                 ├─ 0: ASC
+      │                 └─ 1: DESC
       └─ 7
          └─ #/properties/nextToken
             ├─ types
@@ -1243,6 +1307,61 @@ exports[`SchemaTree output should generate valid tree for formats-schema.json 1`
                               ├─ types
                               │  └─ 0: integer
                               └─ primaryType: integer
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for objects/additional-empty.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/additionalProperties
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for objects/additional-false.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/additionalProperties
+            └─ value: false
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for objects/additional-schema.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/additionalProperties
+            ├─ types
+            │  └─ 0: object
+            ├─ primaryType: object
+            └─ children
+               └─ 0
+                  └─ #/additionalProperties/properties/baz
+                     ├─ types
+                     │  └─ 0: number
+                     └─ primaryType: number
+"
+`;
+
+exports[`SchemaTree output should generate valid tree for objects/additional-true.json 1`] = `
+"└─ #
+   ├─ types
+   │  └─ 0: object
+   ├─ primaryType: object
+   └─ children
+      └─ 0
+         └─ #/additionalProperties
+            └─ value: true
 "
 `;
 

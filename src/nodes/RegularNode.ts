@@ -10,6 +10,7 @@ import { isDeprecated } from '../accessors/isDeprecated';
 import { unwrapArrayOrNull, unwrapStringOrNull } from '../accessors/unwrap';
 import type { SchemaFragment } from '../types';
 import { BaseNode } from './BaseNode';
+import type { BooleanishNode } from './BooleanishNode';
 import type { ReferenceNode } from './ReferenceNode';
 import { MirroredSchemaNode, SchemaAnnotations, SchemaCombinerName, SchemaNodeKind } from './types';
 
@@ -25,14 +26,14 @@ export class RegularNode extends BaseNode {
   public readonly title: string | null;
   public readonly deprecated: boolean;
 
-  public children: (RegularNode | ReferenceNode | MirroredSchemaNode)[] | null | undefined;
+  public children: (RegularNode | BooleanishNode | ReferenceNode | MirroredSchemaNode)[] | null | undefined;
 
   public readonly annotations: Readonly<Partial<Dictionary<unknown, SchemaAnnotations>>>;
   public readonly validations: Readonly<Dictionary<unknown>>;
   public readonly originalFragment: SchemaFragment;
 
   constructor(public readonly fragment: SchemaFragment, context?: { originalFragment?: SchemaFragment }) {
-    super(fragment);
+    super();
 
     this.$id = unwrapStringOrNull('id' in fragment ? fragment.id : fragment.$id);
     this.types = getTypes(fragment);

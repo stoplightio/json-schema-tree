@@ -7,10 +7,11 @@ import { isMirroredNode, isReferenceNode, isRegularNode, isRootNode } from '../g
 import { mergeAllOf } from '../mergers/mergeAllOf';
 import { mergeOneOrAnyOf } from '../mergers/mergeOneOrAnyOf';
 import { MirroredReferenceNode, MirroredRegularNode, MirroredSchemaNode, ReferenceNode, RegularNode } from '../nodes';
+import { BooleanishNode } from '../nodes/BooleanishNode';
 import type { RootNode } from '../nodes/RootNode';
 import { SchemaCombinerName, SchemaNode, SchemaNodeKind } from '../nodes/types';
 import type { SchemaFragment } from '../types';
-import { isNonNullable, isObjectLiteral } from '../utils/guards';
+import { isNonNullable, isObjectLiteral, isValidSchemaFragment } from '../utils/guards';
 import type { WalkerEmitter, WalkerHookAction, WalkerHookHandler, WalkerSnapshot, WalkingOptions } from './types';
 
 type InternalWalkerState = {
@@ -25,7 +26,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   public readonly path: string[];
   public depth: number;
 
-  protected fragment: SchemaFragment;
+  protected fragment: SchemaFragment | boolean;
   protected schemaNode: RegularNode | RootNode;
 
   private mergedAllOfs: WeakMap<SchemaFragment, SchemaFragment>;
@@ -124,22 +125,24 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     super.emit('enterNode', schemaNode);
 
     const actualNode = isMirroredNode(schemaNode) ? schemaNode.mirroredNode : schemaNode;
-    this.processedFragments.set(schemaNode.fragment, actualNode);
-    this.processedFragments.set(initialFragment, actualNode);
+    if (typeof schemaNode.fragment !== 'boolean' && initialFragment !== null) {
+      this.processedFragments.set(schemaNode.fragment, actualNode);
+      this.processedFragments.set(initialFragment, actualNode);
+    }
 
     this.fragment = schemaNode.fragment;
     this.depth = initialDepth + 1;
+
+    if (!isRootNode(schemaNode)) {
+      schemaNode.parent = initialSchemaNode;
+      schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
+    }
 
     const isIncluded = this.hooks.filter?.(schemaNode);
 
     if (isIncluded === false) {
       super.emit('skipNode', schemaNode);
       return;
-    }
-
-    if (!isRootNode(schemaNode)) {
-      schemaNode.parent = initialSchemaNode;
-      schemaNode.subpath = this.path.slice(initialSchemaNode.path.length);
     }
 
     if ('children' in initialSchemaNode && !isRootNode(schemaNode)) {
@@ -186,7 +189,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
   protected walkNodeChildren(): void {
     const { fragment, schemaNode } = this;
 
-    if (!isRegularNode(schemaNode)) return;
+    if (!isRegularNode(schemaNode) || typeof fragment === 'boolean') return;
 
     const state = this.dumpInternalWalkerState();
 
@@ -213,17 +216,26 @@ export class Walker extends EventEmitter<WalkerEmitter> {
           let i = -1;
           for (const item of fragment.items) {
             i++;
-            if (!isObjectLiteral(item)) continue;
+            if (!isValidSchemaFragment(item)) continue;
             this.fragment = item;
             this.restoreInternalWalkerState(state);
             this.path.push('items', String(i));
             this.walk();
           }
-        } else if (isObjectLiteral(fragment.items)) {
-          this.fragment = fragment.items;
-          this.restoreInternalWalkerState(state);
-          this.path.push('items');
-          this.walk();
+        } else {
+          if (isObjectLiteral(fragment.items)) {
+            this.fragment = fragment.items;
+            this.restoreInternalWalkerState(state);
+            this.path.push('items');
+            this.walk();
+          }
+
+          if (isValidSchemaFragment(fragment.additionalItems)) {
+            this.fragment = fragment.additionalItems;
+            this.restoreInternalWalkerState(state);
+            this.path.push('additionalItems');
+            this.walk();
+          }
         }
 
         break;
@@ -231,7 +243,7 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         if (isObjectLiteral(fragment.properties)) {
           for (const key of Object.keys(fragment.properties)) {
             const value = fragment.properties[key];
-            if (!isObjectLiteral(value)) continue;
+            if (!isValidSchemaFragment(value)) continue;
             this.fragment = value;
             this.restoreInternalWalkerState(state);
             this.path.push('properties', key);
@@ -242,12 +254,19 @@ export class Walker extends EventEmitter<WalkerEmitter> {
         if (isObjectLiteral(fragment.patternProperties)) {
           for (const key of Object.keys(fragment.patternProperties)) {
             const value = fragment.patternProperties[key];
-            if (!isObjectLiteral(value)) continue;
+            if (!isValidSchemaFragment(value)) continue;
             this.fragment = value;
             this.restoreInternalWalkerState(state);
             this.path.push('patternProperties', key);
             this.walk();
           }
+        }
+
+        if (isValidSchemaFragment(fragment.additionalProperties)) {
+          this.fragment = fragment.additionalProperties;
+          this.restoreInternalWalkerState(state);
+          this.path.push('additionalProperties');
+          this.walk();
         }
 
         break;
@@ -275,11 +294,19 @@ export class Walker extends EventEmitter<WalkerEmitter> {
     }
   }
 
-  protected processFragment(): [SchemaNode, ProcessedFragment] {
+  protected processFragment(): [SchemaNode, ProcessedFragment | null] {
     const { walkingOptions, path, fragment: originalFragment, depth } = this;
     let { fragment } = this;
 
-    let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment, originalFragment) : null;
+    if (typeof fragment === 'boolean') {
+      return [new BooleanishNode(fragment), null];
+    }
+
+    if (typeof originalFragment === 'boolean') {
+      throw new TypeError('Original fragment cannot be a boolean');
+    }
+
+    let retrieved = isNonNullable(fragment) ? this.retrieveFromFragment(fragment, fragment) : null;
 
     if (retrieved) {
       return retrieved;

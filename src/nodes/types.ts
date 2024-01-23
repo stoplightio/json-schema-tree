@@ -1,3 +1,4 @@
+import type { BooleanishNode } from './BooleanishNode';
 import type { MirroredReferenceNode } from './mirrored/MirroredReferenceNode';
 import type { MirroredRegularNode } from './mirrored/MirroredRegularNode';
 import type { ReferenceNode } from './ReferenceNode';
@@ -6,7 +7,7 @@ import type { RootNode } from './RootNode';
 
 export type MirroredSchemaNode = MirroredRegularNode | MirroredReferenceNode;
 
-export type SchemaNode = RootNode | RegularNode | ReferenceNode | MirroredSchemaNode;
+export type SchemaNode = RootNode | RegularNode | BooleanishNode | ReferenceNode | MirroredSchemaNode;
 
 export enum SchemaNodeKind {
   Any = 'any',

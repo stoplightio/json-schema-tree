@@ -1,0 +1,11 @@
+{
+  "type": "array",
+  "additionalItems": {
+    "type": "object",
+    "properties": {
+      "baz": {
+        "type": "number"
+      }
+    }
+  }
+}

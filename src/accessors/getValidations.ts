@@ -12,8 +12,8 @@ const VALIDATION_TYPES: Partial<Dictionary<(keyof SchemaFragment)[], SchemaNodeK
   get integer() {
     return this.number;
   },
-  object: ['additionalProperties', 'minProperties', 'maxProperties'],
-  array: ['additionalItems', 'minItems', 'maxItems', 'uniqueItems'],
+  object: ['minProperties', 'maxProperties'],
+  array: ['minItems', 'maxItems', 'uniqueItems'],
 };
 
 function getTypeValidations(types: SchemaNodeKind[]): (keyof SchemaFragment)[] | null {
