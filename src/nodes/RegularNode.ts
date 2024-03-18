@@ -47,8 +47,8 @@ export class RegularNode extends BaseNode {
     this.title = unwrapStringOrNull(fragment.title);
 
     this.annotations = getAnnotations(fragment);
-    this.validations = getValidations(fragment, this.types);
     this.originalFragment = context?.originalFragment ?? fragment;
+    this.validations = getValidations(fragment, this.types, this.originalFragment);
 
     this.children = void 0;
   }

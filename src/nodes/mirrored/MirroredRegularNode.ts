@@ -1,5 +1,6 @@
 import type { Dictionary } from '@stoplight/types';
 
+import { getValidations } from '../../accessors/getValidations';
 import { isReferenceNode, isRegularNode } from '../../guards';
 import type { SchemaFragment } from '../../types';
 import { isNonNullable } from '../../utils';
@@ -39,7 +40,7 @@ export class MirroredRegularNode extends BaseNode implements RegularNode {
     super();
     this.fragment = mirroredNode.fragment;
     this.originalFragment = context?.originalFragment ?? mirroredNode.originalFragment;
-
+    this.validations = getValidations(this.fragment, null, this.originalFragment);
     this.cache = new WeakMap();
 
     this._this = new Proxy(this, {

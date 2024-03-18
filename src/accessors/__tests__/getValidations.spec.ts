@@ -12,12 +12,58 @@ describe('getValidations util', () => {
           multipleOf: 2,
         },
         [SchemaNodeKind.Integer],
+        {},
       ),
     ).toStrictEqual({
       exclusiveMaximum: true,
       maximum: 20,
       minimum: 2,
       multipleOf: 2,
+    });
+  });
+  it('should support $ref visibility', () => {
+    expect(
+      getValidations(
+        {
+          readOnly: true,
+        },
+        [SchemaNodeKind.Object],
+        {
+          writeOnly: true,
+        },
+      ),
+    ).toStrictEqual({
+      writeOnly: true,
+    });
+
+    expect(
+      getValidations(
+        {
+          writeOnly: true,
+        },
+        [SchemaNodeKind.Object],
+        {
+          readOnly: true,
+        },
+      ),
+    ).toStrictEqual({
+      readOnly: true,
+    });
+
+    expect(
+      getValidations({}, [SchemaNodeKind.Object], {
+        readOnly: true,
+      }),
+    ).toStrictEqual({
+      readOnly: true,
+    });
+
+    expect(
+      getValidations({}, [SchemaNodeKind.Object], {
+        writeOnly: true,
+      }),
+    ).toStrictEqual({
+      writeOnly: true,
     });
   });
 });

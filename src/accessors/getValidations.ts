@@ -30,11 +30,34 @@ function getTypeValidations(types: SchemaNodeKind[]): (keyof SchemaFragment)[] |
   return extraValidations;
 }
 
-export function getValidations(fragment: SchemaFragment, types: SchemaNodeKind[] | null): Dictionary<unknown> {
+export function getValidations(
+  fragment: SchemaFragment,
+  types: SchemaNodeKind[] | null,
+  originalFragment: SchemaFragment | null = null,
+): Dictionary<unknown> {
   const extraValidations = types === null ? null : getTypeValidations(types);
 
+  const fragmentValidations: Dictionary<unknown> = pick(fragment, COMMON_VALIDATION_TYPES);
+
+  if (originalFragment) {
+    const originalValidations: Dictionary<unknown> = pick(originalFragment, COMMON_VALIDATION_TYPES);
+
+    if (originalValidations.readOnly as boolean) {
+      fragmentValidations.readOnly = true;
+      if (fragmentValidations.writeOnly as boolean) {
+        delete fragmentValidations.writeOnly;
+      }
+    }
+    if (originalValidations.writeOnly as boolean) {
+      fragmentValidations.writeOnly = true;
+      if (fragmentValidations.readOnly as boolean) {
+        delete fragmentValidations.readOnly;
+      }
+    }
+  }
+
   return {
-    ...pick(fragment, COMMON_VALIDATION_TYPES),
+    ...fragmentValidations,
     ...(extraValidations !== null ? pick(fragment, extraValidations) : null),
   };
 }
