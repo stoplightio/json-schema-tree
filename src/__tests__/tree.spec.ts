@@ -2,6 +2,7 @@ import * as fastGlob from 'fast-glob';
 import * as fs from 'fs';
 import type { JSONSchema4 } from 'json-schema';
 import * as path from 'path';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { isRegularNode } from '../guards';
 import type { RegularNode } from '../nodes';

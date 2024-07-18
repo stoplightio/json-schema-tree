@@ -15,6 +15,7 @@
     "no-console": "error",
     "no-undefined": "error"
   },
+  "ignorePatterns": ["**/vitest.config.mts"],
   "overrides": [
     {
       "files": ["*.spec.{ts,tsx}"],

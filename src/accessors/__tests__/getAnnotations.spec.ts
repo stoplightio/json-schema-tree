@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { getAnnotations } from '../getAnnotations';
 
 describe('getAnnotations util', () => {

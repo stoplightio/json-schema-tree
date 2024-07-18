@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SchemaTree output compound keywords given anyOf combiner placed next to allOf given allOf merging disabled, should still merge 1`] = `
+exports[`SchemaTree > output > compound keywords > given anyOf combiner placed next to allOf > given allOf merging disabled, should still merge 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: anyOf
@@ -77,7 +77,7 @@ exports[`SchemaTree output compound keywords given anyOf combiner placed next to
 "
 `;
 
-exports[`SchemaTree output compound keywords given anyOf combiner placed next to allOf given allOf merging enabled, should merge contents of allOf combiners 1`] = `
+exports[`SchemaTree > output > compound keywords > given anyOf combiner placed next to allOf > given allOf merging enabled, should merge contents of allOf combiners 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: anyOf
@@ -148,7 +148,7 @@ exports[`SchemaTree output compound keywords given anyOf combiner placed next to
 "
 `;
 
-exports[`SchemaTree output compound keywords given oneOf combiner placed next to allOf given allOf merging disabled, should still merge 1`] = `
+exports[`SchemaTree > output > compound keywords > given oneOf combiner placed next to allOf > given allOf merging disabled, should still merge 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: oneOf
@@ -225,7 +225,7 @@ exports[`SchemaTree output compound keywords given oneOf combiner placed next to
 "
 `;
 
-exports[`SchemaTree output compound keywords given oneOf combiner placed next to allOf given allOf merging enabled, should merge contents of allOf combiners 1`] = `
+exports[`SchemaTree > output > compound keywords > given oneOf combiner placed next to allOf > given allOf merging enabled, should merge contents of allOf combiners 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: oneOf
@@ -296,7 +296,7 @@ exports[`SchemaTree output compound keywords given oneOf combiner placed next to
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/additional-empty.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/additional-empty.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -307,7 +307,7 @@ exports[`SchemaTree output should generate valid tree for arrays/additional-empt
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/additional-false.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/additional-false.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -319,7 +319,7 @@ exports[`SchemaTree output should generate valid tree for arrays/additional-fals
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/additional-schema.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/additional-schema.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -339,7 +339,7 @@ exports[`SchemaTree output should generate valid tree for arrays/additional-sche
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/additional-true.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/additional-true.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -351,7 +351,7 @@ exports[`SchemaTree output should generate valid tree for arrays/additional-true
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/of-allofs.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/of-allofs.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -382,7 +382,7 @@ exports[`SchemaTree output should generate valid tree for arrays/of-allofs.json 
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/of-arrays.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/of-arrays.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -413,7 +413,7 @@ exports[`SchemaTree output should generate valid tree for arrays/of-arrays.json 
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/of-objects.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/of-objects.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -439,7 +439,7 @@ exports[`SchemaTree output should generate valid tree for arrays/of-objects.json
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/of-refs.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/of-refs.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -453,7 +453,7 @@ exports[`SchemaTree output should generate valid tree for arrays/of-refs.json 1`
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/with-multiple-arrayish-items.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/with-multiple-arrayish-items.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -488,7 +488,7 @@ exports[`SchemaTree output should generate valid tree for arrays/with-multiple-a
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/with-ordered-items.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/with-ordered-items.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -507,7 +507,7 @@ exports[`SchemaTree output should generate valid tree for arrays/with-ordered-it
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for arrays/with-single-arrayish-items.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for arrays/with-single-arrayish-items.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -537,7 +537,7 @@ exports[`SchemaTree output should generate valid tree for arrays/with-single-arr
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/allOfs/base.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/allOfs/base.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -609,7 +609,7 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/base.
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/allOfs/circular-regular-level.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/allOfs/circular-regular-level.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -638,7 +638,7 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/circu
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/allOfs/circular-top-level.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/allOfs/circular-top-level.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -656,7 +656,7 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/circu
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/allOfs/complex.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/allOfs/complex.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -749,7 +749,7 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/compl
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/allOfs/nested-refs.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/allOfs/nested-refs.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -896,7 +896,7 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/neste
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/allOfs/todo-full.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/allOfs/todo-full.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: array
@@ -959,7 +959,7 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/todo-
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/allOfs/todo-full-2.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/allOfs/todo-full-2.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -994,7 +994,7 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/todo-
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/allOfs/with-type.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/allOfs/with-type.json 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: oneOf
@@ -1092,7 +1092,7 @@ exports[`SchemaTree output should generate valid tree for combiners/allOfs/with-
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for combiners/oneof-with-array-type.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for combiners/oneof-with-array-type.json 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: oneOf
@@ -1151,7 +1151,7 @@ exports[`SchemaTree output should generate valid tree for combiners/oneof-with-a
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for default-schema.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for default-schema.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1261,7 +1261,7 @@ exports[`SchemaTree output should generate valid tree for default-schema.json 1`
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for formats-schema.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for formats-schema.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1310,7 +1310,7 @@ exports[`SchemaTree output should generate valid tree for formats-schema.json 1`
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for objects/additional-empty.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for objects/additional-empty.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1321,7 +1321,7 @@ exports[`SchemaTree output should generate valid tree for objects/additional-emp
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for objects/additional-false.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for objects/additional-false.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1333,7 +1333,7 @@ exports[`SchemaTree output should generate valid tree for objects/additional-fal
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for objects/additional-schema.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for objects/additional-schema.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1353,7 +1353,7 @@ exports[`SchemaTree output should generate valid tree for objects/additional-sch
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for objects/additional-true.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for objects/additional-true.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1365,7 +1365,7 @@ exports[`SchemaTree output should generate valid tree for objects/additional-tru
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for references/base.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for references/base.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1398,7 +1398,7 @@ exports[`SchemaTree output should generate valid tree for references/base.json 1
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for references/circular-with-overrides.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for references/circular-with-overrides.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1428,7 +1428,7 @@ exports[`SchemaTree output should generate valid tree for references/circular-wi
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for references/nullish.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for references/nullish.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
@@ -1442,7 +1442,7 @@ exports[`SchemaTree output should generate valid tree for references/nullish.jso
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for references/with-overrides.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for references/with-overrides.json 1`] = `
 "└─ #
    ├─ combiners
    │  └─ 0: oneOf
@@ -1465,7 +1465,7 @@ exports[`SchemaTree output should generate valid tree for references/with-overri
 "
 `;
 
-exports[`SchemaTree output should generate valid tree for tickets.schema.json 1`] = `
+exports[`SchemaTree > output > should generate valid tree for tickets.schema.json 1`] = `
 "└─ #
    ├─ types
    │  └─ 0: object
